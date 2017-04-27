@@ -72,34 +72,74 @@ require "class.connect.php";
 			            <input name="edate" id="edate" type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 			        </div>
 
-				    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-				    <link href="css/bootstrap.min.css" rel="stylesheet">
-				    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+				    <!--<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+					<!-- Include Date Range Picker -->
+					<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+					<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
 				    <script>
-				    $('.input-group.date').datepicker({
-					    format: "yyyy/mm/dd",
-					    startDate: "2017-04-01",
-					    endDate: "2020-01-01",
-					    todayBtn: "linked",
-					    autoclose: true,
-					    todayHighlight: true
+				    $('#end').datepicker({
+						format: 'yyyy/mm/dd',
+						todayHighlight: true,
+						autoclose: true,
+					    
+				    });
+				    
+				    $('#edate').datepicker({
+					    format: 'yyyy/mm/dd',
+						todayHighlight: true,
+						autoclose: true,
 					    
 				    });
 				    </script>
 
-
-		            <div class="bootstrap-iso" id="summernote"><p>Hello Summernote</p></div>
+				    <fieldset>
+				        <legend>Make Post</legend>
+				        <p class="container">
+				          <textarea class="input-block-level" id="summernote" name="content" rows="18">
+				          </textarea>
+				        </p>
+				    </fieldset>
+					<script type="text/javascript">
+						$(document).ready(function() {
+						  $('#summernote').summernote({
+						    height: "500px"
+						  });
+						});
+					    var postForm = function() {
+						  var content = $('textarea[name="content"]').html($('#summernote').code());
+						}
+                    </script>
+		             <div class="form-group col-md-12">
+						<!-- Tags Selected -->
+						<h4>Please tag your project</h4>
+						<div class="input-group col-md-offset-1">					
+							<input type="checkbox" name="tag[]" value="jazz">Jazz
+							<input type="checkbox" name="tag[]" value="blue">Blue
+							<input type="checkbox" name="tag[]" value="modern">Modern
+							<input type="checkbox" name="tag[]" value="art">Art
+							<input type="checkbox" name="tag[]" value="beauty">Beauty
+							<br /> 
+							<input type="checkbox" name="tag[]" value="fashion">Fashion						
+							<input type="checkbox" name="tag[]" value="food">Food
+							<input type="checkbox" name="tag[]" value="it">IT
+							<input type="checkbox" name="tag[]" value="makeup">Make up
+							<input type="checkbox" name="tag[]" value="music">Music
+							<br /> 
+							<input type="checkbox" name="tag[]" value="painting">Painting
+							<input type="checkbox" name="tag[]" value="rap">Rap
+							<input type="checkbox" name="tag[]" value="social">Social
+							<input type="checkbox" name="tag[]" value="tech">Technology
+							<input type="checkbox" name="tag[]" value="travel">Travel
+						</div>
+					</div>
 
 		            <div class="form-group"> <!-- Submit button -->
 		            <button class="btn btn-primary " name="submit" type="submit">Submit</button>
-		          </div>
+		            </div>
 
-		          <!--  summernote --> 
-		            <script>
-		            $(document).ready(function() {
-		                $('#summernote').summernote();
-		            });
-		          </script>	  
+
+		         
 
 
 	    </form>

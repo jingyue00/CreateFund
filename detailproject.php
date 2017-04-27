@@ -1,7 +1,72 @@
 <?php 
+    session_start();
+    include_once "header.php";
+    
+    require "class.connect.php";
+    $connect = new connect();
+    $conn = $connect->getConnect("dbproject");
+    if(!$conn) { echo "failed to connect!";}
+        
+    //get cname and keyword
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
-include_once "header.php";
+    //<!-- get pid --> 
+    //$pid = $_SESSION["pid"];
+    $pid = '10113106771384991864';
 
+    $getpro = $conn-> prepare("SELECT * FROM PROJECT 
+            WHERE pid = ? ");
+    $getpro->bind_param("s",$pid);
+    $getpro->execute();
+    $result = $getpro->get_result();
+    if($result){
+        $row = mysqli_fetch_array($result,MYSQLI_BOTH);        
+        $pname = $row['pname'];  
+        $pdesc = $row['pdesc']; 
+        $createtime = $row['createtime']; 
+        $currentamt = $row['currentamt'];
+        $owner = $row['owner'];
+        $min = $row['min'];
+        $max = $row['max'];
+        $endcampaign = $row['endcampaign'];
+        $etime = $row['etime'];
+        $ctime = $row['ctime'];
+        $status = $row['status'];
+        $post = $row['post'];
+    } 
+
+    $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+    $getrichtext->bind_param("s",$pdesc);
+    $getrichtext->execute();
+    $result = $getrichtext->get_result();
+    if($result){
+        $row = mysqli_fetch_array($result,MYSQLI_BOTH);    
+        $rt = $row['content'];
+    }
+
+    $getreview = $conn-> prepare("SELECT COUNT(*) AS count FROM COMMENT 
+            WHERE pid = ? ");
+    $getreview->bind_param("s",$pid);
+    $getreview->execute();
+    $result = $getreview->get_result();
+    if($result){
+        $row = mysqli_fetch_array($result,MYSQLI_BOTH); 
+        $reviewamt = $row['count'];
+    }
+
+    $now = new DateTime(null, new DateTimeZone('America/New_York'));
+    $nowb = $now->format('Y-m-d H:i:s');  
+    $a = strlen($endcampaign);
+    $b = strlen($nowb);
+    $restcampaign = strtotime($a)-strtotime($b);
+
+    if ($status='PledgeStarted'){
+        $progress = round(($currentamt/$min)*100);
+    }
+
+    $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
+    $endcampaignformat = $endcampaignformat->format('Y-m-d');  
 ?>
 
  <!-- Page Content -->
@@ -12,7 +77,7 @@ include_once "header.php";
             
             <div class="col-md-3">
                 <!-- Owner Name -->
-                <p class="lead">Coco Chanel</p>
+                <p class="lead"><?php echo "$owner"; ?></p>
                 <!-- PUT OWNER IMAGE AND INFO HERE -->
                 <img src="img/coco.png" class="img-circle" alt="Cinque Terre" width="250" height="250">
 
@@ -26,17 +91,21 @@ include_once "header.php";
                     <img class="img-responsive" src="img/coco1.png" alt="">
 
                     <div class="caption-full">
-                        <h4 class="pull-right">$24.99</h4>
-                        <h4><a href="#">Product Name</a>
-                        </h4>
-                        <p>See more snippets like these online store reviews at <a target="_blank" href="http://bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
-                        <p>Want to make these reviews work? Check out
-                            <strong><a href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this building a review system tutorial</a>
-                            </strong>over at maxoffsky.com!</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        <h4 class="pull-right">$<?php echo "$currentamt"; ?> raised | $<?php echo "$min"; ?> goal </h4>
+                        <h4><?php echo "$pname"; ?></h4>
+                        <div class="text-right">
+                            <a class="btn btn-warning">Pledge Me!</a>
+                        </div>
+                        <div class="detail-list">
+                                <span class="glyphicon glyphicon-time"></span><a><?php echo "$endcampaignformat";?></a><br/>
+                                <span class="glyphicon glyphicon-map-marker"></span><a>User Location</a> <br/>
+                                <button type="button" class="btn btn-default btn-xs btn-danger">Tag1</button>
+                        </div>
+
+                        <p><?php echo "$rt";?></p>
                     </div>
                     <div class="ratings">
-                        <p class="pull-right">3 reviews</p>
+                        <p class="pull-right"><?php echo "$reviewamt";?> reviews</p>
                         <p>
                             <span class="glyphicon glyphicon-star"></span>
                             <span class="glyphicon glyphicon-star"></span>
@@ -49,10 +118,10 @@ include_once "header.php";
 
                     <!--  Progress Bar -->
                     <div class="caption-full">
-                        <h4>Current Progress</h4>
+                        <h4>Current Progress: <?php echo "$progress";?>% completed</h4>
                         <div class="progress">
-                          <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                            <span class="sr-only">20% Complete</span>
+                          <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo "$progress";?>%">
+                            <span class="sr-only"><?php echo "$progress";?>% Complete</span>
                           </div>
                         </div>
                     </div>

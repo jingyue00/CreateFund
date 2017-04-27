@@ -32,7 +32,7 @@
 
 
         <!--  jQuery -->
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.js"></script>
 
         <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap 
         <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
@@ -45,17 +45,29 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>  
 
         <!-- Summernote 
-        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet"> 
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script> -->
+        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet"> -->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script> 
 
         <script src="js/bootstrap.js"></script>  
-        <!--
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.css" rel="stylesheet"> -->
+        
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.css" rel="stylesheet"> 
 
         <link href="css/bootstrap-iso.css" rel="stylesheet"> 
-
         <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.js"></script> 
+        <link href="css/summernote.css" / rel="stylesheet">
+        <script src="css/summernote.min.js"></script>
 
+        <!-- icon -->
+        <link href="css/iconmoon.css" rel="stylesheet">
+        <link href="css/flexslider.css" rel="stylesheet">
+        <link href="css/language-selector-remove-able-css.css" rel="stylesheet">
+        <link href="css/menu.css" rel="stylesheet">
+        <link href="css/responsive.css" rel="stylesheet">
+        <link href="css/color.css" rel="stylesheet">
+        <link href="css/iconmoon.css" rel="stylesheet">
+        <link href="css/themetypo.css" rel="stylesheet">
+        <link href="css/widget.css" rel="stylesheet">
+        <link href="css/sumoselect.css" rel="stylesheet">
 </head>
 
 <body>
