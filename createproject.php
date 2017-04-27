@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 include_once "header.php";
 
 require "class.connect.php";
@@ -8,7 +8,6 @@ require "class.connect.php";
     if(!$conn) { echo "failed to connect!";}
 		
 	//get cname and keyword
-	session_start();
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     $loginname = $_SESSION["loginname"];
@@ -139,7 +138,7 @@ require "class.connect.php";
 		            </div>
 
 
-		         
+
 
 
 	    </form>

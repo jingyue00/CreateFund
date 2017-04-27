@@ -12,8 +12,8 @@
     ini_set('display_errors', 1);
 
     //<!-- get pid --> 
-    //$pid = $_SESSION["pid"];
-    $pid = '10113106771384991864';
+    $pid = $_SESSION["pid"];
+    //$pid = '10113106771384991864';
 
     $getpro = $conn-> prepare("SELECT * FROM PROJECT 
             WHERE pid = ? ");
@@ -55,6 +55,12 @@
         $reviewamt = $row['count'];
     }
 
+    $getreviewdetail = $conn-> prepare("SELECT * FROM COMMENT 
+            WHERE pid = ? ");
+    $getreviewdetail->bind_param("s",$pid);
+    $getreviewdetail->execute();
+    $commentresult = $getreviewdetail->get_result();
+
     $now = new DateTime(null, new DateTimeZone('America/New_York'));
     $nowb = $now->format('Y-m-d H:i:s');  
     $a = strlen($endcampaign);
@@ -67,6 +73,17 @@
 
     $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
     $endcampaignformat = $endcampaignformat->format('Y-m-d');  
+
+    $getlike = $conn-> prepare("SELECT COUNT(*) AS count FROM dbproject.LIKE
+            WHERE pid = ? ");
+    $getlike->bind_param("s",$pid);
+    $getlike->execute();
+    $resultl = $getlike->get_result();
+    if($resultl){
+        $rowl = mysqli_fetch_array($resultl,MYSQLI_BOTH); 
+        $likeamt = $rowl['count'];
+    }
+
 ?>
 
  <!-- Page Content -->
@@ -91,15 +108,23 @@
                     <img class="img-responsive" src="img/coco1.png" alt="">
 
                     <div class="caption-full">
-                        <h4 class="pull-right">$<?php echo "$currentamt"; ?> raised | $<?php echo "$min"; ?> goal </h4>
-                        <h4><?php echo "$pname"; ?></h4>
+                        <h4 class="pull-right">$<?php echo "$currentamt"; ?> raised, $<?php echo "$min"; ?> goal </h4>
+                        <h3><?php echo "$pname"; ?></h3>
                         <div class="text-right">
                             <a class="btn btn-warning">Pledge Me!</a>
                         </div>
                         <div class="detail-list">
-                                <span class="glyphicon glyphicon-time"></span><a><?php echo "$endcampaignformat";?></a><br/>
-                                <span class="glyphicon glyphicon-map-marker"></span><a>User Location</a> <br/>
-                                <button type="button" class="btn btn-default btn-xs btn-danger">Tag1</button>
+                            <p class="pull-right">
+                                <span class="glyphicon glyphicon-heart"></span><a> <?php echo "$likeamt";?> likes</a>
+                                <button class="btn btn-warning">Like Me!</button>
+                            </p>
+                            <p>
+                                <span class="glyphicon glyphicon-time"></span><a> <?php echo "$endcampaignformat";?></a><br/>
+                                <span class="glyphicon glyphicon-map-marker"></span><a> User Location</a><br/>
+                                <button type="button" class="btn btn-default btn-xs btn-success"> Tag1</button>
+                                <button type="button" class="btn btn-default btn-xs btn-success"> Tag2</button>
+                                <button type="button" class="btn btn-default btn-xs btn-success"> Tag3</button>
+                            </p>
                         </div>
 
                         <p><?php echo "$rt";?></p>
@@ -177,6 +202,35 @@
                             <p>I've seen some better than this, but not at this price. I definitely recommend this item.</p>
                         </div>
                     </div>
+                    <hr>
+
+                    <?php
+                    if($commentresult){
+                        while ($row = mysqli_fetch_array($commentresult, MYSQLI_BOTH)){
+                            $reviewcontent = $row['comment'];
+                            $reviewuser = $row['loginname'];
+                            $reviewtime = $row['updatetime'];
+                            $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+                            $getrichtext->bind_param("s",$reviewcontent);
+                            $getrichtext->execute();
+                            $resultc = $getrichtext->get_result();
+                            if($resultc){
+                                $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
+                                $rtc = $rowc['content'];
+                            }
+
+                            echo "
+                            <div class='row'>
+                                <div class='col-md-12'>".$reviewuser."
+                                <span class='pull-right'>".$reviewtime."</span>
+                                <p>".$rtc."</p></div></div> 
+                                <hr>
+                            ";
+
+                        }
+                    }
+
+                    ?>
 
                 </div>
 
