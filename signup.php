@@ -52,7 +52,16 @@
 							<input class="form-control" name="hometown" id="hometown"
 								type="text" placeholder="Enter Home Town" >
 						</div>
-						
+					</div>
+
+					<!-- user post -->
+					<div class="form-group col-md-12">
+						<!-- User Post input -->
+						<h4>Please select your post</h4>
+						<div class="input-group col-md-offset-1 pull-left">
+							<input type="hidden" name="size" value="1000000" />
+				            <input id="post" type="file" name="post"/> 
+						</div>
 					</div>
 					
 					<div class="form-group col-md-12">

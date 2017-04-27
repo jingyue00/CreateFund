@@ -14,7 +14,26 @@
 	$loginname = $_GET["loginname"];
 	$password = $_GET["password"];
 	$md5password = md5($password);
-	$hometown = $_GET["hometown"];	
+	$hometown = $_GET["hometown"];
+	$target_path = "/Library/WebServer/Documents/git/img/";
+    $target_path = $target_path . basename( $_FILES['post']['name']); 
+
+    //echo "<br>";
+    //echo $target_path;
+    //echo "<br>";
+    if(move_uploaded_file($_FILES["post"]["tmp_name"], $target_path))
+    {
+       //echo "upload complete";
+    }
+    else
+    {
+       //echo "move_uploaded_file failed";
+       exit();
+    }
+
+    //echo "<img src='img/".$_FILES["post"]["name"]."'>";
+
+    $post = $_FILES["post"]["name"];	
 	
 	
 	$usr = $conn->prepare("select * from USER where loginname= ?");
@@ -26,8 +45,8 @@
 		echo "<script>window.location.href='signup.php'; alert('Login Name already exist!');</script>";
 	}
 	else {
-		$updatepur = $conn->prepare("INSERT USER Set name=?, loginname=?, password=?, hometown=?");        
-		$updatepur->bind_param("ssss", $name, $loginname, $md5password, $hometown);
+		$updatepur = $conn->prepare("INSERT USER Set name=?, loginname=?, password=?, hometown=? post=?");        
+		$updatepur->bind_param("ssss", $name, $loginname, $md5password, $hometown, $post);
 		$updatepur->execute();
 	}
 	$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
@@ -56,8 +75,23 @@
 	$updatetag = $conn->prepare("INSERT TAG_USER Set loginname=?, tag=?");        
 	$updatetag->bind_param("ss", $loginname, $chk);
 	//$updatetag->execute();
-	foreach($_GET["tag"] as $chk) $updatetag->execute();
-	$updaterowt = mysqli_fetch_array($updatetag->get_result(),MYSQLI_BOTH);
+
+	//save USER_TAG
+	if( isset( $_POST["tag"] )) {
+
+        $updatetag = $conn->prepare("INSERT TAG_USER Set loginname=?, tag=?");        
+
+        foreach($_POST["tag"] as $chk) { 
+            $updatetag->bind_param("ss", $loginname, $chk);
+            $updatetag->execute();
+            //echo "total tag: ".$updatetag->affected_rows;
+        }
+    }
+
+
+	//foreach($_POST["tag"] as $chk) $updatetag->execute();
+	//$updaterowt = mysqli_fetch_array($updatetag->get_result(),MYSQLI_BOTH);
+
 	
 	if (!$updaterowu )
 	{

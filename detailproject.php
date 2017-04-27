@@ -7,13 +7,12 @@
     $conn = $connect->getConnect("dbproject");
     if(!$conn) { echo "failed to connect!";}
         
-    //get cname and keyword
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
 
     //<!-- get pid --> 
-    $pid = $_SESSION["pid"];
-    //$pid = '10113106771384991864';
+    //$pid = $_SESSION["pid"];
+    $pid = '10113106771384991864';
 
     $getpro = $conn-> prepare("SELECT * FROM PROJECT 
             WHERE pid = ? ");
@@ -84,6 +83,17 @@
         $likeamt = $rowl['count'];
     }
 
+    //get user post
+    $getupost = $conn-> prepare("SELECT post FROM USER 
+            WHERE loginname = ? ");
+    $getupost->bind_param("s",$owner);
+    $getupost->execute();
+    $resultu = $getupost->get_result();
+    if($resultu){
+        $rowu = mysqli_fetch_array($resultu,MYSQLI_BOTH); 
+        $upost = $rowu['post'];
+    }
+
 ?>
 
  <!-- Page Content -->
@@ -96,7 +106,7 @@
                 <!-- Owner Name -->
                 <p class="lead"><?php echo "$owner"; ?></p>
                 <!-- PUT OWNER IMAGE AND INFO HERE -->
-                <img src="img/coco.png" class="img-circle" alt="Cinque Terre" width="250" height="250">
+                <img src="img/<?php echo "$upost";?>" class="img-circle" alt="Cinque Terre" width="250" height="250">
 
             </div>
         
@@ -105,7 +115,7 @@
         
             <div class="thumbnail">
 
-                    <img class="img-responsive" src="img/coco1.png" alt="">
+                    <img class="img-responsive" src="img/<?php echo "$post";?>" alt="">
 
                     <div class="caption-full">
                         <h4 class="pull-right">$<?php echo "$currentamt"; ?> raised, $<?php echo "$min"; ?> goal </h4>
