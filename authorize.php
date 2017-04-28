@@ -11,9 +11,9 @@
     ini_set('display_errors', 1);
     $loginname = $_POST["loginname"];
 	$password = $_POST["password"];
-	
+	$md5password = md5($password);
 	$checkCname = $conn->prepare("select * from USER where loginname = ? and password = ?");
-    $checkCname->bind_param("ss",$loginname, $password);
+    $checkCname->bind_param("ss",$loginname, $md5password);
     $checkCname->execute();
     $row = mysqli_fetch_array($checkCname -> get_result(),MYSQLI_BOTH);
     if(!$row)
