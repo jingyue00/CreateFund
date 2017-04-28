@@ -10,17 +10,12 @@
 	//get product and customer
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-    $name = $_POST["name"];
-	$loginname = $_POST["loginname"];
-	$password = $_POST["password"];
+    $name = $_GET["name"];
+	$loginname = $_GET["loginname"];
+	$password = $_GET["password"];
 	$md5password = md5($password);
-<<<<<<< HEAD
 	$hometown = $_GET["hometown"];
 	$target_path = "/Library/WebServer/Documents/git/img/";
-=======
-	$hometown = $_POST["hometown"];
-	$target_path = "/var/www/html/DbProject/img/";
->>>>>>> origin/master
     $target_path = $target_path . basename( $_FILES['post']['name']); 
 
     //echo "<br>";
@@ -50,8 +45,8 @@
 		echo "<script>window.location.href='signup.php'; alert('Login Name already exist!');</script>";
 	}
 	else {
-		$updatepur = $conn->prepare("INSERT USER Set name=?, loginname=?, password=?, hometown=? , post=?");        
-		$updatepur->bind_param("sssss", $name, $loginname, $md5password, $hometown, $post);
+		$updatepur = $conn->prepare("INSERT USER Set name=?, loginname=?, password=?, hometown=? post=?");        
+		$updatepur->bind_param("ssss", $name, $loginname, $md5password, $hometown, $post);
 		$updatepur->execute();
 	}
 	$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
