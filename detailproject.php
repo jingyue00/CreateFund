@@ -125,7 +125,7 @@
     }
 
     $getreviewdetail = $conn-> prepare("SELECT * FROM COMMENT 
-            WHERE pid = ? ");
+            WHERE pid = ? ORDER BY updatetime DESC");
     $getreviewdetail->bind_param("s",$pid);
     $getreviewdetail->execute();
     $commentresult = $getreviewdetail->get_result();

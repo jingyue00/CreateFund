@@ -95,7 +95,7 @@ function update()
 </div>
 
 
-<form role="form" id="pform" method="get" action="updatepledge.php">
+<form role="form" id="pform" method="post" action="inserttrans.php">
         <input type="hidden" id="hamount" name="hamount"/>
         <input type="hidden" id="hccn" name="hccn"/>
         <input type="hidden" id="hccv" name="hccv"/>

@@ -22,6 +22,10 @@
     //<!-- get loginname --> 
     $loginname = 'jane1234';
 
+    $gettrans = $conn-> prepare("SELECT * FROM TRANSACTION WHERE loginname = ? ORDER BY createtime DESC "); 
+    $gettrans->bind_param("s",$loginname); 
+    $gettrans->execute();
+    $transaction = $gettrans->get_result();
 
 ?>
 
@@ -48,22 +52,55 @@
           <thead>
             <tr class="info">
               <th>Date</th>
+              <th>Project</th>
               <th>Amount</th>
               <th>Payment</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>2017 May 1</td>
-              <td>$20</td>
-              <td>VISA - 6200999988887777</td>
-            </tr>
-            <tr>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            
+          <?php
+            if($transaction){
+            while($row = mysqli_fetch_array($transaction, MYSQLI_BOTH)){
+                $tdate = $row['createtime'];
+                $plid = $row['plid'];
+                $ccn = $row['ccn'];
+                $amount = $row['amount'];
+
+                $getpname = $conn->prepare("SELECT pname FROM
+                    PLEDGE a, PROJECT b
+                    WHERE a.pid = b.pid
+                    AND plid = ?");
+                $getpname->bind_param("s",$plid);
+                $getpname->execute();
+                $presult= $getpname->get_result();
+                if($presult){
+                    $rowp= mysqli_fetch_array($presult,MYSQLI_BOTH);    
+                    $pname = $rowp['pname'];
+                }
+
+                $getcardname = $conn->prepare("SELECT cname FROM CCN WHERE ccn = ?");
+                $getcardname->bind_param("s",$ccn);
+                $getcardname->execute();
+                $cresult= $getcardname->get_result();
+                if($cresult){
+                    $rowc= mysqli_fetch_array($cresult,MYSQLI_BOTH);    
+                    $cname = $rowc['cname'];
+                }
+
+                echo "
+                 <tr>
+                  <td>".$tdate."</td>
+                  <td>".$pname."</td>
+                  <td>$".$amount."</td>
+                  <td>".$cname." - ".$ccn."</td>
+                </tr>
+                ";
+               
+                }
+           }
+
+          ?>
+
           </tbody>
         </table> 
         
