@@ -10,6 +10,8 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     $code = $_POST["code"];
+    echo $_SESSION["code"];
+    echo $code;
     if($code != $_SESSION["code"])
     {
          echo "<script>window.location.href='login.php'; alert('Incorrect Captcha. Please re-enter!');</script>";
