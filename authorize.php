@@ -31,6 +31,6 @@
     {
         $_SESSION['loginname'] = $loginname;
 		$conn->close();
-		header('Location:createproject.php');
+		echo "<script>window.location.href='userprofile.php'; alert('Login success!');</script>";
 	}
 ?>
