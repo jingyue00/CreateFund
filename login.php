@@ -43,18 +43,6 @@
 						</div>
 					</div>
 
-					<div class="form-group col-md-12">
-						<!-- captcha input -->
-						<div class="input-group col-md-offset-1">
-							<span class="input-group-addon">
-								<!-- <i class="glyphicon glyphicon-lock"></i> -->
-								<img src="create_code.php">
-							</span> 
-
-							<input type="text" style="height: 50px" class="form-control" id="code" name="code" placeholder="Enter captcha" >
-						</div>
-					</div>
-
 					<div class="form-group ">			
 						<button type="submit"
 							class="btn btn-info col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">Submit</button>
