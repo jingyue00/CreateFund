@@ -11,6 +11,7 @@
     ini_set('display_errors', 1);
 
     //<!-- get pid --> 
+<<<<<<< HEAD
     if(isset($_GET["pid"])){
         $pid = $_GET["pid"];
     }
@@ -84,6 +85,9 @@
         }
     }
 
+=======
+    $pid = $_GET["pid"];
+>>>>>>> origin/master
     $getpro = $conn-> prepare("SELECT * FROM PROJECT 
             WHERE pid = ? ");
     $getpro->bind_param("s",$pid);
@@ -143,8 +147,12 @@
     $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
     $endcampaignformat = $endcampaignformat->format('Y-m-d');  
 
+<<<<<<< HEAD
     $getlike = $conn-> prepare("SELECT COUNT(*) AS count FROM LIKERELATION
             WHERE pid = ? ");
+=======
+    $getlike = $conn-> prepare("SELECT COUNT(*) AS count FROM LIKERELATION WHERE pid = ? ");
+>>>>>>> origin/master
     $getlike->bind_param("s",$pid);
     $getlike->execute();
     $resultl = $getlike->get_result();

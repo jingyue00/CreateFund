@@ -9,11 +9,16 @@
 	session_start();
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
+    $code = $_POST["code"];
+    if($code != $_SESSION["code"])
+    {
+         echo "<script>window.location.href='login.php'; alert('Incorrect Captcha. Please re-enter!');</script>";
+    }
     $loginname = $_POST["loginname"];
 	$password = $_POST["password"];
-	
+	$md5password = md5($password);
 	$checkCname = $conn->prepare("select * from USER where loginname = ? and password = ?");
-    $checkCname->bind_param("ss",$loginname, $password);
+    $checkCname->bind_param("ss",$loginname, $md5password);
     $checkCname->execute();
     $row = mysqli_fetch_array($checkCname -> get_result(),MYSQLI_BOTH);
     if(!$row)
@@ -25,6 +30,6 @@
     {
         $_SESSION['loginname'] = $loginname;
 		$conn->close();
-		header('Location:createproject.php');
+		echo "<script>window.location.href='userprofile.php'; alert('Login success!');</script>";
 	}
 ?>
