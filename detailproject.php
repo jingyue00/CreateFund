@@ -11,7 +11,6 @@
     ini_set('display_errors', 1);
 
     //<!-- get pid --> 
-<<<<<<< HEAD
     if(isset($_GET["pid"])){
         $pid = $_GET["pid"];
     }
@@ -85,9 +84,6 @@
         }
     }
 
-=======
-    $pid = $_GET["pid"];
->>>>>>> origin/master
     $getpro = $conn-> prepare("SELECT * FROM PROJECT 
             WHERE pid = ? ");
     $getpro->bind_param("s",$pid);
@@ -147,12 +143,8 @@
     $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
     $endcampaignformat = $endcampaignformat->format('Y-m-d');  
 
-<<<<<<< HEAD
     $getlike = $conn-> prepare("SELECT COUNT(*) AS count FROM LIKERELATION
             WHERE pid = ? ");
-=======
-    $getlike = $conn-> prepare("SELECT COUNT(*) AS count FROM LIKERELATION WHERE pid = ? ");
->>>>>>> origin/master
     $getlike->bind_param("s",$pid);
     $getlike->execute();
     $resultl = $getlike->get_result();
@@ -185,6 +177,14 @@
     }
 
 ?>
+<script>
+function update()
+        {
+            document.querySelector("#hpid").value = "<?php echo $pid?>";
+            document.querySelector("#hloginame").value = "<?php echo $loginname?>";
+            document.getElementById("pledgeform").submit();
+        }
+</script>
 
  <!-- Page Content -->
     <div class="container">
@@ -211,7 +211,7 @@
                         <!-- <h4 class="pull-right">$<?php echo "$currentamt"; ?> raised, $<?php echo "$min"; ?> goal </h4> -->
                         <h3><?php echo "$pname"; ?></h3>
                         <div class="text-right">
-                            <a class="btn btn-warning">Pledge Me!</a>
+                            <button name = "pledgeme" class="btn btn-warning" onClick="update()">Pledge Me!</button>
                         </div>
                         <div class="detail-list">
                             <p class="pull-right">
@@ -343,15 +343,15 @@
 
                         }
                     }
-
                     ?>
-
                 </div>
-
-
 
         </div>
     </div>
+<form role="form" id="pledgeform" method="post" action="transactionform.php">
+        <input type="hidden" id="hpid" name="hpid"/>
+        <input type="hidden" id="hloginame" name="hloginname"/>
+</form>
 
 <?php 
 
