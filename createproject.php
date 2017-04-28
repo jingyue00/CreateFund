@@ -15,7 +15,7 @@ require "class.connect.php";
 ?>
 
  <!-- Page Content -->
- 	<h1> <?php   echo "$loginname"; ?></h1>
+ 	<h1> Current User: <?php   echo "$loginname"; ?></h1>
     <div class="container">
 
         <!-- Page Header -->
@@ -32,11 +32,10 @@ require "class.connect.php";
         <div class="row">  
         	 <div class="col-md-3">
 
-
             </div>
 
-        <div class="col-md-9 center-block"> 
-        	<div class="thumbnail center-block">
+        <div class="col-md-6 center-block"> 
+        	<div class=" center-block">
 	 			<form role="form" id="project" method="post" action="updatepro.php" enctype="multipart/form-data">
 		            
 		            <label>Project Name:</label>
@@ -44,29 +43,29 @@ require "class.connect.php";
 		            <br />
 		            <label>Project Description:</label> 
 		            <textarea name="pdesc" id="pdesc" class="form-control" placeholder="Project Description" rows="5" id="comment"></textarea>
-		            <br />
+		           
 		            <input type="hidden" name="size" value="1000000" />
 		            <label>Select Post Image:</label>
 		            <input id="post" type="file" name="post"/> 
-		            <br />
+		            
 		            <div>
-		            <label>Minimum Amount $ </label> <br/>
+		            <label>Minimum Amount $ </label>
 		            <input  name="min" id="min" type="number" placeholder="0.00" required name="price" min="0" value="0" step="0.01" title="Currency" pattern="^\d+(?:\.\d{1,2})?$" onblur="
 		this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'">
 		            </div>
 		            <div>
-		            <label>Maximum Amount $</label> <br/>
+		            <label>Maximum Amount $</label>
 		            <input name="max" id="max" type="number" placeholder="0.00" required name="price" min="0" value="0" step="0.01" title="Currency" pattern="^\d+(?:\.\d{1,2})?$" onblur="
 		this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'">
 					</div>
-		            <br />
-		            <label>End Campaign Date</label> <br/>
+		            
+		            <label>End Campaign Date</label>
 		            <div class="input-group date">
 		            <input name="end" id="end" type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 			        </div>
 
-			        <br />
-			        <label>Estimated Project End Date</label> <br/>
+			    
+			        <label>Estimated Project End Date</label> 
 			        <div class="input-group date">
 			            <input name="edate" id="edate" type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 			        </div>
@@ -136,10 +135,6 @@ require "class.connect.php";
 		            <div class="form-group"> <!-- Submit button -->
 		            <button class="btn btn-primary " name="submit" type="submit">Submit</button>
 		            </div>
-
-
-
-
 
 	    </form>
      </div>

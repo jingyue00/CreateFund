@@ -67,6 +67,9 @@
         <link href="css/themetypo.css" rel="stylesheet">
         <link href="css/widget.css" rel="stylesheet">
         <link href="css/sumoselect.css" rel="stylesheet">
+
+        <!-- css from bootwatch
+        <link href="http://bootswatch.com/cerulean/bootstrap.css" rel="stylesheet" type="text/css"> -->
 </head>
 
 <body>

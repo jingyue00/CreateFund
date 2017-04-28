@@ -49,10 +49,14 @@
         if($listresult){
             $i = 0;
             while($row = mysqli_fetch_array($listresult, MYSQLI_BOTH)){
+                $pid = $row['pid'];
                 $pname = $row['pname'];
                 $post = $row['post'];
                 $min = $row['min'];
+                $currentamt = $row['currentamt'];
                 $endcampaign = $row['endcampaign'];
+                $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
+                $endcampaignformat = $endcampaignformat->format('Y-m-d');  
                 $pdesc = $row['pdesc'];
                 $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
                 $getrichtext->bind_param("s",$pdesc);
@@ -61,6 +65,7 @@
                 if($resultc){
                     $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
                     $rtc = $rowc['content'];
+                    $rtc = substr($rtc, 0, 90);
                 }
 
                 //new row
@@ -70,13 +75,17 @@
 
                 echo "
                 <div class='col-md-4 portfolio-item'>
-                <a>
+                <a href='detailproject.php?pid=".$pid."'>
                     <img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
                 </a>
                 <h3>
-                    <a>".$pname."</a>
+                    <a href='detailproject.php?pid=".$pid."'>".$pname."</a>
                 </h3>
-                <p>".$pdesc."</p>
+                <div>
+                <a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
+                <span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
+                </div>
+                <p class='text-info'>".$rtc."</p>
                 </div>
                 ";
 
