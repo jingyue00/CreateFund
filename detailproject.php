@@ -73,7 +73,7 @@
     $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
     $endcampaignformat = $endcampaignformat->format('Y-m-d');  
 
-    $getlike = $conn-> prepare("SELECT COUNT(*) AS count FROM `LIKE` WHERE pid = ? ");
+    $getlike = $conn-> prepare("SELECT COUNT(*) AS count FROM LIKERELATION WHERE pid = ? ");
     $getlike->bind_param("s",$pid);
     $getlike->execute();
     $resultl = $getlike->get_result();
