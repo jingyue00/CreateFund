@@ -20,6 +20,11 @@
         $loginname = $rowu['loginname'];
         $hometown = $rowu['hometown'];
     }
+    $getpro = $conn-> prepare("SELECT * FROM PROJECT 
+            WHERE post is not null");
+    $getpro->execute();
+    $resultp = $getpro->get_result();
+
 
 ?>
 <!DOCTYPE html>
@@ -109,9 +114,33 @@
             </div>
         </div>
     </section>
-
-    <!-- Fixed Height Image Aside -->
-    <!-- Image backgrounds are set within the full-width-pics.css file. -->
+    <!-- Content Section -->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="section-heading">Projects you might be interested<img src="img/observe.gif"/></h1>
+                    <?php
+                    while($rowp = mysqli_fetch_array($resultp,MYSQLI_BOTH)){
+                        echo " 
+                        <p class=\"lead section-lead\">".$rowp['pname']."</p>
+                        <p class=\"lead section-lead\"><img src=\"img/".$rowp['post']."\" height=\"250px\" width=\"600px\"/></p>
+                        <p class=\"section-paragraph\">owner: ".$rowp['owner']." <span style=\"margin-left:100px\"></span> createtime: ".$rowp['createtime']."</p>
+                        <p class=\"section-paragraph\">Minimum:".$rowp['min']." <span style=\"margin-left:100px\"></span> Maximum:".$rowp['max']." </p>";
+                        if($rowp['status'] == 'Completed')
+                        {
+                            echo"<p class=\"section-paragraph\">Status: <button type=\"button\" class=\"btn btn-success\">Completed</button> </p>";
+                        }
+                        else if ($rowp['status'] == 'Cancelled')
+                        {
+                            echo"<p class=\"section-paragraph\">Status: <button type=\"button\" class=\"btn btn-danger\">Cancelled</button> </p>";
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
