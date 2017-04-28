@@ -18,7 +18,7 @@
 			</div>
 
 			<div class="panel-body">
-				<form class="form-horizontal" role="form" method="get" action="savenewusr.php">
+				<form class="form-horizontal" role="form" method="post"  enctype="multipart/form-data" action="savenewusr.php">
 					<div class="form-group col-md-12">
 						<!-- Username input -->
 						<div class="input-group col-md-offset-1">

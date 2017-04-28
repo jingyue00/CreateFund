@@ -10,11 +10,11 @@
 	//get product and customer
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-    $name = $_GET["name"];
-	$loginname = $_GET["loginname"];
-	$password = $_GET["password"];
+    $name = $_POST["name"];
+	$loginname = $_POST["loginname"];
+	$password = $_POST["password"];
 	$md5password = md5($password);
-	$hometown = $_GET["hometown"];
+	$hometown = $_POST["hometown"];
 	$target_path = "/var/www/html/DbProject/img/";
     $target_path = $target_path . basename( $_FILES['post']['name']); 
     //echo "<br>";
