@@ -1,15 +1,4 @@
-<?php 
-    session_start();
-    include_once "header.php";
-    
-    require "class.connect.php";
-    $connect = new connect();
-    $conn = $connect->getConnect("dbproject");
-    if(!$conn) { echo "failed to connect!";}
-        
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
+<?php
     //<!-- get pid --> 
     if(isset($_GET["pid"])){
         $pid = $_GET["pid"];
@@ -20,7 +9,7 @@
     }
 
     //<!-- get loginname --> 
-    $loginname = 'jane1234';
+    $loginname = $_SESSION["loginname"];
 
     //if like btn clicked
     if(isset($_POST['likeme'])){ 
