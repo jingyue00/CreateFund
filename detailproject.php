@@ -11,9 +11,7 @@
     ini_set('display_errors', 1);
 
     //<!-- get pid --> 
-    //$pid = $_SESSION["pid"];
-    $pid = '10113106771384991864';
-
+    $pid = $_SESSION["pid"];
     $getpro = $conn-> prepare("SELECT * FROM PROJECT 
             WHERE pid = ? ");
     $getpro->bind_param("s",$pid);
