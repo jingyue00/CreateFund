@@ -15,9 +15,8 @@
 	$password = $_GET["password"];
 	$md5password = md5($password);
 	$hometown = $_GET["hometown"];
-	$target_path = "/Library/WebServer/Documents/git/img/";
+	$target_path = "/var/www/html/DbProject/img/";
     $target_path = $target_path . basename( $_FILES['post']['name']); 
-
     //echo "<br>";
     //echo $target_path;
     //echo "<br>";
