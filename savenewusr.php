@@ -44,7 +44,7 @@
 		echo "<script>window.location.href='signup.php'; alert('Login Name already exist!');</script>";
 	}
 	else {
-		$updatepur = $conn->prepare("INSERT USER Set name=?, loginname=?, password=?, hometown=? post=?");        
+		$updatepur = $conn->prepare("INSERT USER Set name=?, loginname=?, password=?, hometown=?, post=?");        
 		$updatepur->bind_param("sssss", $name, $loginname, $md5password, $hometown, $post);
 		$updatepur->execute();
 	}
