@@ -94,6 +94,7 @@ require "class.connect.php";
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
+
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -116,7 +117,22 @@ require "class.connect.php";
                         <a href="userprofile.php">My Page</a>
                     </li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                <?php
+                if(isset($loginname)){
+                    echo "<li><a href='userprofile.php'>".$loginname." ";
+                }
+                else{
+                    echo "<li><a href='login.php'>Log in</a></li> <li><a href='signup.php'>Sign up";
+                }
+                ?>
+                </a></li>
+                </ul>
             </div>
+            <div>
+            
+        </div>
+
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
