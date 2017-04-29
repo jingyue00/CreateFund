@@ -17,7 +17,7 @@
     <title>Find Me, Fund Me</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet"> 
+    <link href="css/bootstrap.min.css" rel="stylesheet"> 
 
     <!-- Custom CSS -->
     <link href="css/shop-item.css" rel="stylesheet"> 
