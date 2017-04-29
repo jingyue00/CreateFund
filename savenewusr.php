@@ -45,7 +45,7 @@
 	}
 	else {
 		$updatepur = $conn->prepare("INSERT USER Set name=?, loginname=?, password=?, hometown=? post=?");        
-		$updatepur->bind_param("ssss", $name, $loginname, $md5password, $hometown, $post);
+		$updatepur->bind_param("sssss", $name, $loginname, $md5password, $hometown, $post);
 		$updatepur->execute();
 	}
 	$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
