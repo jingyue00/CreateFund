@@ -1,5 +1,21 @@
 <?php 
+session_start();
+include_once "header.php";
 
+require "class.connect.php";
+    $connect = new connect();
+    $conn = $connect->getConnect("dbproject");
+    if(!$conn) { echo "failed to connect!";}
+        
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
+    //<!-- get loginname --> 
+    if(isset($_SESSION["loginname"])){
+        $loginname = $_SESSION["loginname"];
+    }else{
+        $loginname = 'jane1234';
+    }
 
 ?>
 
@@ -17,7 +33,7 @@
     <title>Find Me, Fund Me</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet"> 
+    <link href="css/bootstrap.css" rel="stylesheet"> 
 
     <!-- Custom CSS -->
     <link href="css/shop-item.css" rel="stylesheet"> 
@@ -85,19 +101,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">GreateFund</a>
+                <a class="navbar-brand" href="index.php">GreateFund</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">Find Project</a>
+                        <a href="projectlist.php">Project</a>
                     </li>
                     <li>
-                        <a href="#">Find People</a>
+                        <a href="#">People</a>
                     </li>
                     <li>
-                        <a href="#">My Page</a>
+                        <a href="userprofile.php">My Page</a>
                     </li>
                 </ul>
             </div>
