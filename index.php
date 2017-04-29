@@ -10,7 +10,18 @@ require "class.connect.php";
 	//get cname and keyword
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-    $loginname = $_SESSION["loginname"];
+
+    //<!-- get pid --> 
+    if(isset($_GET["pid"])){
+        $pid = $_GET["pid"];
+    }
+    else{
+    //$pid = $_SESSION["pid"];
+    $pid = '10113106771384991868';
+    }
+
+    //<!-- get loginname --> 
+    $loginname = 'jane1234';
 
 ?>
 <!--
