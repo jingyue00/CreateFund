@@ -1,15 +1,15 @@
 <?php 
-session_start();
+
 include_once "header.php";
 
-require "class.connect.php";
-    $connect = new connect();
-    $conn = $connect->getConnect("dbproject");
-    if(!$conn) { echo "failed to connect!";}
+//require "class.connect.php";
+    //$iconnect = new connect();
+    //$conn = $iconnect->getConnect("dbproject");
+    //if(!$conn) { echo "failed to connect!";}
 		
 	//get cname and keyword
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+    //error_reporting(E_ALL);
+    //ini_set('display_errors', 1);
 
     //<!-- get pid --> 
     if(isset($_GET["pid"])){
@@ -98,21 +98,21 @@ $(document).ready(function () {
                 <!-- Set the first background image using inline CSS below. -->
                 <div class="fill" style="background-image:url('img/slider4.jpg');"></div>
                 <div class="carousel-caption">
-                    <h2>Caption 1</h2>
+                    
                 </div>
             </div>
             <div class="item">
                 <!-- Set the second background image using inline CSS below. -->
                 <div class="fill" style="background-image:url('img/slider1.jpg');"></div>
                 <div class="carousel-caption">
-                    <h2>Caption 2</h2>
+                   
                 </div>
             </div>
             <div class="item">
                 <!-- Set the third background image using inline CSS below. -->
                 <div class="fill" style="background-image:url('img/slider3.jpg');"></div>
                 <div class="carousel-caption">
-                    <h2>Caption 3</h2>
+                    
                 </div>
             </div>
         </div>
