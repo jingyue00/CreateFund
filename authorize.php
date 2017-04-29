@@ -1,5 +1,4 @@
 <?php
-    session_start();
 	//connect to database
 	require "class.connect.php";
     $connect = new connect();
@@ -31,6 +30,6 @@
     {
         $_SESSION['loginname'] = $loginname;
 		$conn->close();
-		echo "<script>window.location.href='userprofile.php';</script>";
+		echo "<script>window.location.href='userprofile.php'; alert('Login success!');</script>";
 	}
 ?>
