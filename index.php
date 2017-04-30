@@ -20,8 +20,46 @@ include_once "header.php";
     $pid = '10113106771384991868';
     }
 
-    //<!-- get loginname --> 
-    $loginname = 'jane1234';
+    if(isset($loginname)){
+
+        //get people list
+        $getpeople = $conn-> prepare("SELECT following FROM FOLLOW WHERE loginname = ? ORDER BY updatetime DESC");
+        $getpeople->bind_param("s",$loginname);
+        $getpeople->execute();
+        $peopleresult = $getpeople->get_result();
+
+        //get project list
+        $getproject1 = $conn-> prepare("SELECT pid FROM LIKERELATION WHERE loginname = ? ORDER BY updatetime DESC");
+        $getproject1->bind_param("s",$loginname);
+        $getproject1->execute();
+        $projectlist1 = $getproject1->get_result();
+        
+        $getproject2 = $conn-> prepare("SELECT pid FROM PLEDGE WHERE loginname = ? ORDER BY updatetime DESC");
+        $getproject2->bind_param("s",$loginname);
+        $getproject2->execute();
+        $projectlist2 = $getproject2->get_result();
+        
+    }else{
+        $loginname = 'jane1234';
+        //get people list
+        $people = [
+        'following'=>'jane1234',
+        'following'=>'ivy1234',
+        'following'=>'lily1234'];
+
+        //get project list
+        $getproject1 = $conn-> prepare("SELECT pid FROM LIKERELATION ORDER BY updatetime DESC LIMIT 3");
+        $getproject1->bind_param("s",$loginname);
+        $getproject1->execute();
+        $projectlist1 = $getproject1->get_result();
+    
+        $getproject2 = $conn-> prepare("SELECT pid FROM PLEDGE ORDER BY updatetime DESC LIMIT 3");
+        $getproject2->bind_param("s",$loginname);
+        $getproject2->execute();
+        $projectlist2 = $getproject2->get_result();
+
+        //get project list
+    }
 
 ?>
 <!--
@@ -89,7 +127,7 @@ $(document).ready(function () {
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
             <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <!-- <li data-target="#myCarousel" data-slide-to="2"></li> -->
         </ol>
 
         <!-- Wrapper for Slides -->
@@ -108,13 +146,14 @@ $(document).ready(function () {
                    
                 </div>
             </div>
-            <div class="item">
-                <!-- Set the third background image using inline CSS below. -->
+            <!-- <div class="item">
+                <!-- Set the third background image using inline CSS below. 
                 <div class="fill" style="background-image:url('img/slider3.jpg');"></div>
                 <div class="carousel-caption">
                     
                 </div>
-            </div>
+            </div> 
+           -->
         </div>
 
         <!-- Controls -->
@@ -136,17 +175,53 @@ $(document).ready(function () {
                     <small></small>
                 </h1>
             </div>
-           <!-- about user -->
-            <div class="col-lg-4 col-sm-6 text-center mb-4">
+        </div>
+           <!-- people list -->
+           <?php
+           if($peopleresult){
+            $i = 0;
+            while($row = mysqli_fetch_array($peopleresult, MYSQLI_BOTH)){
+                $getfname = $conn-> prepare("SELECT * FROM USER WHERE loginname = ?");
+                $getfname->bind_param("s",$row['following']);
+                $getfname->execute();
+                $fresult = $getfname->get_result();
+                $prow = mysqli_fetch_array($fresult, MYSQLI_BOTH);
+                $ppost = $prow['post'];
+                $pname = $prow['name'];
+                $phometown = $prow['hometown'];
+
+                 //new row
+                if($i%3 == 0){
+                    echo "<div class='row'>";
+                }
+                echo "<div class='col-md-4 text-center'>
+                <img class='img-circle' style='width: 65%' height='230' src='img/".$ppost."'>
+                <h3>".$pname."
+                    <small>from ".$phometown."</small>
+                </h3>
+                <p>We are a group of seasoned engineers and we want bring you a whole new experience of controlling smart things.</p>
+                </div>
+                ";
+
+                //end of row
+                if($i%3 == 2){
+                    echo "</div><hr>";
+                }
+                $i++;
+            }
+           }
+
+           ?>
+
+
+            <!-- <div class="col-lg-4 col-sm-6 text-center mb-4">
                 <img class="rounded-circle img-fluid d-block mx-auto img-circle" src="http://placehold.it/200x200" alt="">
                 <h3>John Smith
                     <small>Job Title</small>
                 </h3>
-                <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
+                <p>We are a group of seasoned engineers and we want bring you a whole new experience of controlling smart things.</p>
             </div>
-            <!-- about user-->
-            
-        </div>
+            <!-- people list-->
 
         <div class="row">
             <div class="col-lg-12">
@@ -154,7 +229,133 @@ $(document).ready(function () {
                     <small></small>
                 </h1>
             </div>
-           <!-- about user -->
+        </div>
+         <?php
+
+        //while($row = $allProject){
+         if(($projectlist1!=FALSE) or($projectlist2!=FALSE)){
+            if($projectlist1){
+
+                $i = 0;
+                while($row = mysqli_fetch_array($projectlist1, MYSQLI_BOTH)){
+
+                $getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
+                $getpname->bind_param("s",$row['pid']);
+                $getpname->execute();
+                $presult = $getpname->get_result();
+                $row = mysqli_fetch_array($presult, MYSQLI_BOTH);
+            
+                $pid = $row['pid'];
+                $pname = $row['pname'];
+                $post = $row['post'];
+                $min = $row['min'];
+                $currentamt = $row['currentamt'];
+                $endcampaign = $row['endcampaign'];
+                $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
+                $endcampaignformat = $endcampaignformat->format('Y-m-d');  
+                $pdesc = $row['pdesc'];
+                $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+                $getrichtext->bind_param("s",$pdesc);
+                $getrichtext->execute();
+                $resultc = $getrichtext->get_result();
+                if($resultc){
+                    $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
+                    $rtc = $rowc['content'];
+                    $rtc = substr($rtc, 0, 90);
+                }
+
+                //new row
+                if($i%3 == 0){
+                    echo "<div class='row'>";
+                }
+
+                echo "
+                <div class='col-md-4 portfolio-item'>
+                <a href='detailproject.php?pid=".$pid."'>
+                    <img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
+                </a>
+                <h3>
+                    <a href='detailproject.php?pid=".$pid."'>".$pname."</a>
+                </h3>
+                <div>
+                <a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
+                <span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
+                </div>
+                <p class='text-info'>".$rtc."</p>
+                </div>
+                ";
+
+                //end of row
+                if($i%3 == 2){
+                    echo "</div><hr>";
+                }
+
+                $i++;
+
+            }
+
+            if($projectlist2){
+                while($row = mysqli_fetch_array($projectlist2, MYSQLI_BOTH)){
+            
+                $getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
+                $getpname->bind_param("s",$row['pid']);
+                $getpname->execute();
+                $presult = $getpname->get_result();
+                $row = mysqli_fetch_array($presult, MYSQLI_BOTH);
+            
+                $pid = $row['pid'];
+                $pname = $row['pname'];
+                $post = $row['post'];
+                $min = $row['min'];
+                $currentamt = $row['currentamt'];
+                $endcampaign = $row['endcampaign'];
+                $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
+                $endcampaignformat = $endcampaignformat->format('Y-m-d');  
+                $pdesc = $row['pdesc'];
+                $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+                $getrichtext->bind_param("s",$pdesc);
+                $getrichtext->execute();
+                $resultc = $getrichtext->get_result();
+                if($resultc){
+                    $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
+                    $rtc = $rowc['content'];
+                    $rtc = substr($rtc, 0, 90);
+                }
+
+                //new row
+                if($i%3 == 0){
+                    echo "<div class='row'>";
+                }
+
+                echo "
+                <div class='col-md-4 portfolio-item'>
+                <a href='detailproject.php?pid=".$pid."'>
+                    <img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
+                </a>
+                <h3>
+                    <a href='detailproject.php?pid=".$pid."'>".$pname."</a>
+                </h3>
+                <div>
+                <a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
+                <span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
+                </div>
+                <p class='text-info'>".$rtc."</p>
+                </div>
+                ";
+
+                //end of row
+                if($i%3 == 2){
+                    echo "</div><hr>";
+                }
+
+                $i++;
+            }  
+            }
+        }
+    }
+        ?>
+
+           <!-- project list 
             <div class="col-lg-4 col-sm-6 text-center mb-4">
                 <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
                 <h3>John Smith
@@ -162,7 +363,7 @@ $(document).ready(function () {
                 </h3>
                 <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
             </div>
-            <!-- about user-->
+            <!-- project list-->
             
         </div>
 
