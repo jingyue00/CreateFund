@@ -10,14 +10,21 @@
     //error_reporting(E_ALL);
     //ini_set('display_errors', 1);
 
+    //from search input form the keyword is set
+    if(isset($_POST["keyword"])){
+        $_SESSION["projectlistcondition"] = "WHERE pname like '%".$_POST["keyword"]."%'";
+    }
+
     $listcondition = "ALL";
     if(isset($_SESSION["projectlistcondition"])){
         $listcondition = $_SESSION["projectlistcondition"];
     }
 
     if(strcmp($listcondition,"ALL") == 0){
+        //listcondition == all
         $getpro = $conn-> prepare("SELECT * FROM PROJECT ORDER BY createtime DESC ");  // specify page size 
     } else {
+        //listcondition is not all
         $sqlst = "SELECT * FROM PROJECT ".$listcondition;
         $getpro = $conn-> prepare($sqlst);
     }

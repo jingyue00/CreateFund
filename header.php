@@ -87,6 +87,18 @@ require "class.connect.php";
         <!-- css from bootwatch
         <link href="http://bootswatch.com/cerulean/bootstrap.css" rel="stylesheet" type="text/css"> -->
 </head>
+<style>
+    .buttonx {
+        appearance: button;
+        -moz-appearance: button;
+        -webkit-appearance: button;
+        text-decoration: none; 
+        font: menu; 
+        color: ButtonText;
+        display: inline-block; 
+        padding: 2px 8px;
+    }
+</style>
 
 <body>
 
@@ -105,7 +117,7 @@ require "class.connect.php";
                 <a class="navbar-brand" href="index.php">GreateFund</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
                 <ul class="nav navbar-nav">
                     <li>
                         <a href="projectlist.php">Project</a>
@@ -116,6 +128,12 @@ require "class.connect.php";
                     <li>
                         <a href="userprofile.php">My Page</a>
                     </li>
+
+                        <form role="form" method="post" action="projectlist.php" style="float:left;margin-top: 12px;">
+                        <input placeholder="  Project Keyword" name="keyword" id="keyword"></input>
+                        <button name="searchbtn" id="searchbtn" type="submit"> Search </button> 
+                        </form>  
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                 <?php
@@ -128,6 +146,7 @@ require "class.connect.php";
                 ?>
                 </a></li>
                 </ul>
+
             </div>
             <div>
             
@@ -137,10 +156,6 @@ require "class.connect.php";
         </div>
         <!-- /.container -->
     </nav>
-
-    
-
-
 
 <?php 
 
