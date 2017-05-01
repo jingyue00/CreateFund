@@ -1,4 +1,5 @@
 <?php 
+	//Show the detail of project
     //session_start();
     include_once "header.php";
     

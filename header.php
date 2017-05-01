@@ -138,22 +138,18 @@ require "class.connect.php";
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                <?php
-                if(isset($loginname)){
-                    echo "<li><a href='userprofile.php'>".$loginname." </a></li> <li><a href='logout.php'>Log out";
-                }
-                else{
-                    echo "<li><a href='login.php'>Log in</a></li> <li><a href='signup.php'>Sign up";
-                }
-                ?>
+					<?php
+						if(isset($loginname)){
+							echo "<li><a href='userprofile.php'>".$loginname." </a></li> <li><a href='logout.php'>Log out";
+						}
+						else{
+							echo "<li><a href='login.php'>Log in</a></li> <li><a href='signup.php'>Sign up";
+						}
+					?>
                 </a></li>
                 </ul>
 
             </div>
-            <div>
-            
-        </div>
-
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->

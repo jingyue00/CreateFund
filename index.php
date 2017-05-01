@@ -1,8 +1,8 @@
 <?php 
+	//homepage 
+	include_once "header.php";
 
-include_once "header.php";
-
-//require "class.connect.php";
+	//require "class.connect.php";
     //$iconnect = new connect();
     //$conn = $iconnect->getConnect("dbproject");
     //if(!$conn) { echo "failed to connect!";}
