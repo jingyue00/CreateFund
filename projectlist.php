@@ -19,6 +19,7 @@
     if(isset($_SESSION["projectlistcondition"])){
         $listcondition = $_SESSION["projectlistcondition"];
     }
+    unset($_SESSION["projectlistcondition"]);
 
     if(strcmp($listcondition,"ALL") == 0){
         //listcondition == all
