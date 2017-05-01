@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include_once "header.php";
+//include_once "header.php";
 
 require "class.connect.php";
     $connect = new connect();

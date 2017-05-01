@@ -13,14 +13,18 @@
     //<!-- get pid --> 
     if(isset($_GET["pid"])){
         $pid = $_GET["pid"];
+        $_SESSION['pid'] = $_GET["pid"];
     }
-    else{
+    if(isset($_SESSION["loginname"])){
+        $loginname = $_SESSION["loginname"];
+    }
+    //else{
     //$pid = $_SESSION["pid"];
-    $pid = '10113106771384991868';
-    }
+    //$pid = '10113106771384991868';
+    //}
 
     //<!-- get loginname --> 
-    $loginname = 'jane1234';
+    //$loginname = 'jane1234';
 
     //if like btn clicked
     if(isset($_POST['likeme'])){ 
