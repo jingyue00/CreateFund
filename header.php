@@ -124,7 +124,7 @@ require "class.connect.php";
                         <a href="projectlist.php">Project</a>
                     </li>
                     <li>
-                        <a href="#">People</a>
+                        <a href="peoplelist.php">People</a>
                     </li>
                     <li>
                         <a href="userprofile.php">My Page</a>
