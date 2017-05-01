@@ -14,7 +14,10 @@
     if(isset($_GET["pid"])){
         $pid = $_GET["pid"];
         $_SESSION['pid'] = $_GET["pid"];
+    } elseif (isset($_SESSION['pid'])){
+        $pid = $_SESSION["pid"];
     }
+    
     if(isset($_SESSION["loginname"])){
         $loginname = $_SESSION["loginname"];
     }
@@ -51,7 +54,7 @@
         $liketodo->bind_param("ss",$pid,$loginname);
         $liketodo->execute();
 
-    }
+    } 
 
     //save the comment
     if(isset($_POST['submitcomment'])){ //check if form was submitted
