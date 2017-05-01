@@ -40,21 +40,19 @@ include_once "header.php";
         $projectlist2 = $getproject2->get_result();
         
     }else{
-        $loginname = 'jane1234';
+        
         //get people list
-        $people = [
-        'following'=>'jane1234',
-        'following'=>'ivy1234',
-        'following'=>'lily1234'];
+        //$people = [
+        //'following'=>'jane1234',
+        //'following'=>'ivy1234',
+        //'following'=>'lily1234'];
 
         //get project list
         $getproject1 = $conn-> prepare("SELECT pid FROM LIKERELATION ORDER BY updatetime DESC LIMIT 3");
-        $getproject1->bind_param("s",$loginname);
         $getproject1->execute();
         $projectlist1 = $getproject1->get_result();
     
         $getproject2 = $conn-> prepare("SELECT pid FROM PLEDGE ORDER BY updatetime DESC LIMIT 3");
-        $getproject2->bind_param("s",$loginname);
         $getproject2->execute();
         $projectlist2 = $getproject2->get_result();
 
@@ -178,7 +176,7 @@ $(document).ready(function () {
         </div>
            <!-- people list -->
            <?php
-           if($peopleresult){
+           if(isset($peopleresult) AND $peopleresult){
             $i = 0;
             while($row = mysqli_fetch_array($peopleresult, MYSQLI_BOTH)){
                 $getfname = $conn-> prepare("SELECT * FROM USER WHERE loginname = ?");
@@ -209,6 +207,36 @@ $(document).ready(function () {
                 }
                 $i++;
             }
+           } else {
+            echo"
+            <div class='row'>
+                <div class='col-md-4 text-center'>
+                <img class='img-circle' style='width: 65%' height='230' src='img/user2.jpg'>
+                <h3>Ivy Yu
+                    <small>from NY</small>
+                </h3>
+                <p>Database is the best course in Tanadon</p>
+                </div>
+
+                <div class='col-md-4 text-center'>
+                <img class='img-circle' style='width: 65%'' height='230' src='img/user9.jpg'>
+                <h3>Jane Jing
+                    <small>from NY</small>
+                </h3>
+                <p>Database is the best course in Tanadon</p>
+                </div>
+
+                <div class='col-md-4 text-center'>
+                <img class='img-circle' style='width: 65%'' height='230' src='img/user4.jpg'>
+                <h3>Mary
+                    <small>from NY</small>
+                </h3>
+                <p>Database is the best course in Tanadon</p>
+                </div>
+
+            </div><hr>
+            ";
+
            }
 
            ?>

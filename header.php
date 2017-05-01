@@ -13,9 +13,10 @@ require "class.connect.php";
     //<!-- get loginname --> 
     if(isset($_SESSION["loginname"])){
         $loginname = $_SESSION["loginname"];
-    }else{
-        $loginname = 'jane1234';
     }
+    //else{
+    //    $loginname = 'jane1234';
+    //}
 
 ?>
 
@@ -138,7 +139,7 @@ require "class.connect.php";
                 <ul class="nav navbar-nav navbar-right">
                 <?php
                 if(isset($loginname)){
-                    echo "<li><a href='userprofile.php'>".$loginname." ";
+                    echo "<li><a href='userprofile.php'>".$loginname." </a></li> <li><a href='logout.php'>Log out";
                 }
                 else{
                     echo "<li><a href='login.php'>Log in</a></li> <li><a href='signup.php'>Sign up";
