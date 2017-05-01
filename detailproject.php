@@ -62,9 +62,11 @@
 
         //save comment into rich_content
         $newcomment = $conn-> prepare("INSERT RICH_CONTENT SET 
-            content = ?
+            content = ? , createtime = ?
             ");
-        $newcomment->bind_param("s",$inputc);
+        $now = new DateTime(null, new DateTimeZone('America/New_York'));
+        $nowb = $now->format('Y-m-d H:i:s'); 
+        $newcomment->bind_param("ss",$inputc,$nowb);
         $newcomment->execute();
 
         //get rid
