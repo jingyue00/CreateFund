@@ -5,12 +5,6 @@
     $_SESSION['loginname'] = $_POST['hloginname'];
     $_SESSION['pid'] = $_POST['hpid'];
 
-    $a = $_SESSION['loginname'];
-    $b = $_SESSION['pid'];
-
-    echo "$a";
-    echo "$b";
-
 ?>
 <script>
 function update()
