@@ -83,9 +83,12 @@
         $newcomment = $conn-> prepare("INSERT COMMENT SET 
             loginname = ?,
             comment = ?,
-            pid = ?
+            pid = ?,
+            updatetime = ?
             ");
-        $newcomment->bind_param("sss", $loginname, $rid, $pid);
+        $now = new DateTime(null, new DateTimeZone('America/New_York'));
+        $nowb = $now->format('Y-m-d H:i:s');
+        $newcomment->bind_param("ssss", $loginname, $rid, $pid,$nowb);
         $newcomment->execute();
         $result = $getrid->get_result();
         if($result){
