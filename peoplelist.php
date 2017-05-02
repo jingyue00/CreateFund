@@ -20,10 +20,20 @@
     $peopleresult = $getppl->get_result();
 
 ?>
+<script type="text/javascript">
+function follow(followto)
+        {
+            document.querySelector("#hfollowing").value = followto;
+            document.querySelector("#hloginname").value = "<?php echo $loginname?>";
+            document.getElementById("follow").submit();
+        }
+</script>
 
  <!-- Page Content -->
-    <div class="container">
+
+<div class="container"> 
         <?php
+
         if($peopleresult){
             $row = mysqli_fetch_array($peopleresult, MYSQLI_BOTH);
             $rowCount = mysqli_num_rows($peopleresult);
@@ -48,17 +58,20 @@
                 $ppost = $row['post'];
                 $pname = $row['name'];
                 $phometown = $row['hometown'];
+                $ploginname = $row['loginname'];
 
                  //new row
                 if($i%3 == 0){
                     echo "<div class='row'>";
                 }
-                echo "<div class='col-md-4 text-center'>
-                <img class='img-circle' style='width: 65%' height='230' src='img/".$ppost."'>
+                echo "<div class=\"col-md-4 text-center\">
+                <img class=\"img-circle\" style=\"width: 65%\" height=\"230\" src='img/".$ppost."'>
                 <h3>".$pname."
                     <small>from ".$phometown."</small>
                 </h3>
-                <p>We are a group of seasoned engineers and we want bring you a whole new experience of controlling smart things.</p>
+                <button style=\"width: 60px;margin-right:65px;\" class=\"pull-right\"> Detail </button>
+                <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"follow('$row[1]')\"> Follow </button>
+                
                 </div>
                 ";
 
@@ -108,6 +121,10 @@
         <hr>
 
     </div>
+<form role="form" id="follow" method="post" action="follow.php">
+        <input type="hidden" id="hloginname" name="hloginname"/>
+        <input type="hidden" id="hfollowing" name="hfollowing"/>
+</form>
 
 
 <?php 

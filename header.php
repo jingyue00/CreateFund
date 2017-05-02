@@ -88,7 +88,18 @@ require "class.connect.php";
 
         <!-- css from bootwatch
         <link href="http://bootswatch.com/cerulean/bootstrap.css" rel="stylesheet" type="text/css"> -->
+		<script type="text/javascript">
+        function alreadyfollowing()
+                {
+                    $('#alreadyfollowing').modal('show')
+                }
+        function newfollowing()
+                {
+                    $('#newfollowing').modal('show')
+                }
+        </script>
 </head>
+
 <style>
     .buttonx {
         appearance: button;
@@ -102,7 +113,19 @@ require "class.connect.php";
     }
 </style>
 
-<body>
+<?php
+ if(isset($_SESSION['follow'])){
+            if($_SESSION['follow'] == "already"){
+                echo "<body onload=\"alreadyfollowing()\">";
+                unset($_SESSION['follow']);
+            }elseif ($_SESSION['follow'] == "new") {
+                echo "<body onload=\"newfollowing()\">";
+                unset($_SESSION['follow']);
+            } 
+        }else{
+             echo "<body>";
+        }
+?>
 
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -158,6 +181,42 @@ require "class.connect.php";
         </div>
         <!-- /.container -->
     </nav>
+	
+	<div class="modal fade" id="alreadyfollowing" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span   aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title"> Oops.... </h4>
+        </div>
+        <div class="modal-body">
+            <p>You are already following: <?php echo $_SESSION['following'];?></p>
+            <img src="img/alreadyfollowing.gif"/>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="newfollowing" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span   aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title"> Congrats! </h4>
+        </div>
+        <div class="modal-body">
+            <p>Now you are following one more amazing people: <?php echo $_SESSION['following'];?></p>
+            <img src="img/newfollowing.gif"/>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <?php 
 
