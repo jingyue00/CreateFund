@@ -128,7 +128,11 @@ require "class.connect.php";
                         <a href="peoplelist.php">People</a>
                     </li>
                     <li>
-                        <a href="userprofile.php">My Page</a>
+						<?php
+						if(isset($loginname)){
+							echo "<li><a href='mypage.php'>My Page</a></li>";
+						}
+						?>                      
                     </li>
 
                         <form role="form" method="post" action="projectlist.php" style="float:left;margin-top: 12px;">
@@ -140,7 +144,7 @@ require "class.connect.php";
                 <ul class="nav navbar-nav navbar-right">
 					<?php
 						if(isset($loginname)){
-							echo "<li><a href='userprofile.php'>".$loginname." </a></li> <li><a href='logout.php'>Log out";
+							echo "<li><a href='mypage.php'>".$loginname." </a></li> <li><a href='logout.php'>Log out";
 						}
 						else{
 							echo "<li><a href='login.php'>Log in</a></li> <li><a href='signup.php'>Sign up";
