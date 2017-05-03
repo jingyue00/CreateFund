@@ -16,31 +16,29 @@
         $loginname = $_SESSION["loginname"];
     }
 
-    $hloginname = $_POST["hloginname"];
-	$hfollowing = $_POST["hfollowing"];
+    $loginname = $_POST["unloginname"];
+	$following = $_POST["unfollowing"];
 
     //check if already exit pledge
     $iffollow = $conn->prepare("SELECT COUNT(*) as c FROM FOLLOW WHERE 
         following = ? AND loginname = ? 
         ");
-    $iffollow->bind_param("ss",$hfollowing,$hloginname);
+    $iffollow->bind_param("ss",$following,$loginname);
     $iffollow->execute();
     $result = $iffollow->get_result();
     $row = mysqli_fetch_array($result,MYSQLI_BOTH);  
     if($row['c'] > 0){
             //already following
-            $_SESSION['follow'] = "already";
-            $_SESSION['following'] = $hfollowing;
+            $rmfollow = $conn->prepare("DELETE FROM FOLLOW
+                WHERE loginname = ? AND following = ? ");
+            $rmfollow->bind_param("ss", $loginname, $following);
+            $rmfollow->execute();
+
+            $_SESSION['rmfollow'] = "done";
     }  
-    else{
-            $newfollow = $conn->prepare("
-                INSERT FOLLOW SET loginname = ?, following = ?
-            ");
-            $newfollow->bind_param("ss",$hloginname,$hfollowing);
-            $newfollow->execute();
-            //insert a new following
-            $_SESSION['follow'] = "new";
-            $_SESSION['following'] = $hfollowing;
+    else{    
+            // not following
+            $_SESSION['rmfollow'] = "fail";
              
     }
 

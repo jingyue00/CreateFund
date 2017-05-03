@@ -19,7 +19,7 @@
     $hloginname = $_POST["hloginname"];
 	$hfollowing = $_POST["hfollowing"];
 
-    //check if already exit pledge
+    //check if already follow
     $iffollow = $conn->prepare("SELECT COUNT(*) as c FROM FOLLOW WHERE 
         following = ? AND loginname = ? 
         ");

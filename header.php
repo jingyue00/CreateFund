@@ -89,9 +89,9 @@ require "class.connect.php";
         <!-- css from bootwatch
         <link href="http://bootswatch.com/cerulean/bootstrap.css" rel="stylesheet" type="text/css"> -->
 		<script type="text/javascript">
-        function alreadyfollowing()
+        function deletefollowing()
                 {
-                    $('#alreadyfollowing').modal('show')
+                    $('#deletefollowing').modal('show')
                 }
         function newfollowing()
                 {
@@ -123,16 +123,23 @@ require "class.connect.php";
 
 <?php
  if(isset($_SESSION['follow'])){
-            if($_SESSION['follow'] == "already"){
-                echo "<body onload=\"alreadyfollowing()\">";
-                unset($_SESSION['follow']);
-            }elseif ($_SESSION['follow'] == "new") {
+            if($_SESSION['follow'] == "new"){
                 echo "<body onload=\"newfollowing()\">";
                 unset($_SESSION['follow']);
-            } 
-        }else{
+            }else{
              echo "<body>";
         }
+    }
+
+ if(isset($_SESSION['rmfollow'])){
+
+        if($_SESSION['rmfollow'] == "done"){
+                echo "<body onload=\"deletefollowing()\">";
+                unset($_SESSION['rmfollow']);
+            }else{
+             echo "<body>";
+        }
+ }
 ?>
 
     <!-- Navigation -->
@@ -190,7 +197,7 @@ require "class.connect.php";
         <!-- /.container -->
     </nav>
 	
-	<div class="modal fade" id="alreadyfollowing" tabindex="-1" role="dialog">
+<div class="modal fade" id="deletefollowing" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -198,7 +205,7 @@ require "class.connect.php";
             <h4 class="modal-title"> Oops.... </h4>
         </div>
         <div class="modal-body">
-            <p>You are already following: <?php echo $_SESSION['following'];?></p>
+            <p>You cancelled following: <?php echo $_SESSION['following'];?></p>
             <img src="img/alreadyfollowing.gif"/>
         </div>
         <div class="modal-footer">

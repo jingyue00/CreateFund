@@ -27,6 +27,12 @@ function follow(followto)
             document.querySelector("#hloginname").value = "<?php echo $loginname?>";
             document.getElementById("follow").submit();
         }
+function unfollow(followto)
+        {
+            document.querySelector("#unfollowing").value = followto;
+            document.querySelector("#unloginname").value = "<?php echo $loginname?>";
+            document.getElementById("unfollow").submit();
+        }
 </script>
 
  <!-- Page Content -->
@@ -60,6 +66,20 @@ function follow(followto)
                 $phometown = $row['hometown'];
                 $ploginname = $row['loginname'];
 
+                //check if follow
+                $iffollow = $conn->prepare("SELECT COUNT(*) as c FROM FOLLOW WHERE 
+                    following = ? AND loginname = ? 
+                    ");
+                $iffollow->bind_param("ss",$ploginname,$loginname);
+                $iffollow->execute();
+                $result = $iffollow->get_result();
+                $rowf = mysqli_fetch_array($result,MYSQLI_BOTH);  
+                if($rowf['c'] > 0){ 
+                     $followbtn = "unfollow";
+                } else {
+                     $followbtn = "follow";
+                }
+
                  //new row
                 if($i%3 == 0){
                     echo "<div class='row'>";
@@ -70,7 +90,7 @@ function follow(followto)
                     <small>from ".$phometown."</small>
                 </h3>
                 <button style=\"width: 60px;margin-right:65px;\" class=\"pull-right\"> Detail </button>
-                <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"follow('$row[1]')\"> Follow </button>
+                <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"$followbtn('$row[1]')\"> ".$followbtn." </button>
                 
                 </div>
                 ";
@@ -124,6 +144,10 @@ function follow(followto)
 <form role="form" id="follow" method="post" action="follow.php">
         <input type="hidden" id="hloginname" name="hloginname"/>
         <input type="hidden" id="hfollowing" name="hfollowing"/>
+</form>
+<form role="form" id="unfollow" method="post" action="unfollow.php">
+        <input type="hidden" id="unloginname" name="unloginname"/>
+        <input type="hidden" id="unfollowing" name="unfollowing"/>
 </form>
 
 
