@@ -29,19 +29,24 @@
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
 							<input class="form-control" name="loginname" id="loginname"
-								type="text" placeholder="Enter Login Name" >
+								type="text" placeholder="Enter Login Name" 
+								value="<?php if(isset($_COOKIE["member_login"])) { echo $_COOKIE["member_login"]; } ?>">
 						</div>
 					</div>
-					
+
+		
+
 					<div class="form-group col-md-12">
 						<!-- Password input -->
 						<div class="input-group col-md-offset-1">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i>
 							</span> 
-							<input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" >
+							<input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" 
+							value="<?php if(isset($_COOKIE["member_password"])) { echo $_COOKIE["member_password"]; } ?>">
 						</div>
 					</div>
+
 
 					<div class="form-group col-md-12">
 						<!-- captcha input -->
@@ -52,6 +57,13 @@
 							</span> 
 
 							<input type="text" style="height: 50px" class="form-control" id="code" name="code" placeholder="Enter captcha" >
+						</div>
+					</div>
+
+					<div class="form-group col-md-12">
+						<!-- Password input -->
+						<div class="input-group col-md-offset-1">
+							<input type="checkbox" name="remember" id="remember"> Remember Me
 						</div>
 					</div>
 

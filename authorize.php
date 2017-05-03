@@ -8,7 +8,6 @@
     if(!$conn) { echo "failed to connect!";}
 		
 	//get cname and keyword
-	session_start();
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     $code = $_POST["code"];
@@ -19,6 +18,20 @@
     $loginname = $_POST["loginname"];
 	$password = $_POST["password"];
 	$md5password = md5($password);
+
+    //remember me
+    if(!empty($_POST["remember"])) {
+                setcookie ("member_login",$loginname,time()+ (10 * 365 * 24 * 60 * 60));
+                setcookie ("member_password",$password,time()+ (10 * 365 * 24 * 60 * 60));
+    } else {
+        if(isset($_COOKIE["member_login"])) {
+        setcookie ("member_login","");
+        }
+        if(isset($_COOKIE["member_password"])) {
+        setcookie ("member_password","");
+        }
+    }
+
 	$checkCname = $conn->prepare("select * from USER where loginname = ? and password = ?");
     $checkCname->bind_param("ss",$loginname, $md5password);
     $checkCname->execute();
@@ -34,4 +47,7 @@
 		$conn->close();
 		echo "<script>window.location.href='index.php';</script>";
 	}
+
+
+    
 ?>
