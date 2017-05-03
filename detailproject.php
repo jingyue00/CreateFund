@@ -190,12 +190,18 @@
     }
 
 ?>
-<script>
+<script type="text/javascript">
 function update()
         {
             document.querySelector("#hpid").value = "<?php echo $pid?>";
             document.querySelector("#hloginame").value = "<?php echo $loginname?>";
             document.getElementById("pledgeform").submit();
+        }
+
+function tagproject(tag)
+        {
+            document.querySelector("#htag").value = tag;
+            document.getElementById("tag").submit();
         }
 </script>
 
@@ -243,18 +249,20 @@ function update()
                                 $gettag->bind_param("s",$pid);
                                 $gettag->execute();
                                 $tresult = $gettag->get_result();
+                                $tcount = mysqli_num_rows($tresult);
                                 if($tresult){
                                     while ($row = mysqli_fetch_array($tresult, MYSQLI_BOTH)) {
                                          $rows[] = $row;
                                     }
                                 }
-                       
-                                foreach($rows as $row)
-                                {
-                                    $a = stripslashes($row['tag']);
-                                    echo "<button type='button' class='btn btn-default btn-xs btn-success'>".$a."</button>
-                                          <a> </a>
-                                    ";
+                                if($tcount > 0){
+                                    foreach($rows as $row)
+                                    {
+                                        $a = stripslashes($row['tag']);
+                                        echo "<button type='button' class='btn btn-default btn-xs btn-success' onClick=\"tagproject('$a')\">".$a."</button>
+                                              <a> </a>
+                                        ";
+                                    }
                                 }
 
                                 ?>
@@ -364,6 +372,9 @@ function update()
 <form role="form" id="pledgeform" method="post" action="transactionform.php">
         <input type="hidden" id="hpid" name="hpid"/>
         <input type="hidden" id="hloginame" name="hloginname"/>
+</form>
+<form role="form" id="tag" method="post" action="tag.php">
+        <input type="hidden" id="htag" name="htag"/>
 </form>
 
 <?php 
