@@ -96,7 +96,12 @@ function unfollow(followto)
                 }
                 $i++;
             }
-           }
+           }else {
+           	echo "
+        	<h3>
+                    <a> No people with this tag</a>
+            </h3>";
+        }
            ?>
             <div class="row">
             <div class="col-lg-12">
@@ -164,6 +169,11 @@ function unfollow(followto)
                 $i++;
 
             }
+        } else {
+        	echo "
+        	<h3>
+                    <a> No project with this tag</a>
+                </h3>";
         }
     
     ?>
