@@ -259,7 +259,7 @@ function tagproject(tag)
                                     foreach($rows as $row)
                                     {
                                         $a = stripslashes($row['tag']);
-                                        echo "<button type='button' class='btn btn-default btn-xs btn-success' onClick=\"tagproject('$a')\">".$a."</button>
+                                        echo "<button type=\"button\" class=\"btn btn-default btn-xs btn-success\" onClick=\"tagproject('$a')\">".$a."</button>
                                               <a> </a>
                                         ";
                                     }
