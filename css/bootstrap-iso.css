@@ -1,0 +1,559 @@
+@font-face {
+  font-family: "summernote";
+  font-style: normal;
+  font-weight: normal;
+  src: url("font/summernote.eot?546c01739436985e5a21a8cb325521f3");
+  src: url("font/summernote.eot?#iefix") format("embedded-opentype"), url("font/summernote.woff?546c01739436985e5a21a8cb325521f3") format("woff"), url("font/summernote.ttf?546c01739436985e5a21a8cb325521f3") format("truetype");
+}
+.bootstrap-iso [class^="note-icon-"]:before,
+.bootstrap-iso [class*=" note-icon-"]:before {
+  display: inline-block;
+  font: normal normal normal 14px summernote;
+  font-size: inherit;
+  -webkit-font-smoothing: antialiased;
+  text-decoration: inherit;
+  text-rendering: auto;
+  text-transform: none;
+  vertical-align: middle;
+  speak: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+.bootstrap-iso .note-icon-align-center:before {
+  content: "\f101";
+}
+.bootstrap-iso .note-icon-align-indent:before {
+  content: "\f102";
+}
+.bootstrap-iso .note-icon-align-justify:before {
+  content: "\f103";
+}
+.bootstrap-iso .note-icon-align-left:before {
+  content: "\f104";
+}
+.bootstrap-iso .note-icon-align-outdent:before {
+  content: "\f105";
+}
+.bootstrap-iso .note-icon-align-right:before {
+  content: "\f106";
+}
+.bootstrap-iso .note-icon-align:before {
+  content: "\f107";
+}
+.bootstrap-iso .note-icon-arrows-alt:before {
+  content: "\f108";
+}
+.bootstrap-iso .note-icon-bold:before {
+  content: "\f109";
+}
+.bootstrap-iso .note-icon-caret:before {
+  content: "\f10a";
+}
+.bootstrap-iso .note-icon-chain-broken:before {
+  content: "\f10b";
+}
+.bootstrap-iso .note-icon-circle:before {
+  content: "\f10c";
+}
+.bootstrap-iso .note-icon-close:before {
+  content: "\f10d";
+}
+.bootstrap-iso .note-icon-code:before {
+  content: "\f10e";
+}
+.bootstrap-iso .note-icon-eraser:before {
+  content: "\f10f";
+}
+.bootstrap-iso .note-icon-font:before {
+  content: "\f110";
+}
+.bootstrap-iso .note-icon-frame:before {
+  content: "\f111";
+}
+.bootstrap-iso .note-icon-italic:before {
+  content: "\f112";
+}
+.bootstrap-iso .note-icon-link:before {
+  content: "\f113";
+}
+.bootstrap-iso .note-icon-magic:before {
+  content: "\f114";
+}
+.bootstrap-iso .note-icon-menu-check:before {
+  content: "\f115";
+}
+.bootstrap-iso .note-icon-minus:before {
+  content: "\f116";
+}
+.bootstrap-iso .note-icon-orderedlist:before {
+  content: "\f117";
+}
+.bootstrap-iso .note-icon-pencil:before {
+  content: "\f118";
+}
+.bootstrap-iso .note-icon-picture:before {
+  content: "\f119";
+}
+.bootstrap-iso .note-icon-question:before {
+  content: "\f11a";
+}
+.bootstrap-iso .note-icon-redo:before {
+  content: "\f11b";
+}
+.bootstrap-iso .note-icon-special-character:before {
+  content: "\f11c";
+}
+.bootstrap-iso .note-icon-square:before {
+  content: "\f11d";
+}
+.bootstrap-iso .note-icon-strikethrough:before {
+  content: "\f11e";
+}
+.bootstrap-iso .note-icon-subscript:before {
+  content: "\f11f";
+}
+.bootstrap-iso .note-icon-summernote:before {
+  content: "\f120";
+}
+.bootstrap-iso .note-icon-superscript:before {
+  content: "\f121";
+}
+.bootstrap-iso .note-icon-table:before {
+  content: "\f122";
+}
+.bootstrap-iso .note-icon-text-height:before {
+  content: "\f123";
+}
+.bootstrap-iso .note-icon-trash:before {
+  content: "\f124";
+}
+.bootstrap-iso .note-icon-underline:before {
+  content: "\f125";
+}
+.bootstrap-iso .note-icon-undo:before {
+  content: "\f126";
+}
+.bootstrap-iso .note-icon-unorderedlist:before {
+  content: "\f127";
+}
+.bootstrap-iso .note-icon-video:before {
+  content: "\f128";
+}
+.bootstrap-iso .note-editor {
+  position: relative;
+}
+.bootstrap-iso .note-editor .note-dropzone {
+  position: absolute;
+  z-index: 100;
+  display: none;
+  color: #87cefa;
+  background-color: white;
+  opacity: 0.95;
+}
+.bootstrap-iso .note-editor .note-dropzone .note-dropzone-message {
+  display: table-cell;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+.bootstrap-iso .note-editor .note-dropzone.hover {
+  color: #098ddf;
+}
+.bootstrap-iso .note-editor.dragover .note-dropzone {
+  display: table;
+}
+.bootstrap-iso .note-editor .note-editing-area {
+  position: relative;
+}
+.bootstrap-iso .note-editor .note-editing-area .note-editable {
+  outline: 0;
+}
+.bootstrap-iso .note-editor .note-editing-area .note-editable sup {
+  vertical-align: super;
+}
+.bootstrap-iso .note-editor .note-editing-area .note-editable sub {
+  vertical-align: sub;
+}
+.bootstrap-iso .note-editor.note-frame {
+  border: 1px solid #a9a9a9;
+}
+.bootstrap-iso .note-editor.note-frame.codeview .note-editing-area .note-editable {
+  display: none;
+}
+.bootstrap-iso .note-editor.note-frame.codeview .note-editing-area .note-codable {
+  display: block;
+}
+.bootstrap-iso .note-editor.note-frame .note-editing-area {
+  overflow: hidden;
+}
+.bootstrap-iso .note-editor.note-frame .note-editing-area .note-editable {
+  padding: 10px;
+  overflow: auto;
+  color: #000;
+  background-color: #fff;
+}
+.bootstrap-iso .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
+  background-color: #e5e5e5;
+}
+.bootstrap-iso .note-editor.note-frame .note-editing-area .note-codable {
+  display: none;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 0;
+  font-family: Menlo, Monaco, monospace, sans-serif;
+  font-size: 14px;
+  color: #ccc;
+  background-color: #222;
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  resize: none;
+}
+.bootstrap-iso .note-editor.note-frame.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100% !important;
+}
+.bootstrap-iso .note-editor.note-frame.fullscreen .note-editable {
+  background-color: white;
+}
+.bootstrap-iso .note-editor.note-frame.fullscreen .note-resizebar {
+  display: none;
+}
+.bootstrap-iso .note-editor.note-frame .note-statusbar {
+  background-color: #f5f5f5;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.bootstrap-iso .note-editor.note-frame .note-statusbar .note-resizebar {
+  width: 100%;
+  height: 8px;
+  padding-top: 1px;
+  cursor: ns-resize;
+}
+.bootstrap-iso .note-editor.note-frame .note-statusbar .note-resizebar .note-icon-bar {
+  width: 20px;
+  margin: 1px auto;
+  border-top: 1px solid #a9a9a9;
+}
+.bootstrap-iso .note-editor.note-frame .note-placeholder {
+  padding: 10px;
+}
+.bootstrap-iso .note-popover.popover {
+  max-width: none;
+}
+.bootstrap-iso .note-popover.popover .popover-content a {
+  display: inline-block;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.bootstrap-iso .note-popover.popover .arrow {
+  left: 20px !important;
+}
+.bootstrap-iso .note-popover .popover-content,
+.bootstrap-iso .panel-heading.note-toolbar {
+  padding: 0 0 5px 5px;
+  margin: 0;
+}
+.bootstrap-iso .note-popover .popover-content > .btn-group,
+.bootstrap-iso .panel-heading.note-toolbar > .btn-group {
+  margin-top: 5px;
+  margin-right: 5px;
+  margin-left: 0;
+}
+.bootstrap-iso .note-popover .popover-content .btn-group .note-table,
+.bootstrap-iso .panel-heading.note-toolbar .btn-group .note-table {
+  min-width: 0;
+  padding: 5px;
+}
+.bootstrap-iso .note-popover .popover-content .btn-group .note-table .note-dimension-picker,
+.bootstrap-iso .panel-heading.note-toolbar .btn-group .note-table .note-dimension-picker {
+  font-size: 18px;
+}
+.bootstrap-iso .note-popover .popover-content .btn-group .note-table .note-dimension-picker .note-dimension-picker-mousecatcher,
+.bootstrap-iso .panel-heading.note-toolbar .btn-group .note-table .note-dimension-picker .note-dimension-picker-mousecatcher {
+  position: absolute!important;
+  z-index: 3;
+  width: 10em;
+  height: 10em;
+  cursor: pointer;
+}
+.bootstrap-iso .note-popover .popover-content .btn-group .note-table .note-dimension-picker .note-dimension-picker-unhighlighted,
+.bootstrap-iso .panel-heading.note-toolbar .btn-group .note-table .note-dimension-picker .note-dimension-picker-unhighlighted {
+  position: relative!important;
+  z-index: 1;
+  width: 5em;
+  height: 5em;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASAgMAAAAroGbEAAAACVBMVEUAAIj4+Pjp6ekKlAqjAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfYAR0BKhmnaJzPAAAAG0lEQVQI12NgAAOtVatWMTCohoaGUY+EmIkEAEruEzK2J7tvAAAAAElFTkSuQmCC') repeat;
+}
+.bootstrap-iso .note-popover .popover-content .btn-group .note-table .note-dimension-picker .note-dimension-picker-highlighted,
+.bootstrap-iso .panel-heading.note-toolbar .btn-group .note-table .note-dimension-picker .note-dimension-picker-highlighted {
+  position: absolute!important;
+  z-index: 2;
+  width: 1em;
+  height: 1em;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASAgMAAAAroGbEAAAACVBMVEUAAIjd6vvD2f9LKLW+AAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfYAR0BKwNDEVT0AAAAG0lEQVQI12NgAAOtVatWMTCohoaGUY+EmIkEAEruEzK2J7tvAAAAAElFTkSuQmCC') repeat;
+}
+.bootstrap-iso .note-popover .popover-content .note-style h1,
+.bootstrap-iso .panel-heading.note-toolbar .note-style h1,
+.bootstrap-iso .note-popover .popover-content .note-style h2,
+.bootstrap-iso .panel-heading.note-toolbar .note-style h2,
+.bootstrap-iso .note-popover .popover-content .note-style h3,
+.bootstrap-iso .panel-heading.note-toolbar .note-style h3,
+.bootstrap-iso .note-popover .popover-content .note-style h4,
+.bootstrap-iso .panel-heading.note-toolbar .note-style h4,
+.bootstrap-iso .note-popover .popover-content .note-style h5,
+.bootstrap-iso .panel-heading.note-toolbar .note-style h5,
+.bootstrap-iso .note-popover .popover-content .note-style h6,
+.bootstrap-iso .panel-heading.note-toolbar .note-style h6,
+.bootstrap-iso .note-popover .popover-content .note-style blockquote,
+.bootstrap-iso .panel-heading.note-toolbar .note-style blockquote {
+  margin: 0;
+}
+.bootstrap-iso .note-popover .popover-content .note-color .dropdown-toggle,
+.bootstrap-iso .panel-heading.note-toolbar .note-color .dropdown-toggle {
+  width: 20px;
+  padding-left: 5px;
+}
+.bootstrap-iso .note-popover .popover-content .note-color .dropdown-menu,
+.bootstrap-iso .panel-heading.note-toolbar .note-color .dropdown-menu {
+  min-width: 340px;
+}
+.bootstrap-iso .note-popover .popover-content .note-color .dropdown-menu .btn-group,
+.bootstrap-iso .panel-heading.note-toolbar .note-color .dropdown-menu .btn-group {
+  margin: 0;
+}
+.bootstrap-iso .note-popover .popover-content .note-color .dropdown-menu .btn-group:first-child,
+.bootstrap-iso .panel-heading.note-toolbar .note-color .dropdown-menu .btn-group:first-child {
+  margin: 0 5px;
+}
+.bootstrap-iso .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-palette-title,
+.bootstrap-iso .panel-heading.note-toolbar .note-color .dropdown-menu .btn-group .note-palette-title {
+  margin: 2px 7px;
+  font-size: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+.bootstrap-iso .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-reset,
+.bootstrap-iso .panel-heading.note-toolbar .note-color .dropdown-menu .btn-group .note-color-reset {
+  width: 100%;
+  padding: 0 3px;
+  margin: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.bootstrap-iso .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-row,
+.bootstrap-iso .panel-heading.note-toolbar .note-color .dropdown-menu .btn-group .note-color-row {
+  height: 20px;
+}
+.bootstrap-iso .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-reset:hover,
+.bootstrap-iso .panel-heading.note-toolbar .note-color .dropdown-menu .btn-group .note-color-reset:hover {
+  background: #eee;
+}
+.bootstrap-iso .note-popover .popover-content .note-para .dropdown-menu,
+.bootstrap-iso .panel-heading.note-toolbar .note-para .dropdown-menu {
+  min-width: 216px;
+  padding: 5px;
+}
+.bootstrap-iso .note-popover .popover-content .note-para .dropdown-menu > div:first-child,
+.bootstrap-iso .panel-heading.note-toolbar .note-para .dropdown-menu > div:first-child {
+  margin-right: 5px;
+}
+.bootstrap-iso .note-popover .popover-content .dropdown-menu,
+.bootstrap-iso .panel-heading.note-toolbar .dropdown-menu {
+  min-width: 90px;
+}
+.bootstrap-iso .note-popover .popover-content .dropdown-menu.right,
+.bootstrap-iso .panel-heading.note-toolbar .dropdown-menu.right {
+  right: 0;
+  left: auto;
+}
+.bootstrap-iso .note-popover .popover-content .dropdown-menu.right::before,
+.bootstrap-iso .panel-heading.note-toolbar .dropdown-menu.right::before {
+  right: 9px;
+  left: auto !important;
+}
+.bootstrap-iso .note-popover .popover-content .dropdown-menu.right::after,
+.bootstrap-iso .panel-heading.note-toolbar .dropdown-menu.right::after {
+  right: 10px;
+  left: auto !important;
+}
+.bootstrap-iso .note-popover .popover-content .dropdown-menu.note-check li a i,
+.bootstrap-iso .panel-heading.note-toolbar .dropdown-menu.note-check li a i {
+  color: deepskyblue;
+  visibility: hidden;
+}
+.bootstrap-iso .note-popover .popover-content .dropdown-menu.note-check li a.checked i,
+.bootstrap-iso .panel-heading.note-toolbar .dropdown-menu.note-check li a.checked i {
+  visibility: visible;
+}
+.bootstrap-iso .note-popover .popover-content .note-fontsize-10,
+.bootstrap-iso .panel-heading.note-toolbar .note-fontsize-10 {
+  font-size: 10px;
+}
+.bootstrap-iso .note-popover .popover-content .note-color-palette,
+.bootstrap-iso .panel-heading.note-toolbar .note-color-palette {
+  line-height: 1;
+}
+.bootstrap-iso .note-popover .popover-content .note-color-palette div .note-color-btn,
+.bootstrap-iso .panel-heading.note-toolbar .note-color-palette div .note-color-btn {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #fff;
+}
+.bootstrap-iso .note-popover .popover-content .note-color-palette div .note-color-btn:hover,
+.bootstrap-iso .panel-heading.note-toolbar .note-color-palette div .note-color-btn:hover {
+  border: 1px solid #000;
+}
+.bootstrap-iso .note-dialog > div {
+  display: none;
+}
+.bootstrap-iso .note-dialog .form-group {
+  margin-right: 0;
+  margin-left: 0;
+}
+.bootstrap-iso .note-dialog .note-modal-form {
+  margin: 0;
+}
+.bootstrap-iso .note-dialog .note-image-dialog .note-dropzone {
+  min-height: 100px;
+  margin-bottom: 10px;
+  font-size: 30px;
+  line-height: 4;
+  color: lightgray;
+  text-align: center;
+  border: 4px dashed lightgray;
+}
+@-moz-document url-prefix() {
+  .bootstrap-iso .note-image-input {
+    height: auto;
+  }
+}
+.bootstrap-iso .note-placeholder {
+  position: absolute;
+  display: none;
+  color: gray;
+}
+.bootstrap-iso .note-handle .note-control-selection {
+  position: absolute;
+  display: none;
+  border: 1px solid black;
+}
+.bootstrap-iso .note-handle .note-control-selection > div {
+  position: absolute;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-selection-bg {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  -webkit-opacity: .3;
+  -khtml-opacity: .3;
+  -moz-opacity: .3;
+  opacity: .3;
+  -ms-filter: alpha(opacity=30);
+  filter: alpha(opacity=30);
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-handle {
+  width: 7px;
+  height: 7px;
+  border: 1px solid black;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-holder {
+  width: 7px;
+  height: 7px;
+  border: 1px solid black;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-sizing {
+  width: 7px;
+  height: 7px;
+  background-color: white;
+  border: 1px solid black;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-nw {
+  top: -5px;
+  left: -5px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-ne {
+  top: -5px;
+  right: -5px;
+  border-bottom: 0;
+  border-left: none;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-sw {
+  bottom: -5px;
+  left: -5px;
+  border-top: 0;
+  border-right: 0;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-se {
+  right: -5px;
+  bottom: -5px;
+  cursor: se-resize;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-se.note-control-holder {
+  cursor: default;
+  border-top: 0;
+  border-left: none;
+}
+.bootstrap-iso .note-handle .note-control-selection .note-control-selection-info {
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+  margin: 5px;
+  font-size: 12px;
+  color: white;
+  background-color: black;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-opacity: .7;
+  -khtml-opacity: .7;
+  -moz-opacity: .7;
+  opacity: .7;
+  -ms-filter: alpha(opacity=70);
+  filter: alpha(opacity=70);
+}
+.bootstrap-iso .note-hint-popover {
+  min-width: 100px;
+  padding: 2px;
+}
+.bootstrap-iso .note-hint-popover .popover-content {
+  max-height: 150px;
+  padding: 3px;
+  overflow: auto;
+}
+.bootstrap-iso .note-hint-popover .popover-content .note-hint-group .note-hint-item {
+  display: block!important;
+  padding: 3px;
+}
+.bootstrap-iso .note-hint-popover .popover-content .note-hint-group .note-hint-item.active,
+.bootstrap-iso .note-hint-popover .popover-content .note-hint-group .note-hint-item:hover {
+  display: block;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.4;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: #428bca;
+  outline: 0;
+}
