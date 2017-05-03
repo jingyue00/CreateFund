@@ -64,45 +64,20 @@
     }
 
 ?>
+<script type="text/javascript">
+function unfollow(followto)
+        {
+            document.querySelector("#unfollowing").value = followto;
+            document.querySelector("#unloginname").value = "<?php echo $loginname?>";
+            document.getElementById("unfollow").submit();
+        }
+</script>
+
 
 <body> 
 	<link href="css/half-slider.css" rel="stylesheet"> 
 
-	<header id="myCarousel" class="carousel slide">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <!-- <li data-target="#myCarousel" data-slide-to="2"></li> -->
-        </ol>
-
-        <!-- Wrapper for Slides -->
-        <div class="carousel-inner">
-            <div class="item active">
-                <!-- Set the first background image using inline CSS below. -->
-                <div class="fill" style="background-image:url('img/slider4.jpg');"></div>
-                <div class="carousel-caption">
-                    
-                </div>
-            </div>
-            <div class="item">
-                <!-- Set the second background image using inline CSS below. -->
-                <div class="fill" style="background-image:url('img/slider1.jpg');"></div>
-                <div class="carousel-caption">
-                   
-                </div>
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-            <span class="icon-prev"></span>
-        </a>
-        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-            <span class="icon-next"></span>
-        </a>
-
-    </header>
+	
     <!-- Page Content -->
 
     <div class="container">
@@ -340,6 +315,7 @@
 				$pname = $prow['name'];
 				$phometown = $prow['hometown'];
 
+
 				//new row
 				if($i%3 == 0){
 					echo "<div class='row'>";
@@ -349,7 +325,7 @@
 				<h3>".$pname."
 					<small>from ".$phometown."</small>
 				</h3>
-				<p>We are a group of seasoned engineers and we want bring you a whole new experience of controlling smart things.</p>
+				<button type=\"button\" style=\" width: 60px;\" name = \"follow\" onClick=\"unfollow('$prow[1]')\"> unfollow </button>
                 </div>
                 ";
 
@@ -409,6 +385,10 @@
             
         </div>
 	</body>
+<form role="form" id="unfollow" method="post" action="unfollowfrommypage.php">
+        <input type="hidden" id="unloginname" name="unloginname"/>
+        <input type="hidden" id="unfollowing" name="unfollowing"/>
+</form>
     <!-- /.container -->
 
     <!-- jQuery -->
