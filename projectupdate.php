@@ -121,7 +121,7 @@ else
 }
 
 
-$target_path = "=/var/www/html/DbProject/img/";
+$target_path = "/var/www/html/DbProject/img/";
 $target_path = $target_path . basename( $_FILES['updatevideo']['name']);
 
 if(move_uploaded_file($_FILES["updatevideo"]["tmp_name"], $target_path))
