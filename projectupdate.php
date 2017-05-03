@@ -107,32 +107,17 @@ session_start();
 
     }
 
-$target_path = "/var/www/html/DbProject/img/";
+$target_path = "img/";
 $target_path = $target_path . basename( $_FILES['updateimage']['name']); 
 
-if(move_uploaded_file($_FILES["updateimage"]["tmp_name"], $target_path))
-{
-   echo "upload complete";
-}
-else
-{
-   echo "move_uploaded_file failed";
-   exit();
-}
+move_uploaded_file($_FILES["updateimage"]["tmp_name"], $target_path);
 
 
-$target_path = "/var/www/html/DbProject/img/";
+$target_path = "img/";
 $target_path = $target_path . basename( $_FILES['updatevideo']['name']);
 
-if(move_uploaded_file($_FILES["updatevideo"]["tmp_name"], $target_path))
-{
-   echo "upload complete";
-}
-else
-{
-   echo "move_uploaded_file failed";
-   exit();
-}
+move_uploaded_file($_FILES["updatevideo"]["tmp_name"], $target_path);
+
 
 header("Location:detailproject.php");
 exit;
