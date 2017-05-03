@@ -143,6 +143,14 @@
     $getreviewdetail->execute();
     $commentresult = $getreviewdetail->get_result();
 
+    //get project update
+    $getupdatemessage = $conn-> prepare("SELECT * FROM PROJECT_UPDATE 
+            WHERE pid = ? ORDER BY updatetime DESC");
+    $getupdatemessage->bind_param("s",$pid);
+    $getupdatemessage->execute();
+    $updatemessageresult = $getupdatemessage->get_result();
+
+
     $now = new DateTime(null, new DateTimeZone('America/New_York'));
     $nowb = $now->format('Y-m-d H:i:s');  
     $a = strlen($endcampaign);
@@ -197,11 +205,21 @@ function update()
             document.querySelector("#hloginame").value = "<?php echo $loginname?>";
             document.getElementById("pledgeform").submit();
         }
-
 function tagproject(tag)
         {
             document.querySelector("#htag").value = tag;
             document.getElementById("tag").submit();
+        }
+function showupdateform(showornot)
+        {
+          var div1=document.getElementById("proupdate"); 
+          if(showornot == 'show'){
+            //div1.style.display='none'
+            div1.style.visibility='visible'; 
+          }  else {
+            //div1.style.display='block';  
+            div1.style.visibility='hidden'; 
+            }
         }
 </script>
 
@@ -300,10 +318,90 @@ function tagproject(tag)
                           </div>
                         </div>
                     </div>
+
+                    <!--project update -->
+                    <div class="text-right comment" id="proupdate" tabindex="-1" >
+                        <!--update message -->
+                        <form role="form" id="proupdateform" method="post" action="projectupdate.php" enctype="multipart/form-data">
+                        <input class="form-control" rows="5" name="updatemessage" id="updatemessage" type="text" class="form-control" placeholder="what do you want to update? " aria-describedby="basic-addon1">
+                        </input>
+                        <br/>
+                        <!-- update image -->
+                        <input type="hidden" name="size" value="1000000" />
+                        <input type="hidden" name="pid" value=<?php echo "$pid";?> />
+                        <input class="pull-right" type="file" name="updateimage"/> 
+                        <label style="margin-right: 400px;">Upload Image:</label>
+                        
+                        <!--update video, mp4/mp3 -->
+                        <input class="pull-right" type="file" name="updatevideo" />
+                        <label style="margin-right: 400px;" for="updateimage">Upload Video:</label>
+
+                        <button class="btn btn-default" name="submitcomment" type="submit">Submit Update</button>
+                        </form>
+                    </div>
             </div>
 
-            <div class="well">
 
+            <div class="well col-md-9" style="width: 850.22222px;">
+                <h3>Updates from Project Owner</h3>
+                <?php
+                    if($updatemessageresult){
+                        while ($row = mysqli_fetch_array($updatemessageresult, MYSQLI_BOTH)){
+                            $uprid = $row['rid'];
+                            $upuid = $row['uid'];
+                            $updatetime = $row['updatetime'];
+                            $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+                            $getrichtext->bind_param("s",$uprid);
+                            $getrichtext->execute();
+                            $resultc = $getrichtext->get_result();
+                            if($resultc){
+                                $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
+                                $rtc = $rowc['content'];
+                            }
+                             echo "
+                            <div class='row'>
+                                <div class='col-md-12'>".$updatetime."
+                                <p>".$rtc."</p>
+                            ";
+                            $getmedia = $conn->prepare("SELECT * FROM MEDIA WHERE uid = ?");
+                            $getmedia->bind_param("s",$upuid);
+                            $getmedia->execute();
+                            $resultm = $getmedia->get_result();
+
+                           
+                        
+                            while ($rowm = mysqli_fetch_array($resultm, MYSQLI_BOTH)){
+                                $mtype = $rowm['type'];
+                                $mfile = $rowm['filename'];          
+                                if(strcmp($mtype,'image')==0){
+                                    echo "<img src='img/".$mfile."' width=\"380\" height=\"142\"></img>";
+                                }else if(strcmp($mtype,'video')==0){
+                                    echo "<div> 
+                                    <video id='video1' width='400' control>
+                                        <source src='img/". $mfile . "' type='video/mp4'>
+                                        </video>
+                                    <button onclick=\"playPause()\">Play/Pause</button> 
+                                    </div>
+                                    ";
+                                }
+                            }
+
+                            echo "</div>
+                                </div> 
+                                <hr>
+                            ";
+                           
+                        }
+                
+                    }
+                    ?>
+                </div>
+                    
+            </div>
+<br/> <br/>
+
+            <div class="well col-md-9" style="width: 850.22222px;left: 307px;">
+                <h3>Project Comments</h3>
                     <div class="text-right comment">
                         <a class="btn btn-success commentbtn">Leave a Review</a>
                         <div class="commentarea">
@@ -366,8 +464,7 @@ function tagproject(tag)
                     }
                     ?>
                 </div>
-
-        </div>
+            </div>
     </div>
 <form role="form" id="pledgeform" method="post" action="transactionform.php">
         <input type="hidden" id="hpid" name="hpid"/>
@@ -376,8 +473,43 @@ function tagproject(tag)
 <form role="form" id="tag" method="post" action="tag.php">
         <input type="hidden" id="htag" name="htag"/>
 </form>
+<script type="text/javascript">
+function showupdateform(showornot)
+        {
+          var div1=document.getElementById("proupdate"); 
+          if(showornot == 'show'){
+            //div1.style.display='none'
+            div1.style.visibility='visible'; 
+          }  else {
+            //div1.style.display='block';  
+            div1.style.visibility='hidden'; 
+            }
+        }
+</script>
+<script> 
+var myVideo = document.getElementById("video1"); 
 
+function playPause() { 
+    if (myVideo.paused) 
+        myVideo.play(); 
+    else 
+        myVideo.pause(); 
+} 
+
+</script> 
 <?php 
+if ($_SESSION['loginname']==$owner){
+
+    $u = 'show';
+    //show update
+}else{
+    $u = 'hide';
+    //hide update
+}
+echo "<script type=\"text/javascript\">",
+     "showupdateform('$u');",
+     "</script>";
+
 
 include_once "footer.php";
 
