@@ -83,7 +83,7 @@
 					    
 				    });
 				    </script>
-
+<!--
 				    <fieldset>
 				        <legend>Make Post</legend>
 				        <p class="container">
@@ -100,7 +100,7 @@
 					    var postForm = function() {
 						  var content = $('textarea[name="content"]').html($('#summernote').code());
 						}
-                    </script>
+                    </script> -->
 		             <div class="form-group col-md-12">
 						<!-- Tags Selected -->
 						<h4>Please tag your project</h4>

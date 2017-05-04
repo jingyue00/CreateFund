@@ -27,7 +27,7 @@
     //echo "Size: " . ($_FILES["post"]["size"] / 1024) . " Kb<br />";
     //echo "Stored in: " . $_FILES["post"]["tmp_name"];
 
-    $target_path = "/Library/WebServer/Documents/git/img/";
+    $target_path = "/var/www/html/DbProject/img/";
     $target_path = $target_path . basename( $_FILES['post']['name']); 
 
     //echo "<br>";
