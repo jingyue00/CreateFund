@@ -44,25 +44,35 @@ function update()
             $getccn->bind_param("s",$loginname);
             $getccn->execute();
             $cresult = $getccn->get_result();
-            if($cresult){
+            $countccn = mysqli_num_rows($cresult);
+            if($countccn > 0)
+            {
                 while ($row = mysqli_fetch_array($cresult, MYSQLI_BOTH)) {
                 $rows[] = $row;
                 }
+                foreach($rows as $row)
+                {
+                    $a = stripslashes($row['ccn']);
+                    $b = stripslashes($row['edate']);
+                    $phpdate = strtotime( $b );
+                    $mysqldate = date( 'Y-m-d', $phpdate );
+                    $c = stripslashes($row['cname']);
+                    echo "
+                    <div class='radio'>
+                      <label><input type='radio' name='ccnradio' value=".$a.">Card Type: ".$c.", Card Number: ".$a.", Expire Date: ".$mysqldate."</label>
+                    </div>
+                    ";
+                }
+            }
+            else{
+                echo "
+                    <div>
+                      <label style='color: red;''>You don't have credit card yet, please create your credit card first</label>
+                    </div>
+                    ";
             }
                        
-            foreach($rows as $row)
-            {
-                $a = stripslashes($row['ccn']);
-                $b = stripslashes($row['edate']);
-                $phpdate = strtotime( $b );
-                $mysqldate = date( 'Y-m-d', $phpdate );
-                $c = stripslashes($row['cname']);
-                echo "
-                <div class='radio'>
-                  <label><input type='radio' name='ccnradio' value=".$a.">Card Type: ".$c.", Card Number: ".$a.", Expire Date: ".$mysqldate."</label>
-                </div>
-                ";
-            }
+            
          ?>
           <div class="form-group">
             <label for="exampleInputEmail1">Enter Card CCV</label>
