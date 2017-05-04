@@ -115,7 +115,7 @@ function unfollow(followto)
 								<!-- Password input -->
 								<div class="input-group col-md-offset-1">
 									<span class="input-group-addon"></span> 
-										<input type="password" class="form-control" id="password" name="password" placeholder="Enter new Password" >
+										<input type="password" class="form-control" id="password" name="password" placeholder="Enter new Password">
 								</div>
 							</div>
 					
@@ -131,7 +131,7 @@ function unfollow(followto)
 							<!-- user post -->
 							<div class="form-group col-md-12">
 								<!-- User Post input -->
-								<h4>Please select your post</h4>
+								<h4>Please select your new post, now your post is <?php echo "$upost";?></h4>
 								<div class="input-group col-md-offset-1 pull-left">
 									<input type="hidden" name="size" value="1000000" />
 									<input id="post" type="file" name="post"/> 
@@ -241,7 +241,7 @@ function unfollow(followto)
 								<!-- Credit Card Number input -->
 								<div class="input-group col-md-offset-1">
 									<span class="input-group-addon"></span> 
-										<input class="form-control" name="credcn" id="credcn" type="text" placeholder="Enter Credit Card Number">
+										<input class="form-control" name="credcn" id="credcn" type="text" placeholder="Enter Credit Card Number" onKeyUp="chInput('credcn')" onKeyDown="chInput('credcn')">
 								</div>
 							</div>
 							<div class="form-group col-md-12">
