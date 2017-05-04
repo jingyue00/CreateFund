@@ -11,10 +11,15 @@
     //ini_set('display_errors', 1);
 
     //from search input form the keyword is set
+
     if(isset($_POST["keyword"])){
-        $getpro = $conn-> prepare("SELECT * FROM PROJECT where pname like ? ORDER BY createtime DESC ");  // specify page size 
+        $getpro = $conn-> prepare("SELECT a.pname as pname, a.pid as pid, a.post as post, a.min as min, a.max as max, a.currentamt as currentamt, a.endcampaign as endcampaign, c.content as content 
+                FROM PROJECT a, TAG_PROJECT b, RICH_CONTENT c
+                WHERE a.pid = b.pid AND a.pdesc = c.rid AND ((a.pname like ?) OR (b.tag like ?) OR (c.content like ?))
+                GROUP BY a.pid
+                ORDER BY a.createtime DESC");  // specify page size 
         $keyword = "%".$_POST["keyword"]."%";
-        $getpro->bind_param("s",$keyword);
+        $getpro->bind_param("sss",$keyword,$keyword,$keyword);
     }
     else{
         $getpro = $conn-> prepare("SELECT * FROM PROJECT ORDER BY createtime DESC ");  // specify page size 
@@ -64,16 +69,16 @@
                 $endcampaign = $row['endcampaign'];
                 $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
                 $endcampaignformat = $endcampaignformat->format('Y-m-d');  
-                $pdesc = $row['pdesc'];
-                $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
-                $getrichtext->bind_param("s",$pdesc);
-                $getrichtext->execute();
-                $resultc = $getrichtext->get_result();
-                if($resultc){
-                    $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
-                    $rtc = $rowc['content'];
-                    $rtc = substr($rtc, 0, 90);
-                }
+                $rtc = $row['content'];
+                //$getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+                //$getrichtext->bind_param("s",$pdesc);
+                //$getrichtext->execute();
+                //$resultc = $getrichtext->get_result();
+                //if($resultc){
+                //    $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
+                //    $rtc = $rowc['content'];
+                //   $rtc = substr($rtc, 0, 90);
+                //}
 
                 //new row
                 if($i%3 == 0){
