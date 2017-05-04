@@ -12,22 +12,12 @@
 
     //from search input form the keyword is set
     if(isset($_POST["keyword"])){
-        $_SESSION["projectlistcondition"] = "WHERE pname like '%".$_POST["keyword"]."%'";
+        $getpro = $conn-> prepare("SELECT * FROM PROJECT where pname like ? ORDER BY createtime DESC ");  // specify page size 
+        $keyword = "%".$_POST["keyword"]."%";
+        $getpro->bind_param("s",$keyword);
     }
-
-    $listcondition = "ALL";
-    if(isset($_SESSION["projectlistcondition"])){
-        $listcondition = $_SESSION["projectlistcondition"];
-    }
-    unset($_SESSION["projectlistcondition"]);
-
-    if(strcmp($listcondition,"ALL") == 0){
-        //listcondition == all
+    else{
         $getpro = $conn-> prepare("SELECT * FROM PROJECT ORDER BY createtime DESC ");  // specify page size 
-    } else {
-        //listcondition is not all
-        $sqlst = "SELECT * FROM PROJECT ".$listcondition;
-        $getpro = $conn-> prepare($sqlst);
     }
     $getpro->execute();
     $listresult = $getpro->get_result();
@@ -48,7 +38,6 @@
     <div class="container">
         <?php
         if($listresult){
-            $row = mysqli_fetch_array($listresult, MYSQLI_BOTH);
             $rowCount = mysqli_num_rows($listresult);
         }
         ?>
