@@ -40,8 +40,8 @@
 	$usr->execute();
 	$prow = mysqli_fetch_array($usr->get_result(), MYSQLI_BOTH);
 	
-	$updatepur = $conn->prepare("INSERT USER Set name=?, password=?, hometown=?, post=?");        
-	$updatepur->bind_param("sssss", $name, $md5password, $hometown, $post);
+	$updatepur = $conn->prepare("update USER Set name=?, loginname= ?, password=?, hometown=?, post=?");        
+	$updatepur->bind_param("issss", $name, $loginname, $md5password, $hometown, $post);
 	$updatepur->execute();
 	$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
 

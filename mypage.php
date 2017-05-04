@@ -1,15 +1,6 @@
 <?php 
 	//mypage 
 	include_once "header.php";
-
-	//require "class.connect.php";
-    //$iconnect = new connect();
-    //$conn = $iconnect->getConnect("dbproject");
-    //if(!$conn) { echo "failed to connect!";}
-		
-	//get cname and keyword
-    //error_reporting(E_ALL);
-    //ini_set('display_errors', 1);
 	
     $connect = new connect();
     $conn = $connect->getConnect("dbproject");
@@ -18,8 +9,8 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
         //get user post
-    $getupost = $conn-> prepare("SELECT name,loginname,password,hometown,post FROM USER 
-            WHERE loginname = ? ");
+		
+    $getupost = $conn-> prepare("SELECT name,loginname,password,hometown,post FROM USER WHERE loginname = ? ");
     $getupost->bind_param("s",$_SESSION["loginname"]);
     $getupost->execute();
     $resultu = $getupost->get_result();
@@ -40,6 +31,16 @@
     $pid = '10113106771384991868';
     }
 
+	$getpledge = $conn-> prepare("SELECT * FROM PLEDGE WHERE loginname = ? ORDER BY createtime DESC "); 
+    $getpledge->bind_param("s",$loginname); 
+    $getpledge->execute();
+    $pledge = $getpledge->get_result();
+	
+	$getcredcn = $conn-> prepare("SELECT * FROM CCN WHERE loginname = ? ORDER BY edate DESC "); 
+    $getcredcn->bind_param("s",$loginname); 
+    $getcredcn->execute();
+    $credcn = $getcredcn->get_result();
+	
     if(isset($loginname)){
 
         //get people list
@@ -97,9 +98,17 @@ function unfollow(followto)
 <body> 
 	<link href="css/half-slider.css" rel="stylesheet"> 
 	<div class="col-lg-12">
+		
+		
+		
 		<!-- Trigger the modal with a button -->
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">My profile</button>
-		<!-- Modal -->
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mypledgeModal">Pledge History</button>
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mycardModal">Credit Card Information</button>
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mynewcardModal">Add New Credit Card</button>
+		<button type="button" class="btn btn-info btn-lg"><a href="createproject.php">Create New Project</a></button>
+		
+		<!-- My Profile Modal -->			
 		<div id="myModal" class="modal fade" role="dialog">
 			<div class="modal-dialog">
 				<!-- Modal content-->
@@ -157,13 +166,198 @@ function unfollow(followto)
 						<button type="submit" class="btn btn-default ">Edit My Profile</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					</div>					
-				</form>
-					
+				</form>		
 				</div>
-
 			</div>
 		</div>
+		
+		<!-- Pledge History Modal -->
+		<div id="mypledgeModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title"> My Pledge History </h4>
+					</div>
+					<div class="modal-body">
+						<div class="container">
+							<!-- Page Header -->
+							<div class="row">
+								<div class="col-md-6 center-block"> 
+									<h1 class="page-header">My Pledge History
+										<small>Detail Information</small>
+									</h1>
+								</div>
+							</div>
+							<div class="row">
+								<div class="row">  
+									<div class="col-md-6 center-block"> 
+										<table class="table table-striped table-hover ">
+											<thead>
+												<tr class="info">
+													<th>Project</th><th>Amount</th><th>Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													if($pledge){
+														while($row = mysqli_fetch_array($pledge, MYSQLI_BOTH)){
+															$plid = $row['plid'];
+															$amount = $row['totalamount'];
+															$status = $row['status'];
+
+															$getpname = $conn->prepare("SELECT pname FROM
+																PLEDGE a, PROJECT b
+																WHERE a.pid = b.pid
+																AND plid = ?");
+															$getpname->bind_param("s",$plid);
+															$getpname->execute();
+															$presult= $getpname->get_result();
+															if($presult){
+																$rowp= mysqli_fetch_array($presult,MYSQLI_BOTH);    
+																$pname = $rowp['pname'];
+															}
+															$getcardname = $conn->prepare("SELECT cname FROM CCN WHERE ccn = ?");
+															$getcardname->bind_param("s",$ccn);
+															$getcardname->execute();
+															$cresult= $getcardname->get_result();
+															if($cresult){
+																$rowc= mysqli_fetch_array($cresult,MYSQLI_BOTH);    
+																$cname = $rowc['cname'];
+															}
+															echo "
+															 <tr>
+															  <td>".$pname."</td>
+															  <td>$".$amount."</td>
+															  <td>".$status."</td>
+															</tr>
+															"; 
+														}
+													}
+												?>
+											</tbody>
+										</table>   
+									</div>
+								</div>
+							</div>								
+						</div>
+					</div>	
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>					
+				</div>
+			</div>
+		</div>
+		
+		<!-- Add New Credit Card Modal -->			
+		<div id="mynewcardModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title"> Add New Credit Card </h4>
+					</div>
+					<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="mynewcredit.php">
+						<div class="modal-body">
+							<div class="form-group col-md-12">
+								<!-- Credit Card Number input -->
+								<div class="input-group col-md-offset-1">
+									<span class="input-group-addon"></span> 
+										<input class="form-control" name="credcn" id="credcn" type="text" placeholder="Enter Credit Card Number">
+								</div>
+							</div>
+							<div class="form-group col-md-12">
+								<!-- Expiration Date input -->
+								<div class="input-group col-md-offset-1">
+									<span class="input-group-addon"></span> 
+										<input class="form-control" name="edate" id="edate" type="text" placeholder="Enter Expiration Date" >
+								</div>
+							</div>			
+							<div class="form-group col-md-12">
+								<!-- Password input -->
+								<div class="input-group col-md-offset-1">						
+									<label for="credname">Choose Your Card Type:</label>
+									<select class="form-control" id="credname" name ="credname" >
+										<option></option>
+										<option>Visa</option>
+										<option>Master</option>
+									  </select>								  					
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit"
+							class="btn btn-default">Submit</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>					
+					</form>		
+				</div>
+			</div>
+		</div>
+		
+		<!-- Credit Card Information -->
+		<div id="mycardModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title"> Credit Card Information </h4>
+					</div>
+					<div class="modal-body">
+						<div class="container">
+							<!-- Page Header -->
+							<div class="row">
+								<div class="col-md-6 center-block"> 
+									<h1 class="page-header">My Credit Card
+										<small>Detail Information</small>
+									</h1>
+								</div>
+							</div>
+							<div class="row">
+								<div class="row">  
+									<div class="col-md-6 center-block"> 
+										<table class="table table-striped table-hover ">
+											<thead>
+												<tr class="info">
+													<th>Card Name</th><th>Card Number</th><th>Expatriation date</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													if($credcn){
+														while($row = mysqli_fetch_array($credcn, MYSQLI_BOTH)){
+															$cname = $row['cname'];
+															$ccn = $row['ccn'];
+															$edate = $row['edate'];											
+															echo "
+															 <tr>
+															  <td>".$cname."</td>
+															  <td>".$ccn."</td>
+															  <td>".$edate."</td>
+															</tr>
+															"; 
+														}
+													}
+												?>
+											</tbody>
+										</table>   
+									</div>
+								</div>
+							</div>								
+						</div>
+					</div>												
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>					
+				</div>
+			</div>
+		</div>
+	
 	</div>
+	
     <!-- Page Content -->
 
     <div class="container">
