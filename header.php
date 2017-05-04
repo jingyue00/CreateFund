@@ -106,7 +106,23 @@ require "class.connect.php";
                     var str=document.getElementById(inputid);
                     var regex= /[^a-zA-Z0-9 ]/gi;
                     str.value=str.value.replace(regex ,"");
+                    showHint(str.value);
                 }
+        function showHint(str) {
+          var xhttp;
+          if (str.length == 0) { 
+            document.getElementById("txtHint").innerHTML = "";
+            return;
+          }
+          xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              document.getElementById("hintdatalist").innerHTML = this.responseText;
+            }
+          };
+          xhttp.open("GET", "gethint.php?q="+str, true);
+          xhttp.send();   
+        }
         </script>
 </head>
 
@@ -186,7 +202,9 @@ require "class.connect.php";
                     </li>
 
                         <form role="form" method="post" action="projectlist.php" style="float:left;margin-top: 12px;">
-                        <input placeholder="  Project Keyword" name="keyword" id="keyword" onKeyUp="chInput('keyword')" onKeyDown="chInput('keyword')"></input>
+                        <input placeholder="  Project Keyword" list= "hint" name="keyword" id="keyword" onKeyUp="chInput('keyword')" onKeyDown="chInput('keyword')"></input>
+                        <textfield id="hintdatalist">
+                        </textfield>
                         <button name="searchbtn" id="searchbtn" type="submit"> Search </button> 
                         </form>  
 
