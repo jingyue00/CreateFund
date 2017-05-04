@@ -51,9 +51,10 @@
     }  
     else{
         $newpledge = $conn->prepare("
-                INSERT PLEDGE SET loginname = ?, pid = ?
+                INSERT PLEDGE SET loginname = ?, pid = ?, status = ?
             ");
-            $newpledge->bind_param("ss",$loginname,$pid);
+            $status = 'waiting';
+            $newpledge->bind_param("sss",$loginname,$pid,$status);
             $newpledge->execute();
 
             $getplid = $conn->prepare("SELECT plid FROM PLEDGE WHERE 
@@ -75,8 +76,7 @@
     $newtrans = $conn->prepare("
                 INSERT TRANSACTION SET plid = ?, amount = ?, ccn = ?, ccv = ?, loginname = ?, status=?
             ");
-    $status = 'waiting';
-    $newtrans->bind_param("ssssss",$plid, $hamount,$hccn,$hccv,$loginname,$status);
+    $newtrans->bind_param("ssssss",$plid, $hamount,$hccn,$hccv,$loginname);
 	$newtrans->execute();
 
     header("Location:transactionlist.php");
