@@ -32,6 +32,16 @@
     $getpro->execute();
     $listresult = $getpro->get_result();
 
+    //add userlog
+    $now = new DateTime(null, new DateTimeZone('America/New_York'));
+    $nowb = $now->format('Y-m-d H:i:s'); 
+    $ltype = "searchproject";
+    $newlog = $conn->prepare("
+                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+            ");
+    $newlog->bind_param("ssss",$loginname,$ltype,$listcondition,$nowb);
+    $newlog->execute();
+
 ?>
 
  <!-- Page Content -->

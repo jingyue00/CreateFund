@@ -30,6 +30,16 @@
     //<!-- get loginname --> 
     //$loginname = 'jane1234';
 
+    //add userlog
+    $now = new DateTime(null, new DateTimeZone('America/New_York'));
+    $nowb = $now->format('Y-m-d H:i:s'); 
+    $ltype = "viewproject";
+    $newlog = $conn->prepare("
+                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+            ");
+    $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
+    $newlog->execute();
+
     //if like btn clicked
     if(isset($_POST['likeme'])){ 
 

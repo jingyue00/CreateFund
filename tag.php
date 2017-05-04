@@ -20,6 +20,15 @@
         $prrowCount = mysqli_num_rows($projectresult);
     }
 
+//add userlog
+    $now = new DateTime(null, new DateTimeZone('America/New_York'));
+    $nowb = $now->format('Y-m-d H:i:s'); 
+    $ltype = "searchtag";
+    $newlog = $conn->prepare("
+                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+            ");
+    $newlog->bind_param("ssss",$loginname,$ltype,$tag,$nowb);
+    $newlog->execute();
 
 	//search project
 ?>
