@@ -204,7 +204,9 @@ function update(status)
                 document.querySelector("#hloginame").value = "<?php echo $loginname?>";
                 document.getElementById("pledgeform").submit();
             }else {
-                <?php  $_SESSION['cannotpledge'] = "cannotpledge"; ?>
+                document.querySelector("#hpid").value = "<?php echo $pid?>";
+                document.querySelector("#hloginame").value = "<?php echo $loginname?>";
+                document.getElementById("cannotpledgeform").submit();
             }
         }
 function tagproject(tag)
@@ -470,6 +472,10 @@ function showupdateform(showornot)
             </div>
     </div>
 <form role="form" id="pledgeform" method="post" action="transactionform.php">
+        <input type="hidden" id="hpid" name="hpid"/>
+        <input type="hidden" id="hloginame" name="hloginname"/>
+</form>
+<form role="form" id="cannotpledgeform" method="post" action="pledge.php">
         <input type="hidden" id="hpid" name="hpid"/>
         <input type="hidden" id="hloginame" name="hloginname"/>
 </form>
