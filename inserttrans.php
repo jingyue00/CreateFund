@@ -74,9 +74,9 @@
 
     //insert new transaction
     $newtrans = $conn->prepare("
-                INSERT TRANSACTION SET plid = ?, amount = ?, ccn = ?, ccv = ?, loginname = ?, status=?
+                INSERT TRANSACTION SET plid = ?, amount = ?, ccn = ?, ccv = ?, loginname = ?
             ");
-    $newtrans->bind_param("ssssss",$plid, $hamount,$hccn,$hccv,$loginname);
+    $newtrans->bind_param("sssss",$plid, $hamount,$hccn,$hccv,$loginname);
 	$newtrans->execute();
 
     header("Location:transactionlist.php");
