@@ -22,7 +22,11 @@
         $getpro->bind_param("sss",$keyword,$keyword,$keyword);
     }
     else{
-        $getpro = $conn-> prepare("SELECT * FROM PROJECT ORDER BY createtime DESC ");  // specify page size 
+        $getpro = $conn-> prepare("SELECT a.pname as pname, a.pid as pid, a.post as post, a.min as min, a.max as max, a.currentamt as currentamt, a.endcampaign as endcampaign, c.content as content 
+                FROM PROJECT a, RICH_CONTENT c
+                WHERE a.pdesc = c.rid 
+                GROUP BY a.pid
+                ORDER BY a.createtime DESC ");  // specify page size 
     }
     $getpro->execute();
     $listresult = $getpro->get_result();
@@ -69,7 +73,8 @@
                 $endcampaign = $row['endcampaign'];
                 $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
                 $endcampaignformat = $endcampaignformat->format('Y-m-d');  
-                $rtc = $row['content'];
+                $content = $row['content'];
+                $rtc = substr($content, 0, 90);
                 //$getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
                 //$getrichtext->bind_param("s",$pdesc);
                 //$getrichtext->execute();
