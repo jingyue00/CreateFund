@@ -10,8 +10,9 @@
 	//get product and customer
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-    $usrname = $_POST["usrname"];
+    
 	$loginname = $_SESSION['loginname'];
+	$usrname = $_POST["usrname"];
 	$password = $_POST["password"];
 	$md5password = md5($password);
 	$hometown = $_POST["hometown"];
@@ -41,7 +42,7 @@
 	$prow = mysqli_fetch_array($usr->get_result(), MYSQLI_BOTH);
 	
 	$updatepur = $conn->prepare("UPDATE USER Set name=?, password=?, hometown=?, post=? WHERE loginname= ?");        
-	$updatepur->bind_param("issss", $usrname, $md5password, $hometown, $post, $loginname);
+	$updatepur->bind_param("sssss", $usrname, $md5password, $hometown, $post, $loginname);
 	$updatepur->execute();
 	$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
 	
