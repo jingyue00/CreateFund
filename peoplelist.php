@@ -43,6 +43,11 @@ function unfollow(followto)
             document.querySelector("#unloginname").value = "<?php echo $loginname?>";
             document.getElementById("unfollow").submit();
         }
+function peopledetail(ploginname)
+        {
+            document.querySelector("#ploginname").value = ploginname;
+            document.getElementById("peopledetail").submit();
+        }
 </script>
 
  <!-- Page Content -->
@@ -99,7 +104,7 @@ function unfollow(followto)
                 <h3>".$pname."
                     <small>from ".$phometown."</small>
                 </h3>
-                <button style=\"width: 60px;margin-right:65px;\" class=\"pull-right\"> Detail </button>
+                <button type=\"button\" style=\"width: 60px;margin-right:65px;\" class=\"pull-right\" onClick=\"peopledetail('$ploginname')\"> Detail </button>
                 <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"$followbtn('$row[1]')\"> ".$followbtn." </button>
                 
                 </div>
@@ -159,7 +164,9 @@ function unfollow(followto)
         <input type="hidden" id="unloginname" name="unloginname"/>
         <input type="hidden" id="unfollowing" name="unfollowing"/>
 </form>
-
+<form role="form" id="peopledetail" method="post" action="usrpage.php">
+        <input type="hidden" id="ploginname" name="ploginname"/>
+</form>
 
 <?php 
 
