@@ -358,55 +358,61 @@ function unfollow(followto)
         </div> 
 		<?php
 			if($peocreate) 
-			{		
-                $i = 0;
-                while($row = mysqli_fetch_array($peocreate, MYSQLI_BOTH)){							            
-					$pid = $row['pid'];
-					$pname = $row['pname'];
-					$post = $row['post'];
-					$min = $row['min'];
-					$currentamt = $row['currentamt'];
-					$endcampaign = $row['endcampaign'];
-					$endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
-					$endcampaignformat = $endcampaignformat->format('Y-m-d');  
-					$pdesc = $row['pdesc'];
-					$getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
-					$getrichtext->bind_param("s",$pdesc);
-					$getrichtext->execute();
-					$resultc = $getrichtext->get_result();
-					if($resultc){
-						$rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
-						$rtc = $rowc['content'];
-						$rtc = substr($rtc, 0, 90);
+			{	
+				if (mysqli_num_rows($peocreate)== 0){
+						echo " 
+							<p>No Created Project Yet!</p>;
+							<img src='img/pu.gif'/>
+							";
+				} 
+				else {
+					$i = 0;
+					while($row = mysqli_fetch_array($peocreate, MYSQLI_BOTH)){	
+						$pid = $row['pid'];
+						$pname = $row['pname'];
+						$post = $row['post'];
+						$min = $row['min'];
+						$currentamt = $row['currentamt'];
+						$endcampaign = $row['endcampaign'];
+						$endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
+						$endcampaignformat = $endcampaignformat->format('Y-m-d');  
+						$pdesc = $row['pdesc'];
+						$getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+						$getrichtext->bind_param("s",$pdesc);
+						$getrichtext->execute();
+						$resultc = $getrichtext->get_result();
+						if($resultc){
+							$rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
+							$rtc = $rowc['content'];
+							$rtc = substr($rtc, 0, 90);
+						}
+						//three projects each row
+						if($i%3 == 0){
+							echo "<div class='row'>";
+						}
+						echo "
+							<div class='col-md-4 portfolio-item'>
+							<a href='detailproject.php?pid=".$pid."'>
+							<img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
+							</a>
+							<h3>
+								<a href='detailproject.php?pid=".$pid."'>".$pname."</a>
+							</h3>
+							<div>
+							<a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
+							<span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
+							</div>
+							<p class='text-info'>".$rtc."</p>
+							</div>
+						";
+						//end of row
+						if($i%3 == 2){
+							echo "</div><hr>";
+						}
+						$i++;
 					}
-					//three projects each row
-					if($i%3 == 0){
-						echo "<div class='row'>";
-					}
-					echo "
-					<div class='col-md-4 portfolio-item'>
-					<a href='detailproject.php?pid=".$pid."'>
-                    <img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
-					</a>
-					<h3>
-						<a href='detailproject.php?pid=".$pid."'>".$pname."</a>
-					</h3>
-					<div>
-					<a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
-					<span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
-					</div>
-					<p class='text-info'>".$rtc."</p>
-					</div>
-					";
-					//end of row
-					if($i%3 == 2){
-						echo "</div><hr>";
-					}
-					$i++;
-				}			
-			} else {
-				echo "No project";
-			}
+				}									
+			} 
 		?>
 		
 		<div class="row">
@@ -418,69 +424,68 @@ function unfollow(followto)
         </div> 
 		<?php		
 			if($projectlist1) 
-			{
-                $i = 0;
-                while($row = mysqli_fetch_array($projectlist1, MYSQLI_BOTH)){
-
-					$getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
-					$getpname->bind_param("s",$row['pid']);
-					$getpname->execute();
-					$presult = $getpname->get_result();
-					$prrow = mysqli_fetch_array($presult, MYSQLI_BOTH);
-            
-					$pid = $prrow['pid'];
-					$pname = $prrow['pname'];
-					$post = $prrow['post'];
-					$min = $prrow['min'];
-					$currentamt = $prrow['currentamt'];
-					$endcampaign = $prrow['endcampaign'];
-					$endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
-					$endcampaignformat = $endcampaignformat->format('Y-m-d');  
-					$pdesc = $prrow['pdesc'];
-					$getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
-					$getrichtext->bind_param("s",$pdesc);
-					$getrichtext->execute();
-					$resultc = $getrichtext->get_result();
-					if($resultc){
-						$rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
-						$rtc = $rowc['content'];
-						$rtc = substr($rtc, 0, 90);
-					}
-
-					//new row
-					if($i%3 == 0){
-						echo "<div class='row'>";
-					}
-
+			{		
+				if (mysqli_num_rows($projectlist1) == 0){
 					echo "
-					<div class='col-md-4 portfolio-item'>
-					<a href='detailproject.php?pid=".$pid."'>
-                    <img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
-					</a>
-					<h3>
-						<a href='detailproject.php?pid=".$pid."'>".$pname."</a>
-					</h3>
-					<div>
-					<a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
-					<span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
-					</div>
-					<p class='text-info'>".$rtc."</p>
-					</div>
-					";
-
-					//end of row
-					if($i%3 == 2){
-						echo "</div><hr>";
-					}
-					$i++;
-					
+						<p>No Pledged Project Yet!</p>;
+						<img src='img/pu.gif'/>
+						";
 				}
-				echo "<p>No pledged1</p>";
-			} 
-			else {
-				echo "<p>No pledged2</p>";
-            
-			}
+				else{
+					$i = 0;
+					while($row = mysqli_fetch_array($projectlist1, MYSQLI_BOTH)){
+						$getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
+						$getpname->bind_param("s",$row['pid']);
+						$getpname->execute();
+						$presult = $getpname->get_result();
+						$prrow = mysqli_fetch_array($presult, MYSQLI_BOTH);
+						$pid = $prrow['pid'];
+						$pname = $prrow['pname'];
+						$post = $prrow['post'];
+						$min = $prrow['min'];
+						$currentamt = $prrow['currentamt'];
+						$endcampaign = $prrow['endcampaign'];
+						$endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
+						$endcampaignformat = $endcampaignformat->format('Y-m-d');  
+						$pdesc = $prrow['pdesc'];
+						$getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+						$getrichtext->bind_param("s",$pdesc);
+						$getrichtext->execute();
+						$resultc = $getrichtext->get_result();
+						if($resultc){
+							$rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
+							$rtc = $rowc['content'];
+							$rtc = substr($rtc, 0, 90);
+						}
+
+						//new row
+						if($i%3 == 0){
+							echo "<div class='row'>";
+						}
+
+						echo "
+							<div class='col-md-4 portfolio-item'>
+							<a href='detailproject.php?pid=".$pid."'>
+							<img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
+							</a>
+							<h3>
+								<a href='detailproject.php?pid=".$pid."'>".$pname."</a>
+							</h3>
+							<div>
+							<a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
+							<span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
+							</div>
+							<p class='text-info'>".$rtc."</p>
+							</div>
+						";
+						//end of row
+						if($i%3 == 2){
+							echo "</div><hr>";
+						}
+						$i++;	
+					}
+				}
+			} 			
 		?>
 		
 		<div class="row">
@@ -491,62 +496,66 @@ function unfollow(followto)
             </div>
         </div>		 
 		<?php
-			if($projectlist2){
-                while($row = mysqli_fetch_array($projectlist2, MYSQLI_BOTH)){
-            
-                $getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
-                $getpname->bind_param("s",$row['pid']);
-                $getpname->execute();
-                $presult = $getpname->get_result();
-                $row = mysqli_fetch_array($presult, MYSQLI_BOTH);
-            
-                $pid = $row['pid'];
-                $pname = $row['pname'];
-                $post = $row['post'];
-                $min = $row['min'];
-                $currentamt = $row['currentamt'];
-                $endcampaign = $row['endcampaign'];
-                $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
-                $endcampaignformat = $endcampaignformat->format('Y-m-d');  
-                $pdesc = $row['pdesc'];
-                $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
-                $getrichtext->bind_param("s",$pdesc);
-                $getrichtext->execute();
-                $resultc = $getrichtext->get_result();
-                if($resultc){
-                    $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
-                    $rtc = $rowc['content'];
-                    $rtc = substr($rtc, 0, 90);
-                }
+			if($projectlist2){			
+				if (mysqli_num_rows($projectlist2) == 0){
+					echo "
+						<p>No Liked Project Yet!</p>;
+						<img src='img/pu.gif'/>
+						";
+				} 
+				else {
+					$i = 0;
+					while($row = mysqli_fetch_array($projectlist2, MYSQLI_BOTH)){				
+						$getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
+						$getpname->bind_param("s",$row['pid']);
+						$getpname->execute();
+						$presult = $getpname->get_result();
+						$prrow = mysqli_fetch_array($presult, MYSQLI_BOTH);		
+						$pid = $prrow['pid'];
+						$pname = $prrow['pname'];
+						$post = $prrow['post'];
+						$min = $prrow['min'];
+						$currentamt = $prrow['currentamt'];
+						$endcampaign = $prrow['endcampaign'];
+						$endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
+						$endcampaignformat = $endcampaignformat->format('Y-m-d');  
+						$pdesc = $prrow['pdesc'];
+						$getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
+						$getrichtext->bind_param("s",$pdesc);
+						$getrichtext->execute();
+						$resultc = $getrichtext->get_result();
+						if($resultc){
+							$rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
+							$rtc = $rowc['content'];
+							$rtc = substr($rtc, 0, 90);
+						}
+						//new row
+						if($i%3 == 0){
+							echo "<div class='row'>";
+						}
+						echo "
+							<div class='col-md-4 portfolio-item'>
+							<a href='detailproject.php?pid=".$pid."'>
+								<img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
+							</a>
+							<h3>
+								<a href='detailproject.php?pid=".$pid."'>".$pname."</a>
+							</h3>
+							<div>
+							<a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
+							<span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
+							</div>
+							<p class='text-info'>".$rtc."</p>
+							</div>
+						";
 
-                //new row
-                if($i%3 == 0){
-                    echo "<div class='row'>";
-                }
-
-                echo "
-                <div class='col-md-4 portfolio-item'>
-                <a href='detailproject.php?pid=".$pid."'>
-                    <img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
-                </a>
-                <h3>
-                    <a href='detailproject.php?pid=".$pid."'>".$pname."</a>
-                </h3>
-                <div>
-                <a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
-                <span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
-                </div>
-                <p class='text-info'>".$rtc."</p>
-                </div>
-                ";
-
-                //end of row
-                if($i%3 == 2){
-                    echo "</div><hr>";
-                }
-
-                $i++;
-				}	  
+						//end of row
+						if($i%3 == 2){
+							echo "</div><hr>";
+						}
+						$i++;	  
+					}
+				}
             }
 		?> 
 		 
@@ -560,68 +569,53 @@ function unfollow(followto)
         <!-- people list -->
         <?php
 		if(isset($peopleresult) AND $peopleresult){
-			$i = 0;
-			while($row = mysqli_fetch_array($peopleresult, MYSQLI_BOTH)){
-				$getfname = $conn-> prepare("SELECT * FROM USER WHERE loginname = ?");
-				$getfname->bind_param("s",$row['following']);
-				$getfname->execute();
-				$fresult = $getfname->get_result();
-				$prow = mysqli_fetch_array($fresult, MYSQLI_BOTH);
-				$ppost = $prow['post'];
-				$pname = $prow['name'];
-				$phometown = $prow['hometown'];
+			if (mysqli_num_rows($peopleresult) == 0){
+				echo "
+					<p>No Liked Project Yet!</p>;
+					<img src='img/pu.gif'/>
+					";
+				} 
+			else {
+				$i = 0;
+				while($row = mysqli_fetch_array($peopleresult, MYSQLI_BOTH)){
+					$getfname = $conn-> prepare("SELECT * FROM USER WHERE loginname = ?");
+					$getfname->bind_param("s",$row['following']);
+					$getfname->execute();
+					$fresult = $getfname->get_result();
+					$prow = mysqli_fetch_array($fresult, MYSQLI_BOTH);
+					if (count($prow) == 0){
+						echo "
+							<p>No Liked Project Yet!</p>;
+							<img src='img/pu.gif'/>
+							";
+					}
+					else {
+						$ppost = $prow['post'];
+						$pname = $prow['name'];
+						$phometown = $prow['hometown'];
+						
+						//new row
+						if($i%3 == 0){
+							echo "<div class='row'>";
+						}
+						echo "<div class='col-md-4 text-center'>
+						<img class='img-circle' style='width: 65%' height='230' src='img/".$ppost."'>
+						<h3>".$pname."
+							<small>from ".$phometown."</small>
+						</h3>
+						<button type=\"button\" style=\" width: 60px;\" name = \"follow\" onClick=\"unfollow('$prow[1]')\"> unfollow </button>
+						</div>
+						";
 
-
-				//new row
-				if($i%3 == 0){
-					echo "<div class='row'>";
+						//end of row
+						if($i%3 == 2){
+							echo "</div><hr>";
+						}
+						$i++;
+					}
 				}
-				echo "<div class='col-md-4 text-center'>
-				<img class='img-circle' style='width: 65%' height='230' src='img/".$ppost."'>
-				<h3>".$pname."
-					<small>from ".$phometown."</small>
-				</h3>
-				<button type=\"button\" style=\" width: 60px;\" name = \"follow\" onClick=\"unfollow('$prow[1]')\"> unfollow </button>
-                </div>
-                ";
-
-                //end of row
-                if($i%3 == 2){
-                    echo "</div><hr>";
-                }
-                $i++;
             }
 		} 
-		else {
-			echo"
-				<div class='row'>
-				<div class='col-md-4 text-center'>
-				<img class='img-circle' style='width: 65%' height='230' src='img/user2.jpg'>
-				<h3>Ivy Yu
-					<small>from NY</small>
-				</h3>
-				<p>Database is the best course in Tanadon</p>
-				</div>
-
-				<div class='col-md-4 text-center'>
-				<img class='img-circle' style='width: 65%'' height='230' src='img/user9.jpg'>
-				<h3>Jane Jing
-					<small>from NY</small>
-				</h3>
-				<p>Database is the best course in Tanadon</p>
-				</div>
-
-				<div class='col-md-4 text-center'>
-				<img class='img-circle' style='width: 65%'' height='230' src='img/user4.jpg'>
-				<h3>Mary
-					<small>from NY</small>
-				</h3>
-				<p>Database is the best course in Tanadon</p>
-				</div>
-
-				</div><hr>
-			";
-		}
 
         ?>
 
