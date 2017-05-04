@@ -10,7 +10,27 @@
 	//get cname and keyword
     //error_reporting(E_ALL);
     //ini_set('display_errors', 1);
-
+	
+    $connect = new connect();
+    $conn = $connect->getConnect("dbproject");
+    if(!$conn) { echo "failed to connect!";}
+        
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+        //get user post
+    $getupost = $conn-> prepare("SELECT name,loginname,password,hometown,post FROM USER 
+            WHERE loginname = ? ");
+    $getupost->bind_param("s",$_SESSION["loginname"]);
+    $getupost->execute();
+    $resultu = $getupost->get_result();
+    if($resultu){
+        $rowu = mysqli_fetch_array($resultu,MYSQLI_BOTH); 
+        $upost = $rowu['post'];
+        $name = $rowu['name'];
+        $loginname = $rowu['loginname'];
+        $hometown = $rowu['hometown'];
+		$password = $rowu['password'];
+    }
     //<!-- get pid --> 
     if(isset($_GET["pid"])){
         $pid = $_GET["pid"];
@@ -76,8 +96,74 @@ function unfollow(followto)
 
 <body> 
 	<link href="css/half-slider.css" rel="stylesheet"> 
+	<div class="col-lg-12">
+		<!-- Trigger the modal with a button -->
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">My profile</button>
+		<!-- Modal -->
+		<div id="myModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title"> Edit My Profile </h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="mypedituser.php">
+							<div class="form-group col-md-12">
+								<!-- Login Name input -->
+								<div class="input-group col-md-offset-1">
+									<span class="input-group-addon"></span> 
+										<input class="form-control" name="loginname" id="loginname" disabled value = "<?php echo $loginname;?>"
+											type="text" placeholder="Enter Login Name" onKeyUp="chInput('loginname')" onKeyDown="chInput('loginname')">
+								</div>
+							</div>
+							<div class="form-group col-md-12">
+								<!-- Username input -->
+								<div class="input-group col-md-offset-1">
+									<span class="input-group-addon"></span> 
+										<input class="form-control" name="name" id="name" value = "<?php echo $name;?>"
+											type="text" placeholder="Enter User Name" onKeyUp="chInput('name')" onKeyDown="chInput('name')">
+								</div>
+							</div>			
+							<div class="form-group col-md-12">
+								<!-- Password input -->
+								<div class="input-group col-md-offset-1">
+									<span class="input-group-addon"></span> 
+										<input type="password" class="form-control" id="password" name="password" placeholder="Enter new Password" >
+								</div>
+							</div>
+					
+							<div class="form-group col-md-12">
+								<!-- Home town input -->
+								<div class="input-group col-md-offset-1">
+									<span class="input-group-addon"></span> 
+										<input class="form-control" name="hometown" id="hometown" value = " <?php echo $hometown;?>"
+											type="text" placeholder="Enter Home Town" onKeyUp="chInput('hometown')" onKeyDown="chInput('hometown')">
+								</div>
+							</div>
 
-	
+							<!-- user post -->
+							<div class="form-group col-md-12">
+								<!-- User Post input -->
+								<h4>Please select your post</h4>
+								<div class="input-group col-md-offset-1 pull-left">
+									<input type="hidden" name="size" value="1000000" />
+									<input id="post" type="file" name="post"/> 
+								</div>
+							</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-default ">Edit My Profile</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>					
+				</form>
+					
+				</div>
+
+			</div>
+		</div>
+	</div>
     <!-- Page Content -->
 
     <div class="container">
