@@ -8,7 +8,7 @@
         
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-        //get user post
+    //get user post
 		
     $getupost = $conn-> prepare("SELECT name,loginname,password,hometown,post FROM USER WHERE loginname = ? ");
     $getupost->bind_param("s",$_SESSION["loginname"]);
@@ -22,15 +22,7 @@
         $hometown = $rowu['hometown'];
 		$password = $rowu['password'];
     }
-    //<!-- get pid --> 
-    if(isset($_GET["pid"])){
-        $pid = $_GET["pid"];
-    }
-    else{
-    //$pid = $_SESSION["pid"];
-    $pid = '10113106771384991868';
-    }
-
+    
 	$getpledge = $conn-> prepare("SELECT * FROM PLEDGE WHERE loginname = ? ORDER BY createtime DESC "); 
     $getpledge->bind_param("s",$loginname); 
     $getpledge->execute();
@@ -42,46 +34,33 @@
     $credcn = $getcredcn->get_result();
 		
     if(isset($loginname)){
+	
+		//get project create list
+        $getcreatep = $conn-> prepare("SELECT * FROM PROJECT WHERE owner = ? ORDER BY endcampaign DESC");
+        $getcreatep->bind_param("s",$loginname);
+        $getcreatep->execute();
+        $peocreate = $getcreatep->get_result();
+		
+		//get pledged project list
+        $getproject1 = $conn-> prepare("SELECT pid FROM PLEDGE WHERE loginname = ? ORDER BY updatetime DESC");
+        $getproject1->bind_param("s",$loginname);
+        $getproject1->execute();
+        $projectlist1 = $getproject1->get_result();
+		
+		//get liked project list
+        $getproject2 = $conn-> prepare("SELECT pid FROM LIKERELATION WHERE loginname = ? ORDER BY updatetime DESC");
+        $getproject2->bind_param("s",$loginname);
+        $getproject2->execute();
+        $projectlist2 = $getproject2->get_result();
 
-        //get people list
+        //get followed people list
         $getpeople = $conn-> prepare("SELECT following FROM FOLLOW WHERE loginname = ? ORDER BY updatetime DESC");
         $getpeople->bind_param("s",$loginname);
         $getpeople->execute();
         $peopleresult = $getpeople->get_result();
-
-        //get project list
-        $getproject1 = $conn-> prepare("SELECT pid FROM LIKERELATION WHERE loginname = ? ORDER BY updatetime DESC");
-        $getproject1->bind_param("s",$loginname);
-        $getproject1->execute();
-        $projectlist1 = $getproject1->get_result();
-        
-        $getproject2 = $conn-> prepare("SELECT pid FROM PLEDGE WHERE loginname = ? ORDER BY updatetime DESC");
-        $getproject2->bind_param("s",$loginname);
-        $getproject2->execute();
-        $projectlist2 = $getproject2->get_result();
-		
-		$getproject3 = $conn-> prepare("SELECT pid FROM PLEDGE ORDER BY updatetime DESC LIMIT 3");
-        $getproject3->execute();
-        $projectlist3 = $getproject3->get_result();
         
     }else{
         
-        //get people list
-        //$people = [
-        //'following'=>'jane1234',
-        //'following'=>'ivy1234',
-        //'following'=>'lily1234'];
-
-        //get project list
-        $getproject1 = $conn-> prepare("SELECT pid FROM LIKERELATION ORDER BY updatetime DESC LIMIT 3");
-        $getproject1->execute();
-        $projectlist1 = $getproject1->get_result();
-    
-        $getproject2 = $conn-> prepare("SELECT pid FROM PLEDGE ORDER BY updatetime DESC LIMIT 3");
-        $getproject2->execute();
-        $projectlist2 = $getproject2->get_result();
-
-        //get project list
     }
 
 ?>
@@ -97,10 +76,7 @@ function unfollow(followto)
 
 <body> 
 	<link href="css/half-slider.css" rel="stylesheet"> 
-	<div class="col-lg-12">
-		
-		
-		
+	<div class="col-lg-12">		
 		<!-- Trigger the modal with a button -->
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">My profile</button>
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mypledgeModal">Pledge History</button>
@@ -373,28 +349,18 @@ function unfollow(followto)
 	</div>
 	
     <!-- Page Content -->
-
     <div class="container">
     	<!-- Team Members Row -->
 		<div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Project you Created
-                    <small></small>
-                </h1>
+                <h1 class="page-header">Project you Created</h1>
             </div>
         </div> 
 		<?php
-			if($projectlist1) 
-			{
+			if($peocreate) 
+			{		
                 $i = 0;
-                while($row = mysqli_fetch_array($projectlist1, MYSQLI_BOTH)){
-
-					$getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
-					$getpname->bind_param("s",$row['pid']);
-					$getpname->execute();
-					$presult = $getpname->get_result();
-					$row = mysqli_fetch_array($presult, MYSQLI_BOTH);
-            
+                while($row = mysqli_fetch_array($peocreate, MYSQLI_BOTH)){							            
 					$pid = $row['pid'];
 					$pname = $row['pname'];
 					$post = $row['post'];
@@ -413,12 +379,10 @@ function unfollow(followto)
 						$rtc = $rowc['content'];
 						$rtc = substr($rtc, 0, 90);
 					}
-
-					//new row
+					//three projects each row
 					if($i%3 == 0){
 						echo "<div class='row'>";
 					}
-
 					echo "
 					<div class='col-md-4 portfolio-item'>
 					<a href='detailproject.php?pid=".$pid."'>
@@ -434,16 +398,14 @@ function unfollow(followto)
 					<p class='text-info'>".$rtc."</p>
 					</div>
 					";
-
 					//end of row
 					if($i%3 == 2){
 						echo "</div><hr>";
 					}
 					$i++;
-				}
-				
+				}			
 			} else {
-				
+				echo "No project";
 			}
 		?>
 		
@@ -464,17 +426,17 @@ function unfollow(followto)
 					$getpname->bind_param("s",$row['pid']);
 					$getpname->execute();
 					$presult = $getpname->get_result();
-					$row = mysqli_fetch_array($presult, MYSQLI_BOTH);
+					$prrow = mysqli_fetch_array($presult, MYSQLI_BOTH);
             
-					$pid = $row['pid'];
-					$pname = $row['pname'];
-					$post = $row['post'];
-					$min = $row['min'];
-					$currentamt = $row['currentamt'];
-					$endcampaign = $row['endcampaign'];
+					$pid = $prrow['pid'];
+					$pname = $prrow['pname'];
+					$post = $prrow['post'];
+					$min = $prrow['min'];
+					$currentamt = $prrow['currentamt'];
+					$endcampaign = $prrow['endcampaign'];
 					$endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
 					$endcampaignformat = $endcampaignformat->format('Y-m-d');  
-					$pdesc = $row['pdesc'];
+					$pdesc = $prrow['pdesc'];
 					$getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
 					$getrichtext->bind_param("s",$pdesc);
 					$getrichtext->execute();
