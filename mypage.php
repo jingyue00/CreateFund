@@ -71,6 +71,11 @@ function unfollow(followto)
             document.querySelector("#unloginname").value = "<?php echo $loginname?>";
             document.getElementById("unfollow").submit();
         }
+function peopledetail(ploginname)
+        {
+            document.querySelector("#ploginname").value = ploginname;
+            document.getElementById("peopledetail").submit();
+        }
 </script>
 
 
@@ -592,6 +597,7 @@ function unfollow(followto)
 					else {
 						$ppost = $prow['post'];
 						$pname = $prow['name'];
+                        $ploginname = $prow['loginname'];
 						$phometown = $prow['hometown'];
 						
 						//new row
@@ -603,6 +609,7 @@ function unfollow(followto)
 						<h3>".$pname."
 							<small>from ".$phometown."</small>
 						</h3>
+                        <button type=\"button\" style=\"width: 60px;margin-right:65px;\" class=\"pull-right\" onClick=\"peopledetail('$ploginname')\"> Detail </button>
 						<button type=\"button\" style=\" width: 60px;\" name = \"follow\" onClick=\"unfollow('$prow[1]')\"> unfollow </button>
 						</div>
 						";
@@ -638,6 +645,9 @@ function unfollow(followto)
 <form role="form" id="unfollow" method="post" action="unfollowfrommypage.php">
         <input type="hidden" id="unloginname" name="unloginname"/>
         <input type="hidden" id="unfollowing" name="unfollowing"/>
+</form>
+<form role="form" id="peopledetail" method="post" action="usrpage.php">
+        <input type="hidden" id="ploginname" name="ploginname"/>
 </form>
     <!-- /.container -->
 
