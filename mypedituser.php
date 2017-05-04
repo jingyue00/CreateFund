@@ -40,13 +40,11 @@
 	$usr->execute();
 	$prow = mysqli_fetch_array($usr->get_result(), MYSQLI_BOTH);
 	
-	if($prow){
-		$updatepur = $conn->prepare("UPDATE USER Set name=?, loginname= ?, password=?, hometown=?, post=?");        
-		$updatepur->bind_param("issss", $name, $loginname, $md5password, $hometown, $post);
-		$updatepur->execute();
-		$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
-	}
-
+	$updatepur = $conn->prepare("UPDATE USER Set name=?, password=?, hometown=?, post=? WHERE loginname= ?");        
+	$updatepur->bind_param("issss", $name, $md5password, $hometown, $post, $loginname);
+	$updatepur->execute();
+	$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
+	
 	if (!$updaterowu )
 	{
 		header("Location:mypage.php");
