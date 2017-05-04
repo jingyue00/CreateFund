@@ -157,10 +157,8 @@
     $b = strlen($nowb);
     $restcampaign = strtotime($a)-strtotime($b);
 
-    if ($status='PledgeStarted'){
-        $progress = round(($currentamt/$min)*100);
-    }
-
+    $progress = round(($currentamt/$min)*100);
+    
     $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
     $endcampaignformat = $endcampaignformat->format('Y-m-d');  
 
@@ -199,11 +197,15 @@
 
 ?>
 <script type="text/javascript">
-function update()
+function update(status)
         {
-            document.querySelector("#hpid").value = "<?php echo $pid?>";
-            document.querySelector("#hloginame").value = "<?php echo $loginname?>";
-            document.getElementById("pledgeform").submit();
+            if(status == 'PledgeStarted'){
+                document.querySelector("#hpid").value = "<?php echo $pid?>";
+                document.querySelector("#hloginame").value = "<?php echo $loginname?>";
+                document.getElementById("pledgeform").submit();
+            }else {
+                <?php  $_SESSION['cannotpledge'] = "cannotpledge"; ?>
+            }
         }
 function tagproject(tag)
         {
@@ -247,8 +249,9 @@ function showupdateform(showornot)
                     <div class="caption-full">
                         <!-- <h4 class="pull-right">$<?php echo "$currentamt"; ?> raised, $<?php echo "$min"; ?> goal </h4> -->
                         <h3><?php echo "$pname"; ?></h3>
+                        <small>Current Status: <?php echo "$status"; ?></small>
                         <div class="text-right">
-                            <button name = "pledgeme" class="btn btn-warning" onClick="update()">Pledge Me!</button>
+                            <button name = "pledgeme" class="btn btn-warning" onClick="update('<?php echo "$status";?>')">Pledge Me!</button>
                         </div>
                         <div class="detail-list">
                             <p class="pull-right">
