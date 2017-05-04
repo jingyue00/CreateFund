@@ -40,7 +40,7 @@
     $getcredcn->bind_param("s",$loginname); 
     $getcredcn->execute();
     $credcn = $getcredcn->get_result();
-	
+		
     if(isset($loginname)){
 
         //get people list
@@ -272,9 +272,21 @@ function unfollow(followto)
 								<!-- Expiration Date input -->
 								<div class="input-group col-md-offset-1">
 									<span class="input-group-addon"></span> 
-										<input class="form-control" name="edate" id="edate" type="text" placeholder="Enter Expiration Date" >
+										<div class="input-group date">
+											<input name="edate" id="edate" type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th" onKeyUp="chInput('edate')" onKeyDown="chInput('edate')"></i></span>
+										</div>
 								</div>
-							</div>			
+							</div>		
+							<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+							<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+							<script>
+								$('#edate').datepicker({
+									format: 'yyyy/mm/dd',
+									todayHighlight: true,
+									autoclose: true,
+									
+								});
+							</script>
 							<div class="form-group col-md-12">
 								<!-- Password input -->
 								<div class="input-group col-md-offset-1">						
@@ -331,12 +343,14 @@ function unfollow(followto)
 														while($row = mysqli_fetch_array($credcn, MYSQLI_BOTH)){
 															$cname = $row['cname'];
 															$ccn = $row['ccn'];
-															$edate = $row['edate'];											
+															$b = stripslashes($row['edate']);
+															$phpdate = strtotime( $b );
+															$mysqldate = date( 'Y-m-d', $phpdate );
 															echo "
 															 <tr>
 															  <td>".$cname."</td>
 															  <td>".$ccn."</td>
-															  <td>".$edate."</td>
+															  <td>" .$mysqldate."</td>
 															</tr>
 															"; 
 														}
