@@ -15,17 +15,10 @@
 	$edate = $_POST["edate"];
 	$credname = $_POST["credname"];
 	
-	$usr = $conn->prepare("select * from CCN where loginname= ?");
-	$usr->bind_param("s", $loginname);
-	$usr->execute();
-	$prow = mysqli_fetch_array($usr->get_result(), MYSQLI_BOTH);
-	
-	if ($prow) {
-		$updatepur = $conn->prepare("INSERT CCN Set ccn=?, loginname=?, edate=?, cname=?");        
-		$updatepur->bind_param("ssss", $credcn, $loginname, $edate, $credname);
-		$updatepur->execute();
-		$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
-	}
+	$updatepur = $conn->prepare("INSERT CCN Set ccn=?, loginname=?, edate=?, cname=?");        
+	$updatepur->bind_param("ssss", $credcn, $loginname, $edate, $credname);
+	$updatepur->execute();
+	$updaterowu = mysqli_fetch_array($updatepur->get_result(),MYSQLI_BOTH);
 
 	if (!$updaterowu )
 	{
