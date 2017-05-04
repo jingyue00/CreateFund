@@ -79,6 +79,15 @@
     $newtrans->bind_param("sssss",$plid, $hamount,$hccn,$hccv,$loginname);
 	$newtrans->execute();
 
+    $now = new DateTime(null, new DateTimeZone('America/New_York'));
+    $nowb = $now->format('Y-m-d H:i:s'); 
+    $ltype = "transaction";
+    $newlog = $conn->prepare("
+                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+            ");
+    $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
+    $newlog->execute();
+
     header("Location:transactionlist.php");
     exit;
 

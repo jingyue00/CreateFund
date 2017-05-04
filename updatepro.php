@@ -70,7 +70,7 @@
             pid = '',
             pname = ?,
             pdesc = ?,
-            createtime = NOW(),
+            createtime = ?,
             owner = ?,
             min = ?,
             max = ?,
@@ -80,7 +80,9 @@
             currentamt = '0',
             post = ?
     ");
-	$newpro->bind_param("ssssssss",$pname,$_SESSION['rid'],$l,$min,$max,$endcampaign,$edate,$post);
+    $now = new DateTime(null, new DateTimeZone('America/New_York'));
+    $nowb = $now->format('Y-m-d H:i:s'); 
+	$newpro->bind_param("sssssssss",$pname,$_SESSION['rid'],$nowb,$l,$min,$max,$endcampaign,$edate,$post);
 	$newpro->execute();
 
     if( isset( $_POST["tag"] )) {
