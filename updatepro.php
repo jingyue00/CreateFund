@@ -105,6 +105,16 @@
         }
     }
 
+    //add userlog
+    $now = new DateTime(null, new DateTimeZone('America/New_York'));
+    $nowb = $now->format('Y-m-d H:i:s'); 
+    $ltype = "createproject";
+    $newlog = $conn->prepare("
+                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+            ");
+    $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
+    $newlog->execute();
+
     header("Location:detailproject.php");
     exit;
 
