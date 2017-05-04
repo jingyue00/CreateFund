@@ -1,9 +1,9 @@
 <?php
 	session_start();
 	session_destroy();
-	unset($loginanme);
-	unset($_COOKIE["member_login"]);
-	unset($_COOKIE["member_password"]);
+	unset($loginname);
+	setcookie("member_login","",time()-3600);
+	setcookie("member_password","",time()-3600);
 	header("Location:index.php");
     exit;
 ?>

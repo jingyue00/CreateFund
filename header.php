@@ -12,12 +12,12 @@ require "class.connect.php";
     ini_set('display_errors', 1);
 
     //<!-- get loginname --> 
-    if(isset($_SESSION["loginname"])){
+   if(isset($_COOKIE["member_login"])) { 
+        $loginname = $_COOKIE["member_login"];
+    }
+    elseif(isset($_SESSION["loginname"])){
         $loginname = $_SESSION["loginname"];
     }
-    //else{
-    //    $loginname = 'jane1234';
-    //}
 
 ?>
 
