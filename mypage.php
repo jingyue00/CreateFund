@@ -131,8 +131,8 @@ function unfollow(followto)
 								<!-- Username input -->
 								<div class="input-group col-md-offset-1">
 									<span class="input-group-addon"></span> 
-										<input class="form-control" name="name" id="name" value = "<?php echo $name;?>"
-											type="text" placeholder="Enter User Name" onKeyUp="chInput('name')" onKeyDown="chInput('name')">
+										<input class="form-control" name="usrname" id="usrname" value = "<?php echo $name;?>"
+											type="text" placeholder="Enter User Name" onKeyUp="chInput('usrname')" onKeyDown="chInput('usrname')">
 								</div>
 							</div>			
 							<div class="form-group col-md-12">
