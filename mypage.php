@@ -251,7 +251,7 @@ function tagproject(tag)
 															  <td>".$pname."</td>
 															  <td>$".$amount."</td>
 															  <td>".$status."</td>
-															  <td>".$projectstatus."</td>
+															  <td>".$pledgestatus."</td>
 															  <td> 
 																
 															    <select id='rate' name ='rate' >
@@ -271,7 +271,7 @@ function tagproject(tag)
 																  <td>".$pname."</td>
 																  <td>$".$amount."</td>
 																  <td>".$status."</td>
-																  <td>".$projectstatus."</td>
+																  <td>".$pledgestatus."</td>
 																  <td>".$rate."</td>
 																</tr>
 																";
