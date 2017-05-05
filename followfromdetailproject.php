@@ -53,7 +53,7 @@
             $newlog->execute();
              
     }
-
+    $_SESSION["ploginname"] = $_POST["hfollowing"];
     header("Location:detailproject.php");
     exit;
 

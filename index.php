@@ -2,23 +2,6 @@
 	//homepage 
 	include_once "header.php";
 
-	//require "class.connect.php";
-    //$iconnect = new connect();
-    //$conn = $iconnect->getConnect("dbproject");
-    //if(!$conn) { echo "failed to connect!";}
-		
-	//get cname and keyword
-    //error_reporting(E_ALL);
-    //ini_set('display_errors', 1);
-
-    //<!-- get pid --> 
-    if(isset($_GET["pid"])){
-        $pid = $_GET["pid"];
-    }
-    else{
-    //$pid = $_SESSION["pid"];
-    $pid = '10113106771384991868';
-    }
 
     if(isset($loginname)){
 
@@ -28,95 +11,172 @@
         $getpeople->execute();
         $peopleresult = $getpeople->get_result();
 
-        //get project list
-        $getproject1 = $conn-> prepare("SELECT pid FROM LIKERELATION WHERE loginname = ? ORDER BY updatetime DESC");
-        $getproject1->bind_param("s",$loginname);
-        $getproject1->execute();
-        $projectlist1 = $getproject1->get_result();
-        
-        $getproject2 = $conn-> prepare("SELECT pid FROM PLEDGE WHERE loginname = ? ORDER BY updatetime DESC");
-        $getproject2->bind_param("s",$loginname);
-        $getproject2->execute();
-        $projectlist2 = $getproject2->get_result();
+        //get following people activity about project
+        if(isset($peopleresult) AND $peopleresult){
+
+            //following people > 0
+            $followingproject = array();
+            $followingpeople = array();
+            while($row = mysqli_fetch_array($peopleresult, MYSQLI_BOTH)){
+                $getfollowingproject = $conn->prepare("SELECT targetid FROM USERLOG WHERE loginname = ?
+                AND ltype IN ('createproject','transaction','likeproject','commentproject','viewproject')
+                GROUP BY targetid
+                ORDER BY ltime DESC");
+                $a = $row['following'];
+                $getfollowingproject->bind_param("s",$a);
+                $getfollowingproject->execute();
+                $followingprojectresult = $getfollowingproject->get_result();
+                $x = mysqli_num_rows($followingprojectresult);
+                if ($x > 0){
+                    while($rowtemp = mysqli_fetch_array($followingprojectresult, MYSQLI_BOTH)){
+                        $a = $rowtemp['targetid'];
+                        array_push($followingproject, $rowtemp['targetid']);
+                    }
+                }
+
+                $getfollowingpeople = $conn->prepare("SELECT targetid FROM USERLOG WHERE loginname = ?
+                AND ltype IN ('follow')
+                GROUP BY targetid
+                ORDER BY ltime DESC");
+                $getfollowingpeople->bind_param("s",$row['following']);
+                $getfollowingpeople->execute();
+                $followingpeopleresult = $getfollowingpeople->get_result();
+                $x = mysqli_num_rows($followingpeopleresult);
+                if ($x > 0){
+                    while($rowtemp = mysqli_fetch_array($followingpeopleresult, MYSQLI_BOTH)){
+                        array_push($followingpeople, $rowtemp['targetid']);
+                    }
+                }
+            }
+        }
+        $followingprojectsize = count($followingproject);
+        $followingpeoplesize = count($followingpeople);
+        //my following people dont' have any project log, use user self log 
+        if($followingprojectsize==0){
+            $getfollowingproject = $conn->prepare("SELECT targetid FROM USERLOG WHERE loginname = ?
+            AND ltype IN ('createproject','transaction','likeproject','commentproject','viewproject')
+            GROUP BY targetid
+            ORDER BY ltime DESC");
+            $a = $loginname;
+            $getfollowingproject->bind_param("s",$a);
+            $getfollowingproject->execute();
+            $followingprojectresult = $getfollowingproject->get_result();
+            $x = mysqli_num_rows($followingprojectresult);
+            if ($x > 0){
+                while($rowtemp = mysqli_fetch_array($followingprojectresult, MYSQLI_BOTH)){
+                $a = $rowtemp['targetid'];
+                array_push($followingproject, $rowtemp['targetid']);
+                }
+            }
+        }
+        //my following people dont' have any people log, use user self log
+        if($followingpeoplesize==0){
+            $getfollowingpeople = $conn->prepare("SELECT targetid FROM USERLOG WHERE loginname = ?
+            AND ltype IN ('follow')
+            GROUP BY targetid
+            ORDER BY ltime DESC");
+            $getfollowingpeople->bind_param("s",$loginname);
+            $getfollowingpeople->execute();
+            $followingpeopleresult = $getfollowingpeople->get_result();
+            $x = mysqli_num_rows($followingpeopleresult);
+            if ($x > 0){
+                while($rowtemp = mysqli_fetch_array($followingpeopleresult, MYSQLI_BOTH)){
+                    array_push($followingpeople, $rowtemp['targetid']);
+                }
+            }
+        }
         
     }else{
+        //not log in: 
+        $followingproject = array();
+        $followingpeople = array();
+
+        //get last 3 project in userlog 
+        $getfollowingproject = $conn->prepare("SELECT targetid FROM USERLOG WHERE
+        ltype IN ('createproject','transaction','likeproject','commentproject','viewproject')
+        GROUP BY targetid
+        ORDER BY ltime DESC");
+        $getfollowingproject->execute();
+        $followingprojectresult = $getfollowingproject->get_result();
+        $x = mysqli_num_rows($followingprojectresult);
+        if ($x > 0){
+            while($rowtemp = mysqli_fetch_array($followingprojectresult, MYSQLI_BOTH)){
+            $a = $rowtemp['targetid'];
+            array_push($followingproject, $rowtemp['targetid']);
+            }
+        }
+
+        $getfollowingpeople = $conn->prepare("SELECT targetid FROM USERLOG WHERE ltype IN ('follow')
+        GROUP BY targetid
+        ORDER BY ltime DESC");
+        $getfollowingpeople->execute();
+        $followingpeopleresult = $getfollowingpeople->get_result();
+        $x = mysqli_num_rows($followingpeopleresult);
+        if ($x > 0){
+            while($rowtemp = mysqli_fetch_array($followingpeopleresult, MYSQLI_BOTH)){
+            array_push($followingpeople, $rowtemp['targetid']);
+            }
+        }
         
-        //get people list
-        //$people = [
-        //'following'=>'jane1234',
-        //'following'=>'ivy1234',
-        //'following'=>'lily1234'];
+    }
 
-        //get project list
-        $getproject1 = $conn-> prepare("SELECT pid FROM LIKERELATION ORDER BY updatetime DESC LIMIT 3");
-        $getproject1->execute();
-        $projectlist1 = $getproject1->get_result();
-    
-        $getproject2 = $conn-> prepare("SELECT pid FROM PLEDGE ORDER BY updatetime DESC LIMIT 3");
-        $getproject2->execute();
-        $projectlist2 = $getproject2->get_result();
+    $followingprojectsize = count($followingproject);
+    $followingpeoplesize = count($followingpeople);
+    if($followingprojectsize == 0){
+        //no log from my following people and myself, use global log
+        $getfollowingproject = $conn->prepare("SELECT targetid FROM USERLOG WHERE
+        ltype IN ('createproject','transaction','likeproject','commentproject','viewproject')
+        GROUP BY targetid
+        ORDER BY ltime DESC");
+        $getfollowingproject->execute();
+        $followingprojectresult = $getfollowingproject->get_result();
+        $x = mysqli_num_rows($followingprojectresult);
+        if ($x > 0){
+            while($rowtemp = mysqli_fetch_array($followingprojectresult, MYSQLI_BOTH)){
+            $a = $rowtemp['targetid'];
+            array_push($followingproject, $rowtemp['targetid']);
+            }
+        }
 
-        //get project list
+    }
+    if($followingpeoplesize == 0){
+        //no log from my following people and myself, use global log
+        $getfollowingpeople = $conn->prepare("SELECT targetid FROM USERLOG WHERE ltype IN ('follow')
+        GROUP BY targetid
+        ORDER BY ltime DESC");
+        $getfollowingpeople->execute();
+        $followingpeopleresult = $getfollowingpeople->get_result();
+        $x = mysqli_num_rows($followingpeopleresult);
+        if ($x > 0){
+            while($rowtemp = mysqli_fetch_array($followingpeopleresult, MYSQLI_BOTH)){
+            array_push($followingpeople, $rowtemp['targetid']);
+            }
+        }
     }
 
 ?>
-<!--
-<!DOCTYPE html>
-<html lang="en">
-<script src="js/jquery.mb.YTPlayer.js"></script>
-<link href="css/bootstrap.css" rel="stylesheet"> 
--->
 
-    <!-- /page loader -->
-
-	<!-- Section: home video 
-    <section id="intro" class="home-video text-light">
-		<div class="home-video-wrapper">
-
-		<div class="homevideo-container">
-           <div id="P1" class="bg-player" style="display:block; margin: auto; background: rgba(0,0,0,0.5)" data-property="{videoURL:'https://www.youtube.com/watch?v=mroiVdC7H10',containment:'.homevideo-container', quality: 'hd720', showControls: false, autoPlay:true, mute:true, startAt:0, opacity:1}"></div>
-		</div>
-		<div class="overlay">
-			<div class="text-center video-caption">
-				<div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.8s">
-					<h1 class="big-heading font-light"><span id="js-rotating">We are GreateFund, Awesome Funding Website, Get better Fund, Craft from GreateFund </span></h1>
-				</div>
-				<div class="wow bounceInUp" data-wow-offset="0" data-wow-delay="1s">
-					<div class="margintop-30">
-						<a href="#about" class="btn btn-skin" id="btn-scroll">Start here</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		</div>
-    </section>
-	<!-- /Section: intro -->
-
-<!--Video Section
-<section class="content-section video-section">
-  <div class="pattern-overlay">
-  <a id="bgndVideo" class="player" data-property="{videoURL:'https://www.youtube.com/watch?v=fdJc1_IBKJA',containment:'.video-section', quality:'large', autoPlay:true, mute:true, opacity:1}">bg</a>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-        <h1>Full Width Video</h1>  
-        <h3>Enjoy Adding Full Screen Videos to your Page Sections</h3>
-	   </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!--Video Section Ends Here-->
-
-<!--
-<script>
-$(document).ready(function () {
-
-    $(".player").mb_YTPlayer();
-
-});
+<script type="text/javascript">
+function follow(followto)
+        {
+            document.querySelector("#hfollowing").value = followto;
+            document.querySelector("#hloginname").value = "<?php echo $loginname?>";
+            document.getElementById("follow").submit();
+        }
+function unfollow(followto)
+        {
+            document.querySelector("#unfollowing").value = followto;
+            document.querySelector("#unloginname").value = "<?php echo $loginname?>";
+            document.getElementById("unfollow").submit();
+        }
+function peopledetail(ploginname)
+        {
+            document.querySelector("#ploginname").value = ploginname;
+            document.getElementById("peopledetail").submit();
+        }
 </script>
--->
+
+
 <body> 
 <link href="css/half-slider.css" rel="stylesheet"> 
 
@@ -176,28 +236,45 @@ $(document).ready(function () {
         </div>
            <!-- people list -->
            <?php
-           if(isset($peopleresult) AND $peopleresult){
-            $i = 0;
-            while($row = mysqli_fetch_array($peopleresult, MYSQLI_BOTH)){
+           $i = 0;
+           
+           foreach($followingpeople as $a){
+    
                 $getfname = $conn-> prepare("SELECT * FROM USER WHERE loginname = ?");
-                $getfname->bind_param("s",$row['following']);
+                $getfname->bind_param("s",$a);
                 $getfname->execute();
                 $fresult = $getfname->get_result();
                 $prow = mysqli_fetch_array($fresult, MYSQLI_BOTH);
                 $ppost = $prow['post'];
                 $pname = $prow['name'];
                 $phometown = $prow['hometown'];
+                $ploginname = $prow['loginname'];
+
+                //check if follow
+                $iffollow = $conn->prepare("SELECT COUNT(*) as c FROM FOLLOW WHERE 
+                    following = ? AND loginname = ? 
+                    ");
+                $iffollow->bind_param("ss",$ploginname,$loginname);
+                $iffollow->execute();
+                $result = $iffollow->get_result();
+                $rowf = mysqli_fetch_array($result,MYSQLI_BOTH);  
+                if($rowf['c'] > 0){ 
+                     $followbtn = "unfollow";
+                } else {
+                     $followbtn = "follow";
+                }
 
                  //new row
                 if($i%3 == 0){
                     echo "<div class='row'>";
                 }
-                echo "<div class='col-md-4 text-center'>
-                <img class='img-circle' style='width: 65%' height='230' src='img/".$ppost."'>
+                echo "<div class=\"col-md-4 text-center\">
+                <img class=\"img-circle\" style=\"width: 65%\" height=\"230\" src='img/".$ppost."'>
                 <h3>".$pname."
                     <small>from ".$phometown."</small>
                 </h3>
-                <p>We are a group of seasoned engineers and we want bring you a whole new experience of controlling smart things.</p>
+                <button type=\"button\" style=\"width: 60px;margin-right:65px;\" class=\"pull-right\" onClick=\"peopledetail('$ploginname')\"> Detail </button>
+                <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"$followbtn('$ploginname')\"> ".$followbtn." </button>
                 </div>
                 ";
 
@@ -206,50 +283,11 @@ $(document).ready(function () {
                     echo "</div><hr>";
                 }
                 $i++;
-            }
-           } else {
-            echo"
-            <div class='row'>
-                <div class='col-md-4 text-center'>
-                <img class='img-circle' style='width: 65%' height='230' src='img/user2.jpg'>
-                <h3>Ivy Yu
-                    <small>from NY</small>
-                </h3>
-                <p>Database is the best course in Tanadon</p>
-                </div>
-
-                <div class='col-md-4 text-center'>
-                <img class='img-circle' style='width: 65%'' height='230' src='img/user9.jpg'>
-                <h3>Jane Jing
-                    <small>from NY</small>
-                </h3>
-                <p>Database is the best course in Tanadon</p>
-                </div>
-
-                <div class='col-md-4 text-center'>
-                <img class='img-circle' style='width: 65%'' height='230' src='img/user4.jpg'>
-                <h3>Mary
-                    <small>from NY</small>
-                </h3>
-                <p>Database is the best course in Tanadon</p>
-                </div>
-
-            </div><hr>
-            ";
-
            }
+           
 
            ?>
 
-
-            <!-- <div class="col-lg-4 col-sm-6 text-center mb-4">
-                <img class="rounded-circle img-fluid d-block mx-auto img-circle" src="http://placehold.it/200x200" alt="">
-                <h3>John Smith
-                    <small>Job Title</small>
-                </h3>
-                <p>We are a group of seasoned engineers and we want bring you a whole new experience of controlling smart things.</p>
-            </div>
-            <!-- people list-->
 
         <div class="row">
             <div class="col-lg-12">
@@ -259,16 +297,12 @@ $(document).ready(function () {
             </div>
         </div>
          <?php
-
-        //while($row = $allProject){
-         if(($projectlist1!=FALSE) or($projectlist2!=FALSE)){
-            if($projectlist1){
-
-                $i = 0;
-                while($row = mysqli_fetch_array($projectlist1, MYSQLI_BOTH)){
+        $i = 0;
+           
+        foreach($followingproject as $a){
 
                 $getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
-                $getpname->bind_param("s",$row['pid']);
+                $getpname->bind_param("s",$a);
                 $getpname->execute();
                 $presult = $getpname->get_result();
                 $row = mysqli_fetch_array($presult, MYSQLI_BOTH);
@@ -322,83 +356,20 @@ $(document).ready(function () {
 
             }
 
-            if($projectlist2){
-                while($row = mysqli_fetch_array($projectlist2, MYSQLI_BOTH)){
-            
-                $getpname = $conn-> prepare("SELECT * FROM PROJECT WHERE pid = ?");
-                $getpname->bind_param("s",$row['pid']);
-                $getpname->execute();
-                $presult = $getpname->get_result();
-                $row = mysqli_fetch_array($presult, MYSQLI_BOTH);
-            
-                $pid = $row['pid'];
-                $pname = $row['pname'];
-                $post = $row['post'];
-                $min = $row['min'];
-                $currentamt = $row['currentamt'];
-                $endcampaign = $row['endcampaign'];
-                $endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
-                $endcampaignformat = $endcampaignformat->format('Y-m-d');  
-                $pdesc = $row['pdesc'];
-                $getrichtext = $conn->prepare("SELECT content FROM RICH_CONTENT WHERE rid = ?");
-                $getrichtext->bind_param("s",$pdesc);
-                $getrichtext->execute();
-                $resultc = $getrichtext->get_result();
-                if($resultc){
-                    $rowc= mysqli_fetch_array($resultc,MYSQLI_BOTH);    
-                    $rtc = $rowc['content'];
-                    $rtc = substr($rtc, 0, 90);
-                }
-
-                //new row
-                if($i%3 == 0){
-                    echo "<div class='row'>";
-                }
-
-                echo "
-                <div class='col-md-4 portfolio-item'>
-                <a href='detailproject.php?pid=".$pid."'>
-                    <img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
-                </a>
-                <h3>
-                    <a href='detailproject.php?pid=".$pid."'>".$pname."</a>
-                </h3>
-                <div>
-                <a class='pull-right'>$".$currentamt." raised, $".$min." goal </a>
-                <span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
-                </div>
-                <p class='text-info'>".$rtc."</p>
-                </div>
-                ";
-
-                //end of row
-                if($i%3 == 2){
-                    echo "</div><hr>";
-                }
-
-                $i++;
-            }  
-            }
-        }
-    }
         ?>
-
-           <!-- project list 
-            <div class="col-lg-4 col-sm-6 text-center mb-4">
-                <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
-                <h3>John Smith
-                    <small>Job Title</small>
-                </h3>
-                <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
-            </div>
-            <!-- project list-->
-            
         </div>
-
-
-        
-
     </div>
+<form role="form" id="follow" method="post" action="followfromindex.php">
+        <input type="hidden" id="hloginname" name="hloginname"/>
+        <input type="hidden" id="hfollowing" name="hfollowing"/>
+</form>
+<form role="form" id="unfollow" method="post" action="unfollowfromindex.php">
+        <input type="hidden" id="unloginname" name="unloginname"/>
+        <input type="hidden" id="unfollowing" name="unfollowing"/>
+</form>
+<form role="form" id="peopledetail" method="post" action="usrpage.php">
+        <input type="hidden" id="ploginname" name="ploginname"/>
+</form>
     <!-- /.container -->
 
     <!-- jQuery -->

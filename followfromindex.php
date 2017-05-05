@@ -54,7 +54,7 @@
              
     }
 
-    header("Location:usrpage.php");
+    header("Location:index.php");
     exit;
 
 ?>

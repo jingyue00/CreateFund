@@ -42,8 +42,8 @@
             $_SESSION['rmfollow'] = "fail";
              
     }
-    $_SESSION["ploginname"] = $_POST["hfollowing"];
-    header("Location:detailproject.php");
+    
+    header("Location:index.php");
     exit;
 
 ?>
