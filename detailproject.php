@@ -312,7 +312,7 @@ function peopledetail(ploginname)
                     <img class="img-responsive" src="img/<?php echo "$post";?>" alt="">
 
                     <div class="caption-full">
-                        <!-- <h4 class="pull-right">$<?php echo "$currentamt"; ?> raised, $<?php echo "$min"; ?> goal </h4> -->
+                        <!-- <h4 class="pull-right">$<?php echo "$currentamt"; ?> raised, goal: $<?php echo "$min"; ?>, max goal: <?php echo "$max";?></h4> -->
                         <h3><?php echo "$pname"; ?></h3>
                         <small>Current Status: <?php echo "$status"; ?></small>
                         <div class="text-right">

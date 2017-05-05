@@ -1,3 +1,5 @@
+
+
 <?php
     session_start();
     //include_once "header.php";
@@ -79,11 +81,42 @@
     $newtrans->bind_param("sssss",$plid, $hamount,$hccn,$hccv,$loginname);
 	$newtrans->execute();
 
+    //update project currentamt
+    $getcurrentamt = $conn->prepare("SELECT * FROM PROJECT WHERE pid = ?");
+    $getcurrentamt->bind_param("s",$pid);
+    $getcurrentamt->execute();
+    $amtr = $getcurrentamt->get_result();
+    $rowr = mysqli_fetch_array($amtr,MYSQLI_BOTH); 
+    $currentamt = $rowr['currentamt'];
+    $min = $rowr['min'];
+    $max = $rowr['max'];
+
+    $newamt = $currentamt + $hamount;
+    
+    if($newamt < $max){
+        $updateamt = $conn->prepare("UPDATE PROJECT SET currentamt = ? WHERE pid = ?");
+        $updateamt->bind_param("ss",$newamt, $pid);
+        $updateamt->execute();
+    }else{
+        $updateamt = $conn->prepare("UPDATE PROJECT SET currentamt = ?, status = ? WHERE pid = ?");
+        $closestatus = "PledgeClosed";
+        $updateamt->bind_param("sss",$newamt, $closestatus, $pid);
+        $updateamt->execute();
+
+        //change pledge status to confirmed
+        $updatepl = $conn->prepare("UPDATE PLEDGE SET status = ? WHERE pid = ?");
+        $confirmstatus = "confirmed";
+        $updatepl->bind_param("ss", $confirmstatus, $pid);
+        $updatepl->execute();
+    }
+
+    
+
     $now = new DateTime(null, new DateTimeZone('America/New_York'));
     $nowb = $now->format('Y-m-d H:i:s'); 
     $ltype = "transaction";
     $newlog = $conn->prepare("
-                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+            INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
             ");
     $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
     $newlog->execute();
