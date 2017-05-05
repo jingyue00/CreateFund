@@ -5,8 +5,14 @@
     $connect = new connect();
     $conn = $connect->getConnect("dbproject");
     if(!$conn) { echo "failed to connect!";}
-        
-	$ploginname = $_POST["ploginname"];
+    
+    if(isset($_POST["ploginname"])){
+		$ploginname = $_POST["ploginname"];
+		$_SESSION["ploginname"] = $ploginname;
+	}else{
+		$ploginname = $_SESSION["ploginname"];
+	}
+
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     //get user post
@@ -66,11 +72,22 @@
 
 ?>
 <script type="text/javascript">
+function follow(followto)
+        {
+            document.querySelector("#hfollowing").value = followto;
+            document.querySelector("#hloginname").value = "<?php echo $loginname?>";
+            document.getElementById("follow").submit();
+        }
 function unfollow(followto)
         {
             document.querySelector("#unfollowing").value = followto;
             document.querySelector("#unloginname").value = "<?php echo $loginname?>";
             document.getElementById("unfollow").submit();
+        }
+function peopledetail(ploginname)
+        {
+            document.querySelector("#ploginname").value = ploginname;
+            document.getElementById("peopledetail").submit();
         }
 </script>
 
@@ -323,18 +340,35 @@ function unfollow(followto)
 						$ppost = $prow['post'];
 						$pname = $prow['name'];
 						$phometown = $prow['hometown'];
+						$ploginname = $prow['loginname'];
+
+						 //check if follow
+		                $iffollow = $conn->prepare("SELECT COUNT(*) as c FROM FOLLOW WHERE 
+		                    following = ? AND loginname = ? 
+		                    ");
+		                $iffollow->bind_param("ss",$ploginname,$loginname);
+		                $iffollow->execute();
+		                $result = $iffollow->get_result();
+		                $rowf = mysqli_fetch_array($result,MYSQLI_BOTH);  
+		                if($rowf['c'] > 0){ 
+		                     $followbtn = "unfollow";
+		                } else {
+		                     $followbtn = "follow";
+		                }
 						
 						//new row
 						if($i%3 == 0){
 							echo "<div class='row'>";
 						}
-						echo "<div class='col-md-4 text-center'>
-						<img class='img-circle' style='width: 65%' height='230' src='img/".$ppost."'>
-						<h3>".$pname."
-							<small>from ".$phometown."</small>
-						</h3>
-						</div>
-						";
+						echo "<div class=\"col-md-4 text-center\">
+		                <img class=\"img-circle\" style=\"width: 65%\" height=\"230\" src='img/".$ppost."'>
+		                <h3>".$pname."
+		                    <small>from ".$phometown."</small>
+		                </h3>
+		                <button type=\"button\" style=\"width: 60px;margin-right:65px;\" class=\"pull-right\" onClick=\"peopledetail('$ploginname')\"> Detail </button>
+		                <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"$followbtn('$ploginname')\"> ".$followbtn." </button>
+		                </div>
+		                ";
 
 						//end of row
 						if($i%3 == 2){
@@ -350,9 +384,16 @@ function unfollow(followto)
             
         </div>
 	</body>
-<form role="form" id="unfollow" method="post" action="unfollowfrommypage.php">
+<form role="form" id="follow" method="post" action="followfromusrpage.php">
+        <input type="hidden" id="hloginname" name="hloginname"/>
+        <input type="hidden" id="hfollowing" name="hfollowing"/>
+</form>
+<form role="form" id="unfollow" method="post" action="unfollowfromusrpage.php">
         <input type="hidden" id="unloginname" name="unloginname"/>
         <input type="hidden" id="unfollowing" name="unfollowing"/>
+</form>
+<form role="form" id="peopledetail" method="post" action="usrpage.php">
+        <input type="hidden" id="ploginname" name="ploginname"/>
 </form>
     <!-- /.container -->
 
