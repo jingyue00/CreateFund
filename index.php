@@ -275,9 +275,19 @@ function peopledetail(ploginname)
                     <small>from ".$phometown."</small>
                 </h3>
                 <button type=\"button\" style=\"width: 60px;margin-right:65px;\" class=\"pull-right\" onClick=\"peopledetail('$ploginname')\"> Detail </button>
+                ";
+
+                if($_SESSION['notloginyet']=="login"){
+                echo"
                 <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"$followbtn('$prow[1]')\"> ".$followbtn." </button>
                 </div>
+                ";}
+                else{
+                echo"
+                <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" > Follow </button>
+                </div>
                 ";
+                }
 
                 //end of row
                 if($i%3 == 2){
