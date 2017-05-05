@@ -293,10 +293,8 @@ function tagproject(tag)
 						</div>
 					</div>	
 					<div class='modal-footer'>	
-						<?php
-						if ($status == "Completed" and $rate == NULL){
-							echo "<button type='submit' class='btn btn-default '>Submit</button>";
-						}?>
+						<button type='submit' class='btn btn-default '>Submit</button>";
+						
 						<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
 					</div>
 					</form>
