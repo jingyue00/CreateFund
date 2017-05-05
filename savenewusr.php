@@ -76,16 +76,18 @@
 	//$updatetag->execute();
 
 	//save USER_TAG
-	if( isset( $_GET["tag"] )) {
+	//if( isset( $_GET["tag"] )) {
 
-        $updatetag = $conn->prepare("INSERT TAG_USER Set loginname=?, tag=?");        
+        //$updatetag = $conn->prepare("INSERT TAG_USER Set loginname=?, tag=?");        
 
-        foreach($_GET["tag"] as $chk) { 
-            $updatetag->bind_param("ss", $loginname, $chk);
-            $updatetag->execute();
+        //foreach($_GET["tag"] as $chk) { 
+            //$updatetag->bind_param("ss", $loginname, $chk);
+            //$updatetag->execute();
             //echo "total tag: ".$updatetag->affected_rows;
-        }
-    }
+        //}
+    //}
+	foreach($_GET["tag"] as $chk) $updatetag->execute();
+	$updaterowt = mysqli_fetch_array($updatetag->get_result(),MYSQLI_BOTH);
 
 
 	//foreach($_POST["tag"] as $chk) $updatetag->execute();
