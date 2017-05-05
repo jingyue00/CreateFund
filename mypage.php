@@ -217,7 +217,7 @@ function tagproject(tag)
 														while($row = mysqli_fetch_array($pledge, MYSQLI_BOTH)){
 															$plid = $row['plid'];
 															$amount = $row['totalamount'];
-															$pstatus = $row['status'];
+															$pledgestatus = $row['status'];
 															$rate = $row['rate'];
 															$projectid = $row['pid'];
 
@@ -251,7 +251,7 @@ function tagproject(tag)
 															  <td>".$pname."</td>
 															  <td>$".$amount."</td>
 															  <td>".$status."</td>
-															  <td>".$pstatus."</td>
+															  <td>".$projectstatus."</td>
 															  <td> 
 																
 															    <select id='rate' name ='rate' >
@@ -271,6 +271,7 @@ function tagproject(tag)
 																  <td>".$pname."</td>
 																  <td>$".$amount."</td>
 																  <td>".$status."</td>
+																  <td>".$projectstatus."</td>
 																  <td>".$rate."</td>
 																</tr>
 																";
