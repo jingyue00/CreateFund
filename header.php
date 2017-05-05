@@ -14,9 +14,11 @@ require "class.connect.php";
     //<!-- get loginname --> 
    if(isset($_COOKIE["member_login"])) { 
         $loginname = $_COOKIE["member_login"];
+        $_SESSION['notloginyet'] = "login";
     }
     elseif(isset($_SESSION["loginname"])){
         $loginname = $_SESSION["loginname"];
+        $_SESSION['notloginyet'] = "login";
     }else{
         $_SESSION['notloginyet'] = "nologin";
     }
@@ -180,7 +182,7 @@ require "class.connect.php";
 if(isset($_SESSION['notloginyet'])){
         if($_SESSION['notloginyet'] == "nologin"){
                 echo "<body onload=\"loginfirst()\">";
-                $_SESSION['notloginyet'] = "login";
+                $_SESSION['notloginyet'] = "silent";
             }else{
              echo "<body>";
         }
