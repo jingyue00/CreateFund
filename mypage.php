@@ -257,7 +257,7 @@ function tagproject(tag)
 															  <td>".$pname."</td>
 															  <td>$".$amount."</td>
 															  <td>".$status."</td>
-															  <td>".$pledgestatus."</td>
+															 
 															  <td> 
 																
 															    <select id='rate' name ='rate' >
@@ -277,7 +277,7 @@ function tagproject(tag)
 																  <td>".$pname."</td>
 																  <td>$".$amount."</td>
 																  <td>".$status."</td>
-																  <td>".$pledgestatus."</td>
+																  
 																  <td>".$rate."</td>
 																</tr>
 																";
@@ -293,8 +293,7 @@ function tagproject(tag)
 						</div>
 					</div>	
 					<div class='modal-footer'>	
-						<button type='submit' class='btn btn-default '>Submit</button>";
-						
+						<button type='submit' class='btn btn-default '>Submit</button>						
 						<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
 					</div>
 					</form>
