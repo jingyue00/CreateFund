@@ -2,9 +2,8 @@
 	//homepage 
 	include_once "header.php";
 
-
-    if(isset($loginname)){
-
+    if($_SESSION['notloginyet']!=="silent"){
+        
         //get people list
         $getpeople = $conn-> prepare("SELECT following FROM FOLLOW WHERE loginname = ? ORDER BY updatetime DESC");
         $getpeople->bind_param("s",$loginname);
@@ -87,6 +86,8 @@
         }
         
     }else{
+
+        $_SESSION['notloginyet'] = "nologin";
         //not log in: 
         $followingproject = array();
         $followingpeople = array();
@@ -274,7 +275,7 @@ function peopledetail(ploginname)
                     <small>from ".$phometown."</small>
                 </h3>
                 <button type=\"button\" style=\"width: 60px;margin-right:65px;\" class=\"pull-right\" onClick=\"peopledetail('$ploginname')\"> Detail </button>
-                <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"$followbtn('$ploginname')\"> ".$followbtn." </button>
+                <button type=\"button\" style=\"margin-right: 40px; width: 60px;\" name = \"follow\" onClick=\"$followbtn('$prow[1]')\"> ".$followbtn." </button>
                 </div>
                 ";
 

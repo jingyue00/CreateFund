@@ -17,112 +17,104 @@
         $loginname = $_SESSION["loginname"];
     }
 
-    $hamount = $_POST["hamount"];
-	$hccn = $_POST["hccn"];
-    $hccv = $_POST["hccv"];
+    if($_SESSION['notloginyet']=="silent"){
+            $_SESSION['notloginyet'] = "nologin";
+    } else { 
+        $hamount = $_POST["hamount"];
+    	$hccn = $_POST["hccn"];
+        $hccv = $_POST["hccv"];
 
-	//<!-- get pid --> 
-    if(isset($_SESSION["pid"])){
-        $pid = $_SESSION["pid"];
-    }
+    	//<!-- get pid --> 
+        if(isset($_SESSION["pid"])){
+            $pid = $_SESSION["pid"];
+        }
 
-    echo "$pid";
-    echo "$loginname";
-
-    //else{
-    //$pid = $_SESSION["pid"];
-    //$pid = '10113106771384991868';
-    //}
-
-    //<!-- get loginname --> 
-    //$loginname = 'jane1234';
-
-    //check if already exit pledge
-    $ifpledge = $conn->prepare("SELECT plid FROM PLEDGE WHERE 
-        pid = ? AND loginname = ? 
-        ");
-    $ifpledge->bind_param("ss",$pid,$loginname);
-    $ifpledge->execute();
-    $result = $ifpledge->get_result();
-    $rowCount = mysqli_num_rows($result);
-    if($rowCount > 0){
-            $row = mysqli_fetch_array($result,MYSQLI_BOTH);        
-            $plid = $row['plid']; 
-            echo "aaa";
-            echo $plid;
-    }  
-    else{
-        $newpledge = $conn->prepare("
-                INSERT PLEDGE SET loginname = ?, pid = ?, status = ?
+        $ifpledge = $conn->prepare("SELECT plid FROM PLEDGE WHERE 
+            pid = ? AND loginname = ? 
             ");
-            $status = 'waiting';
-            $newpledge->bind_param("sss",$loginname,$pid,$status);
-            $newpledge->execute();
-
-            $getplid = $conn->prepare("SELECT plid FROM PLEDGE WHERE 
-                pid = ? AND loginname = ? 
+        $ifpledge->bind_param("ss",$pid,$loginname);
+        $ifpledge->execute();
+        $result = $ifpledge->get_result();
+        $rowCount = mysqli_num_rows($result);
+        if($rowCount > 0){
+                $row = mysqli_fetch_array($result,MYSQLI_BOTH);        
+                $plid = $row['plid']; 
+                echo "aaa";
+                echo $plid;
+        }  
+        else{
+            $newpledge = $conn->prepare("
+                    INSERT PLEDGE SET loginname = ?, pid = ?, status = ?
                 ");
-            $getplid->bind_param("ss",$pid,$loginname);
-            $getplid->execute();
+                $status = 'waiting';
+                $newpledge->bind_param("sss",$loginname,$pid,$status);
+                $newpledge->execute();
 
-            $result = $getplid->get_result();
-            if($result){
-                    $row = mysqli_fetch_array($result,MYSQLI_BOTH);        
-                    $plid = $row['plid']; 
-            } 
-            echo "bbb";
-            echo $plid;
-    }
+                $getplid = $conn->prepare("SELECT plid FROM PLEDGE WHERE 
+                    pid = ? AND loginname = ? 
+                    ");
+                $getplid->bind_param("ss",$pid,$loginname);
+                $getplid->execute();
 
-    //insert new transaction
-    $newtrans = $conn->prepare("
-                INSERT TRANSACTION SET plid = ?, amount = ?, ccn = ?, ccv = ?, loginname = ?
-            ");
-    $newtrans->bind_param("sssss",$plid, $hamount,$hccn,$hccv,$loginname);
-	$newtrans->execute();
+                $result = $getplid->get_result();
+                if($result){
+                        $row = mysqli_fetch_array($result,MYSQLI_BOTH);        
+                        $plid = $row['plid']; 
+                } 
+                echo "bbb";
+                echo $plid;
+        }
 
-    //update project currentamt
-    $getcurrentamt = $conn->prepare("SELECT * FROM PROJECT WHERE pid = ?");
-    $getcurrentamt->bind_param("s",$pid);
-    $getcurrentamt->execute();
-    $amtr = $getcurrentamt->get_result();
-    $rowr = mysqli_fetch_array($amtr,MYSQLI_BOTH); 
-    $currentamt = $rowr['currentamt'];
-    $min = $rowr['min'];
-    $max = $rowr['max'];
+        //insert new transaction
+        $newtrans = $conn->prepare("
+                    INSERT TRANSACTION SET plid = ?, amount = ?, ccn = ?, ccv = ?, loginname = ?
+                ");
+        $newtrans->bind_param("sssss",$plid, $hamount,$hccn,$hccv,$loginname);
+    	$newtrans->execute();
 
-    $newamt = $currentamt + $hamount;
-    
-    if($newamt < $max){
-        $updateamt = $conn->prepare("UPDATE PROJECT SET currentamt = ? WHERE pid = ?");
-        $updateamt->bind_param("ss",$newamt, $pid);
-        $updateamt->execute();
-    }else{
-        $updateamt = $conn->prepare("UPDATE PROJECT SET currentamt = ?, status = ? WHERE pid = ?");
-        $closestatus = "PledgeClosed";
-        $updateamt->bind_param("sss",$newamt, $closestatus, $pid);
-        $updateamt->execute();
+        //update project currentamt
+        $getcurrentamt = $conn->prepare("SELECT * FROM PROJECT WHERE pid = ?");
+        $getcurrentamt->bind_param("s",$pid);
+        $getcurrentamt->execute();
+        $amtr = $getcurrentamt->get_result();
+        $rowr = mysqli_fetch_array($amtr,MYSQLI_BOTH); 
+        $currentamt = $rowr['currentamt'];
+        $min = $rowr['min'];
+        $max = $rowr['max'];
 
-        //change pledge status to confirmed
-        $updatepl = $conn->prepare("UPDATE PLEDGE SET status = ? WHERE pid = ?");
-        $confirmstatus = "confirmed";
-        $updatepl->bind_param("ss", $confirmstatus, $pid);
-        $updatepl->execute();
-    }
+        $newamt = $currentamt + $hamount;
+        
+        if($newamt < $max){
+            $updateamt = $conn->prepare("UPDATE PROJECT SET currentamt = ? WHERE pid = ?");
+            $updateamt->bind_param("ss",$newamt, $pid);
+            $updateamt->execute();
+        }else{
+            $updateamt = $conn->prepare("UPDATE PROJECT SET currentamt = ?, status = ? WHERE pid = ?");
+            $closestatus = "PledgeClosed";
+            $updateamt->bind_param("sss",$newamt, $closestatus, $pid);
+            $updateamt->execute();
 
-    
+            //change pledge status to confirmed
+            $updatepl = $conn->prepare("UPDATE PLEDGE SET status = ? WHERE pid = ?");
+            $confirmstatus = "confirmed";
+            $updatepl->bind_param("ss", $confirmstatus, $pid);
+            $updatepl->execute();
+        }
 
-    $now = new DateTime(null, new DateTimeZone('America/New_York'));
-    $nowb = $now->format('Y-m-d H:i:s'); 
-    $ltype = "transaction";
-    $newlog = $conn->prepare("
-            INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
-            ");
-    $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
-    $newlog->execute();
+        
 
-    header("Location:transactionlist.php");
-    exit;
+        $now = new DateTime(null, new DateTimeZone('America/New_York'));
+        $nowb = $now->format('Y-m-d H:i:s'); 
+        $ltype = "transaction";
+        $newlog = $conn->prepare("
+                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+                ");
+        $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
+        $newlog->execute();
+
+        header("Location:transactionlist.php");
+        exit;
+    }    
 
 
 ?>

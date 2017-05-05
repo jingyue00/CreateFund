@@ -20,6 +20,7 @@
         $prrowCount = mysqli_num_rows($projectresult);
     }
 
+if($_SESSION['notloginyet']!=="silent"){
 //add userlog
     $now = new DateTime(null, new DateTimeZone('America/New_York'));
     $nowb = $now->format('Y-m-d H:i:s'); 
@@ -29,7 +30,7 @@
             ");
     $newlog->bind_param("ssss",$loginname,$ltype,$tag,$nowb);
     $newlog->execute();
-
+}
 	//search project
 ?>
   <script type="text/javascript">

@@ -19,16 +19,19 @@
     $getppl->execute();
     $peopleresult = $getppl->get_result();
 
-    //add userlog
-    $now = new DateTime(null, new DateTimeZone('America/New_York'));
-    $nowb = $now->format('Y-m-d H:i:s'); 
-    $ltype = "searchpeople";
-    $newlog = $conn->prepare("
-                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
-            ");
-    $newlog->bind_param("ssss",$loginname,$ltype,$listcondition,$nowb);
-    $newlog->execute();
-
+    if($_SESSION['notloginyet']=="silent"){
+            $_SESSION['notloginyet'] = "nologin";
+    } else {
+        //add userlog
+        $now = new DateTime(null, new DateTimeZone('America/New_York'));
+        $nowb = $now->format('Y-m-d H:i:s'); 
+        $ltype = "searchpeople";
+        $newlog = $conn->prepare("
+                    INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+                ");
+        $newlog->bind_param("ssss",$loginname,$ltype,$listcondition,$nowb);
+        $newlog->execute();
+    }
 ?>
 <script type="text/javascript">
 function follow(followto)

@@ -17,7 +17,10 @@ require "class.connect.php";
     }
     elseif(isset($_SESSION["loginname"])){
         $loginname = $_SESSION["loginname"];
+    }else{
+        $_SESSION['notloginyet'] = "nologin";
     }
+
 
 ?>
 
@@ -101,6 +104,10 @@ require "class.connect.php";
                 {
                     $('#cannotpledge').modal('show')
                 }
+        function loginfirst()
+                {
+                    $('#loginfirst').modal('show')
+                }
         function chInput(inputid)
                 {
                     var str=document.getElementById(inputid);
@@ -165,6 +172,15 @@ require "class.connect.php";
         if($_SESSION['cannotpledge'] == "cannotpledge"){
                 echo "<body onload=\"cannotpledge()\">";
                 unset($_SESSION['cannotpledge']);
+            }else{
+             echo "<body>";
+        }
+ }
+
+if(isset($_SESSION['notloginyet'])){
+        if($_SESSION['notloginyet'] == "nologin"){
+                echo "<body onload=\"loginfirst()\">";
+                $_SESSION['notloginyet'] = "login";
             }else{
              echo "<body>";
         }
@@ -273,6 +289,24 @@ require "class.connect.php";
         <div class="modal-body">
             <p>This project already closed pledge</p>
             <img src="img/pu.gif"/>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="loginfirst" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span   aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title"> Oops... </h4>
+        </div>
+        <div class="modal-body">
+            <p>You need to log in first</p>
+            <img src="img/hotwater.gif"/>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

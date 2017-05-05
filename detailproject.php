@@ -31,101 +31,116 @@
     //$loginname = 'jane1234';
 
     //add userlog
-    $now = new DateTime(null, new DateTimeZone('America/New_York'));
-    $nowb = $now->format('Y-m-d H:i:s'); 
-    $ltype = "viewproject";
-    $newlog = $conn->prepare("
-                INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
-            ");
-    $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
-    $newlog->execute();
-
-    //if like btn clicked
-    if(isset($_POST['likeme'])){ 
-
-        //check if already liked
-        $ugetlike = $conn-> prepare("SELECT COUNT(*) AS count FROM LIKERELATION
-                WHERE pid = ? AND loginname = ? ");
-        $ugetlike->bind_param("ss",$pid,$loginname);
-        $ugetlike->execute();
-        $uresultl = $ugetlike->get_result();
-        if($uresultl){
-            $urowl = mysqli_fetch_array($uresultl,MYSQLI_BOTH); 
-            $ulikeamt = $urowl['count'];
-        }
-
-        if($ulikeamt == 1){
-            //already like
-            $liketodo = $conn-> prepare("DELETE FROM LIKERELATION
-                WHERE pid = ? AND loginname = ? ");
-        } else if ($ulikeamt == 0){
-            //not like yet
-            $liketodo = $conn-> prepare("INSERT INTO LIKERELATION (`pid`, `loginname`) VALUES (?, ?) ");
-        }
-        $liketodo->bind_param("ss",$pid,$loginname);
-        $liketodo->execute();
-
-        //add userlog
+    if($_SESSION['notloginyet']!=="silent"){
+            //not log in
+    
         $now = new DateTime(null, new DateTimeZone('America/New_York'));
         $nowb = $now->format('Y-m-d H:i:s'); 
-        $ltype = "likeproject";
+        $ltype = "viewproject";
         $newlog = $conn->prepare("
                     INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
                 ");
         $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
         $newlog->execute();
+    }
 
+    //if like btn clicked
+    if(isset($_POST['likeme'])){ 
+
+        if($_SESSION['notloginyet']=="silent"){
+            $_SESSION['notloginyet'] = "nologin";
+        } else {
+            //check if already liked
+            $ugetlike = $conn-> prepare("SELECT COUNT(*) AS count FROM LIKERELATION
+                    WHERE pid = ? AND loginname = ? ");
+            $ugetlike->bind_param("ss",$pid,$loginname);
+            $ugetlike->execute();
+            $uresultl = $ugetlike->get_result();
+            if($uresultl){
+                $urowl = mysqli_fetch_array($uresultl,MYSQLI_BOTH); 
+                $ulikeamt = $urowl['count'];
+            }
+
+            if($ulikeamt == 1){
+                //already like
+                $liketodo = $conn-> prepare("DELETE FROM LIKERELATION
+                    WHERE pid = ? AND loginname = ? ");
+            } else if ($ulikeamt == 0){
+                //not like yet
+                $liketodo = $conn-> prepare("INSERT INTO LIKERELATION (`pid`, `loginname`) VALUES (?, ?) ");
+            }
+            $liketodo->bind_param("ss",$pid,$loginname);
+            $liketodo->execute();
+
+            //add userlog
+            $now = new DateTime(null, new DateTimeZone('America/New_York'));
+            $nowb = $now->format('Y-m-d H:i:s'); 
+            $ltype = "likeproject";
+            $newlog = $conn->prepare("
+                        INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+                    ");
+            $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
+            $newlog->execute();
+        }
 
     } 
 
     //save the comment
     if(isset($_POST['submitcomment'])){ //check if form was submitted
-        $inputc = $_POST['comment']; 
 
-        //save comment into rich_content
-        $newcomment = $conn-> prepare("INSERT RICH_CONTENT SET 
-            content = ? , createtime = ?
-            ");
-        $now = new DateTime(null, new DateTimeZone('America/New_York'));
-        $nowb = $now->format('Y-m-d H:i:s'); 
-        $newcomment->bind_param("ss",$inputc,$nowb);
-        $newcomment->execute();
+        if($_SESSION['notloginyet']=="silent"){
+            $_SESSION['notloginyet'] = "nologin";
+        } else {
+            $inputc = $_POST['comment']; 
 
-        //get rid
-        $getrid = $conn->prepare("SELECT rid FROM RICH_CONTENT WHERE content = ? ORDER BY createtime DESC LIMIT 1");
-        $getrid->bind_param("s",$inputc);
-        $getrid->execute();
-        $result = $getrid->get_result();
-        if($result){
-            $row = mysqli_fetch_array($result,MYSQLI_BOTH);    
-            $rid = $row['rid'];
-        }
-
-        //save into comment table
-        $newcomment = $conn-> prepare("INSERT COMMENT SET 
-            loginname = ?,
-            comment = ?,
-            pid = ?,
-            updatetime = ?
-            ");
-        $now = new DateTime(null, new DateTimeZone('America/New_York'));
-        $nowb = $now->format('Y-m-d H:i:s');
-        $newcomment->bind_param("ssss", $loginname, $rid, $pid,$nowb);
-        $newcomment->execute();
-        $result = $getrid->get_result();
-        if($result){
-            echo "good comment";
-        }
-
-        //add userlog
-        $now = new DateTime(null, new DateTimeZone('America/New_York'));
-        $nowb = $now->format('Y-m-d H:i:s'); 
-        $ltype = "commentproject";
-        $newlog = $conn->prepare("
-                    INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+            //save comment into rich_content
+            $newcomment = $conn-> prepare("INSERT RICH_CONTENT SET 
+                content = ? , createtime = ?
                 ");
-        $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
-        $newlog->execute();
+            $now = new DateTime(null, new DateTimeZone('America/New_York'));
+            $nowb = $now->format('Y-m-d H:i:s'); 
+            $newcomment->bind_param("ss",$inputc,$nowb);
+            $newcomment->execute();
+
+            //get rid
+            $getrid = $conn->prepare("SELECT rid FROM RICH_CONTENT WHERE content = ? ORDER BY createtime DESC LIMIT 1");
+            $getrid->bind_param("s",$inputc);
+            $getrid->execute();
+            $result = $getrid->get_result();
+            if($result){
+                $row = mysqli_fetch_array($result,MYSQLI_BOTH);    
+                $rid = $row['rid'];
+            }
+
+            //save into comment table
+            $newcomment = $conn-> prepare("INSERT COMMENT SET 
+                loginname = ?,
+                comment = ?,
+                pid = ?,
+                updatetime = ?
+                ");
+            $now = new DateTime(null, new DateTimeZone('America/New_York'));
+            $nowb = $now->format('Y-m-d H:i:s');
+            $newcomment->bind_param("ssss", $loginname, $rid, $pid,$nowb);
+            $newcomment->execute();
+            $result = $getrid->get_result();
+            if($result){
+                echo "good comment";}
+
+            //add userlog
+            $now = new DateTime(null, new DateTimeZone('America/New_York'));
+            $nowb = $now->format('Y-m-d H:i:s'); 
+            $ltype = "commentproject";
+            $newlog = $conn->prepare("
+                        INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+                    ");
+            $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
+            $newlog->execute();
+            
+        }
+
+
+        
     }
 
     $getpro = $conn-> prepare("SELECT * FROM PROJECT 
