@@ -76,6 +76,11 @@ function peopledetail(ploginname)
             document.querySelector("#ploginname").value = ploginname;
             document.getElementById("peopledetail").submit();
         }
+function tagproject(tag)
+        {
+            document.querySelector("#htag").value = tag;
+            document.getElementById("tag").submit();
+        }
 </script>
 
 
@@ -88,6 +93,30 @@ function peopledetail(ploginname)
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mycardModal">Credit Card Information</button>
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mynewcardModal">Add New Credit Card</button>
 		<button type="button" class="btn btn-info btn-lg"><a href="createproject.php">Create New Project</a></button>
+		
+		<?php	echo"My Tags:";
+                                $gettag = $conn-> prepare("SELECT tag FROM TAG_USER 
+                                        WHERE loginname = ? ");
+                                $gettag->bind_param("s",$loginname);
+                                $gettag->execute();
+                                $tresult = $gettag->get_result();
+                                $tcount = mysqli_num_rows($tresult);
+                                if($tresult){
+                                    while ($row = mysqli_fetch_array($tresult, MYSQLI_BOTH)) {
+                                         $rows[] = $row;
+                                    }
+                                }
+                                if($tcount > 0){
+                                    foreach($rows as $row)
+                                    {
+                                        $a = stripslashes($row['tag']);
+                                        echo "<button type=\"button\" class=\"btn btn-default btn-xs btn-success\" onClick=\"tagproject('$a')\">".$a."</button>
+                                              <a> </a>
+                                        ";
+                                    }
+                                }
+
+                                ?>
 		
 		<!-- My Profile Modal -->			
 		<div id="myModal" class="modal fade" role="dialog">
@@ -736,6 +765,9 @@ function peopledetail(ploginname)
 </form>
 <form role="form" id="peopledetail" method="post" action="usrpage.php">
         <input type="hidden" id="ploginname" name="ploginname"/>
+</form>
+<form role="form" id="tag" method="post" action="tag.php">
+        <input type="hidden" id="htag" name="htag"/>
 </form>
     <!-- /.container -->
 
