@@ -86,7 +86,7 @@
             //echo "total tag: ".$updatetag->affected_rows;
         //}
     //}
-	foreach($_GET["tag"] as $chk) $updatetag->execute();
+	foreach($_POST["tag"] as $chk) $updatetag->execute();
 	$updaterowt = mysqli_fetch_array($updatetag->get_result(),MYSQLI_BOTH);
 
 
