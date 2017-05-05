@@ -377,6 +377,7 @@ function peopledetail(ploginname)
 						$pname = $row['pname'];
 						$post = $row['post'];
 						$min = $row['min'];
+                        $status = $row['status'];
 						$currentamt = $row['currentamt'];
 						$endcampaign = $row['endcampaign'];
 						$endcampaignformat = new DateTime($endcampaign, new DateTimeZone('America/New_York'));
@@ -396,7 +397,7 @@ function peopledetail(ploginname)
 							echo "<div class='row'>";
 						}
 						echo "
-							<div class='col-md-4 portfolio-item'>
+							<div class='col-md-4 portfolio-item' style='padding-bottom: 20px;'>
 							<a href='detailproject.php?pid=".$pid."'>
 							<img class='img-responsive' src='img/".$post."' alt='' width='380' height='142'>
 							</a>
@@ -408,7 +409,13 @@ function peopledetail(ploginname)
 							<span class='glyphicon glyphicon-time'></span><a> ".$endcampaignformat."</a><br/>
 							</div>
 							<p class='text-info'>".$rtc."</p>
-							</div>
+                            <div>
+                            <button type='button' style='width: 100px;' class='pull-right' onClick='updateproject(".$pid.")'>change status</button>
+                            <a >".$status."</a>
+                            </div>
+                            </div>
+							
+                            
 						";
 						//end of row
 						if($i%3 == 2){
