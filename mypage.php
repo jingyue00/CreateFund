@@ -32,6 +32,11 @@
     $getcredcn->bind_param("s",$loginname); 
     $getcredcn->execute();
     $credcn = $getcredcn->get_result();
+	
+	$getuserlog = $conn-> prepare("SELECT * FROM USERLOG WHERE loginname = ? ORDER BY ltime DESC "); 
+    $getuserlog->bind_param("s",$loginname); 
+    $getuserlog->execute();
+    $userlog = $getuserlog->get_result();
 		
     if(isset($loginname)){
 	
@@ -58,7 +63,7 @@
         $getpeople->bind_param("s",$loginname);
         $getpeople->execute();
         $peopleresult = $getpeople->get_result();
-        
+		        
     }else{
         
     }
@@ -92,6 +97,7 @@ function tagproject(tag)
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mypledgeModal">Pledge History</button>
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mycardModal">Credit Card Information</button>
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#mynewcardModal">Add New Credit Card</button>
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#timelineModal">Time Line</button>
 		<button type="button" class="btn btn-info btn-lg"><a href="createproject.php">Create New Project</a></button>
 		
 		<?php	echo"My Tags:";
@@ -207,7 +213,7 @@ function tagproject(tag)
 										<table class="table table-striped table-hover ">
 											<thead>
 												<tr class="info">
-													<th>Project</th><th>Amount</th><th>Project Status</th><th>Pledge Status</th><th>Rate</th>
+													<th>Project</th><th>Amount</th><th>Status</th><th>Rate</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -217,7 +223,7 @@ function tagproject(tag)
 														while($row = mysqli_fetch_array($pledge, MYSQLI_BOTH)){
 															$plid = $row['plid'];
 															$amount = $row['totalamount'];
-															$pledgestatus = $row['status'];
+															$status = $row['status'];
 															$rate = $row['rate'];
 															$projectid = $row['pid'];
 
@@ -251,7 +257,6 @@ function tagproject(tag)
 															  <td>".$pname."</td>
 															  <td>$".$amount."</td>
 															  <td>".$status."</td>
-															  <td>".$pledgestatus."</td>
 															  <td> 
 																
 															    <select id='rate' name ='rate' >
@@ -271,7 +276,6 @@ function tagproject(tag)
 																  <td>".$pname."</td>
 																  <td>$".$amount."</td>
 																  <td>".$status."</td>
-																  <td>".$pledgestatus."</td>
 																  <td>".$rate."</td>
 																</tr>
 																";
@@ -418,7 +422,88 @@ function tagproject(tag)
 			</div>
 		</div>
 		
-		
+		<!-- User Log Information -->
+		<div id="timelineModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title"> Time Line </h4>
+					</div>
+					<div class="modal-body">
+						<div class="container">
+							<!-- Page Header -->
+							<div class="row">
+								<div class="col-md-6 center-block"> 
+									<h1 class="page-header">Time Line
+										<small>View Your Activities</small>
+									</h1>
+								</div>
+							</div>
+							<div class="row">
+								<div class="row">  
+									<div class="col-md-6 center-block"> 
+										<table class="table table-striped table-hover ">
+											<thead>
+												<tr class="info">
+													<th>Activities</th><th>Target</th><th>Time</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													if($userlog){
+														while($row = mysqli_fetch_array($userlog, MYSQLI_BOTH)){
+															$ltype = $row['ltype'];
+															$targetid = $row['targetid'];
+															$ltime = $row['ltime'];
+															if ($ltype == "searchproject" or $ltype == "searchpeople" or $targetid == "All" ){
+															} 
+															elseif ($ltype == "viewproject" or $ltype == "transaction" or $ltype == "likeproject" or $ltype == "commentproject"){
+																$getproname = $conn->prepare("SELECT p.pname FROM
+																PROJECT p, USERLOG ul
+																WHERE p.pid = ul.targetid AND targetid = ?
+																");
+																$getproname -> bind_param("s",$targetid);
+																$getproname ->execute();
+																$tlres = $getproname->get_result();
+																if($tlres){
+																	$rows= mysqli_fetch_array($tlres,MYSQLI_BOTH);    
+																	$pname = $rows['pname'];
+																}
+																echo "
+																 <tr>
+																  <td>".$ltype."</td>
+																  <td>".$pname."</td>
+																  <td>".$ltime."</td>
+																</tr>
+																";
+															}
+															else {
+																echo "
+																	 <tr>
+																	  <td>".$ltype."</td>
+																	  <td>".$targetid."</td>
+																	  <td>".$ltime."</td>
+																	</tr>
+																";
+															}
+														}
+													}
+												?>
+											</tbody>
+										</table>   
+									</div>
+								</div>
+							</div>								
+						</div>
+					</div>												
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>					
+				</div>
+			</div>
+		</div>
 	
 	</div>
 	
@@ -443,7 +528,8 @@ function tagproject(tag)
 					$i = 0;
 					while($row = mysqli_fetch_array($peocreate, MYSQLI_BOTH)){	
 						$pid = $row['pid'];
-						$pname = $row['pname'];?>
+						$pname = $row['pname'];
+		?>
 								<div id="statusModal<?php echo $row['pname'];?><?php echo $row['pid'];?>" class="modal fade" role="dialog">
 										<div class="modal-dialog">
 											<!-- Modal content-->
@@ -514,7 +600,8 @@ function tagproject(tag)
 							</div>
 							<p class='text-info'>".$rtc."</p>
                             <div>";
-								if ($status == 'PledgeClosed' or $status == 'Delay'){ ?>
+								if ($status == 'PledgeClosed' or $status == 'Delay'){ 
+						?>
 									<button type='button' class='btn  btn-sm pull-right' data-toggle='modal' data-target='#statusModal<?php echo $row['pname'];?><?php echo $row['pid'];?>' >Change Status</button>
 									
 									
@@ -709,7 +796,7 @@ function tagproject(tag)
 					$prow = mysqli_fetch_array($fresult, MYSQLI_BOTH);
 					if (count($prow) == 0){
 						echo "
-							<p>No People Followed Yet!</p>;
+							<p>No Liked Project Yet!</p>;
 							<img src='img/pu.gif'/>
 							";
 					}
