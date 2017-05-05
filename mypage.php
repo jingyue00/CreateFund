@@ -163,6 +163,7 @@ function peopledetail(ploginname)
 					</div>
 					<div class="modal-body">
 						<div class="container">
+						<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="updaterate.php">
 							<!-- Page Header -->
 							<div class="row">
 								<div class="col-md-6 center-block"> 
@@ -177,16 +178,19 @@ function peopledetail(ploginname)
 										<table class="table table-striped table-hover ">
 											<thead>
 												<tr class="info">
-													<th>Project</th><th>Amount</th><th>Status</th>
+													<th>Project</th><th>Amount</th><th>Status</th><th>Rate</th>
 												</tr>
 											</thead>
 											<tbody>
-												<?php
+												
+												<?php							
 													if($pledge){
 														while($row = mysqli_fetch_array($pledge, MYSQLI_BOTH)){
 															$plid = $row['plid'];
 															$amount = $row['totalamount'];
 															$status = $row['status'];
+															$rate = $row['rate'];
+															$projectid = $row['pid'];
 
 															$getpname = $conn->prepare("SELECT pname FROM
 																PLEDGE a, PROJECT b
@@ -199,21 +203,48 @@ function peopledetail(ploginname)
 																$rowp= mysqli_fetch_array($presult,MYSQLI_BOTH);    
 																$pname = $rowp['pname'];
 															}
-															$getcardname = $conn->prepare("SELECT cname FROM CCN WHERE ccn = ?");
-															$getcardname->bind_param("s",$ccn);
-															$getcardname->execute();
-															$cresult= $getcardname->get_result();
-															if($cresult){
-																$rowc= mysqli_fetch_array($cresult,MYSQLI_BOTH);    
-																$cname = $rowc['cname'];
+															$getstatus = $conn->prepare("SELECT p.status FROM
+																PROJECT p, PLEDGE pl
+																WHERE p.pid = pl.pid AND plid = ?
+															");
+															$getstatus -> bind_param("s",$plid);
+															$getstatus ->execute();
+															$prestat = $getstatus->get_result();
+															if($prestat){
+																$rows= mysqli_fetch_array($prestat,MYSQLI_BOTH);    
+																$status = $rows['status'];
 															}
-															echo "
-															 <tr>
+															
+															if ($status == "Completed" and $rate == NULL){
+															echo"
+															<input name='projectid' id='projectid' value = $projectid type = 'hidden'>
+															<tr>
 															  <td>".$pname."</td>
 															  <td>$".$amount."</td>
 															  <td>".$status."</td>
-															</tr>
-															"; 
+															  <td> 
+																
+															    <select id='rate' name ='rate' >
+																<option>1</option>
+																<option>2</option>
+																<option>3</option>
+																<option>4</option>
+																<option>5</option>
+																</select>	
+															   </td>
+															  
+															</tr>";
+															}
+															else {
+																echo "
+																 <tr>
+																  <td>".$pname."</td>
+																  <td>$".$amount."</td>
+																  <td>".$status."</td>
+																  <td>".$rate."</td>
+																</tr>
+																";
+															}
 														}
 													}
 												?>
@@ -224,9 +255,14 @@ function peopledetail(ploginname)
 							</div>								
 						</div>
 					</div>	
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>					
+					<div class='modal-footer'>	
+						<?php
+						if ($status == "Completed" and $rate == NULL){
+							echo "<button type='submit' class='btn btn-default '>Submit</button>";
+						}?>
+						<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+					</div>
+					</form>
 				</div>
 			</div>
 		</div>
