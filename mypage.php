@@ -707,7 +707,7 @@ function tagproject(tag)
 					$prow = mysqli_fetch_array($fresult, MYSQLI_BOTH);
 					if (count($prow) == 0){
 						echo "
-							<p>No Liked Project Yet!</p>;
+							<p>No People Followed Yet!</p>;
 							<img src='img/pu.gif'/>
 							";
 					}
