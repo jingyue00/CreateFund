@@ -65,6 +65,17 @@
         $liketodo->bind_param("ss",$pid,$loginname);
         $liketodo->execute();
 
+        //add userlog
+        $now = new DateTime(null, new DateTimeZone('America/New_York'));
+        $nowb = $now->format('Y-m-d H:i:s'); 
+        $ltype = "likeproject";
+        $newlog = $conn->prepare("
+                    INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+                ");
+        $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
+        $newlog->execute();
+
+
     } 
 
     //save the comment
@@ -105,6 +116,16 @@
         if($result){
             echo "good comment";
         }
+
+        //add userlog
+        $now = new DateTime(null, new DateTimeZone('America/New_York'));
+        $nowb = $now->format('Y-m-d H:i:s'); 
+        $ltype = "commentproject";
+        $newlog = $conn->prepare("
+                    INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+                ");
+        $newlog->bind_param("ssss",$loginname,$ltype,$pid,$nowb);
+        $newlog->execute();
     }
 
     $getpro = $conn-> prepare("SELECT * FROM PROJECT 

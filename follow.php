@@ -41,6 +41,16 @@
             //insert a new following
             $_SESSION['follow'] = "new";
             $_SESSION['following'] = $hfollowing;
+
+            //add userlog
+            $now = new DateTime(null, new DateTimeZone('America/New_York'));
+            $nowb = $now->format('Y-m-d H:i:s'); 
+            $ltype = "follow";
+            $newlog = $conn->prepare("
+                        INSERT USERLOG SET loginname = ?, ltype = ?, targetid = ?, ltime = ?
+                    ");
+            $newlog->bind_param("ssss",$loginname,$ltype,$hfollowing,$nowb);
+            $newlog->execute();
              
     }
 
