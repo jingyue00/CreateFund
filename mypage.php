@@ -213,7 +213,7 @@ function tagproject(tag)
 										<table class="table table-striped table-hover ">
 											<thead>
 												<tr class="info">
-													<th>Project</th><th>Amount</th><th>Status</th><th>Rate</th>
+													<th>Project</th><th>Amount</th><th>Project Status</th><th>Pledge Status</th><th>Rate</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -223,7 +223,7 @@ function tagproject(tag)
 														while($row = mysqli_fetch_array($pledge, MYSQLI_BOTH)){
 															$plid = $row['plid'];
 															$amount = $row['totalamount'];
-															$status = $row['status'];
+															$pledgestatus = $row['status'];
 															$rate = $row['rate'];
 															$projectid = $row['pid'];
 
@@ -257,6 +257,7 @@ function tagproject(tag)
 															  <td>".$pname."</td>
 															  <td>$".$amount."</td>
 															  <td>".$status."</td>
+															  <td>".$pledgestatus."</td>
 															  <td> 
 																
 															    <select id='rate' name ='rate' >
@@ -276,6 +277,7 @@ function tagproject(tag)
 																  <td>".$pname."</td>
 																  <td>$".$amount."</td>
 																  <td>".$status."</td>
+																  <td>".$pledgestatus."</td>
 																  <td>".$rate."</td>
 																</tr>
 																";
@@ -782,7 +784,7 @@ function tagproject(tag)
 		if(isset($peopleresult) AND $peopleresult){
 			if (mysqli_num_rows($peopleresult) == 0){
 				echo "
-					<p>No Liked Project Yet!</p>;
+					<p>No Followed People Yet!</p>;
 					<img src='img/pu.gif'/>
 					";
 				} 
@@ -794,23 +796,16 @@ function tagproject(tag)
 					$getfname->execute();
 					$fresult = $getfname->get_result();
 					$prow = mysqli_fetch_array($fresult, MYSQLI_BOTH);
-					if (count($prow) == 0){
-						echo "
-							<p>No Liked Project Yet!</p>;
-							<img src='img/pu.gif'/>
-							";
-					}
-					else {
-						$ppost = $prow['post'];
-						$pname = $prow['name'];
-                        $ploginname = $prow['loginname'];
-						$phometown = $prow['hometown'];
+					$ppost = $prow['post'];
+					$pname = $prow['name'];
+                    $ploginname = $prow['loginname'];
+					$phometown = $prow['hometown'];
 						
-						//new row
-						if($i%3 == 0){
-							echo "<div class='row'>";
-						}
-						echo "<div class='col-md-4 text-center'>
+					//new row
+					if($i%3 == 0){
+						echo "<div class='row'>";
+					}
+					echo "<div class='col-md-4 text-center'>
 						<img class='img-circle' style='width: 65%' height='230' src='img/".$ppost."'>
 						<h3>".$pname."
 							<small>from ".$phometown."</small>
@@ -818,14 +813,14 @@ function tagproject(tag)
                         <button type=\"button\" style=\"width: 60px;margin-right:65px;\" class=\"pull-right\" onClick=\"peopledetail('$ploginname')\"> Detail </button>
 						<button type=\"button\" style=\" width: 60px;\" name = \"follow\" onClick=\"unfollow('$prow[1]')\"> unfollow </button>
 						</div>
-						";
+					";
 
-						//end of row
-						if($i%3 == 2){
-							echo "</div><hr>";
-						}
-						$i++;
+					//end of row
+					if($i%3 == 2){
+						echo "</div><hr>";
 					}
+					$i++;
+				
 				}
             }
 		} 
