@@ -107,13 +107,13 @@ session_start();
 
     }
 
-$target_path = "img/";
+$target_path = "/var/www/html/DbProject/img/";
 $target_path = $target_path . basename( $_FILES['updateimage']['name']); 
 
 move_uploaded_file($_FILES["updateimage"]["tmp_name"], $target_path);
 
 
-$target_path = "img/";
+$target_path = "/var/www/html/DbProject/img/";
 $target_path = $target_path . basename( $_FILES['updatevideo']['name']);
 
 move_uploaded_file($_FILES["updatevideo"]["tmp_name"], $target_path);
