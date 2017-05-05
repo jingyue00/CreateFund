@@ -531,40 +531,6 @@ function tagproject(tag)
 					while($row = mysqli_fetch_array($peocreate, MYSQLI_BOTH)){	
 						$pid = $row['pid'];
 						$pname = $row['pname'];
-		?>
-								<div id="statusModal<?php echo $row['pname'];?><?php echo $row['pid'];?>" class="modal fade" role="dialog">
-										<div class="modal-dialog">
-											<!-- Modal content-->
-											<div class="modal-content">
-												<div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal">&times;</button>
-													<h4 class="modal-title">  <?php echo $pname?>
-												</div>
-												<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="updatestatus.php">
-													<div class="modal-body">
-														<div class="form-group col-md-12">
-															<!-- Password input -->
-															<div class="input-group col-md-offset-1">	
-																<input name='projectid' id='projectid' value = <?php echo $row['pid'];?> type = 'hidden'>
-																<label for="credname">Choose My Project status:</label>
-																<select class="form-control" id="projstatus" name ="projstatus" >
-																	<option>Completed</option>
-																	<option>Failed</option>
-																  </select>								  					
-															</div>
-														</div>
-													</div>
-													<div class="modal-footer">
-														<button type="submit"
-														class="btn btn-default">Submit</button>
-														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-													</div>					
-												</form>		
-											</div>
-										</div>
-									</div>
-								
-						<?php
 						$post = $row['post'];
 						$min = $row['min'];
                         $status = $row['status'];
@@ -604,8 +570,38 @@ function tagproject(tag)
                             <div>";
 								if ($status == 'PledgeClosed' or $status == 'Delay'){ 
 						?>
-									<button type='button' class='btn  btn-sm pull-right' data-toggle='modal' data-target='#statusModal<?php echo $row['pname'];?><?php echo $row['pid'];?>' >Change Status</button>
-									
+									<button type='button' class='btn  btn-sm pull-right' data-toggle='modal' data-target='#statusModal<?php echo $row['pid'];?>' >Change Status</button>
+									<div id="statusModal<?php echo $row['pid'];?>" class="modal fade" role="dialog">
+										<div class="modal-dialog">
+											<!-- Modal content-->
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">  Change Project Status
+												</div>
+												<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="updatestatus.php">
+													<div class="modal-body">
+														<div class="form-group col-md-12">
+															<!-- Password input -->
+															<div class="input-group col-md-offset-1">	
+																<input name='projectid' id='projectid' value = <?php echo $row['pid'];?> type = 'hidden'>
+																<label for="credname">Choose My Project status:</label>
+																<select class="form-control" id="projstatus" name ="projstatus" >
+																	<option>Completed</option>
+																	<option>Failed</option>
+																  </select>								  					
+															</div>
+														</div>
+													</div>
+													<div class="modal-footer">
+														<button type="submit"
+														class="btn btn-default">Submit</button>
+														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+													</div>					
+												</form>		
+											</div>
+										</div>
+									</div>
 									
 								<?php	
 								}
