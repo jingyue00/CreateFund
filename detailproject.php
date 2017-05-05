@@ -226,6 +226,20 @@
         $pcount = $rowr['b'];
     }
 
+    //check owner and current user follow 
+    $iffollow = $conn->prepare("SELECT COUNT(*) as c FROM FOLLOW WHERE 
+                following = ? AND loginname = ? 
+            ");
+    $iffollow->bind_param("ss",$owner,$loginname);
+    $iffollow->execute();
+    $result = $iffollow->get_result();
+    $rowf = mysqli_fetch_array($result,MYSQLI_BOTH);  
+    if($rowf['c'] > 0){ 
+        $followbtn = "unfollow";
+    } else {
+        $followbtn = "follow";
+    }
+
 ?>
 <script type="text/javascript">
 function update(status)
@@ -256,6 +270,23 @@ function showupdateform(showornot)
             div1.style.visibility='hidden'; 
             }
         }
+function follow(followto)
+        {
+            document.querySelector("#hfollowing").value = followto;
+            document.querySelector("#hloginname").value = "<?php echo $loginname?>";
+            document.getElementById("follow").submit();
+        }
+function unfollow(followto)
+        {
+            document.querySelector("#unfollowing").value = followto;
+            document.querySelector("#unloginname").value = "<?php echo $loginname?>";
+            document.getElementById("unfollow").submit();
+        }
+function peopledetail(ploginname)
+        {
+            document.querySelector("#ploginname").value = ploginname;
+            document.getElementById("peopledetail").submit();
+        }
 </script>
 
  <!-- Page Content -->
@@ -269,7 +300,8 @@ function showupdateform(showornot)
                 <p class="lead"><?php echo "$owner"; ?></p>
                 <!-- PUT OWNER IMAGE AND INFO HERE -->
                 <img src="img/<?php echo "$upost";?>" class="img-circle" alt="Cinque Terre" width="250" height="250">
-
+                <button type="button" style="width: 60px;margin-right: 10px;" class="pull-right" onClick="peopledetail('<?php echo "$owner";?>')"> Detail </button>
+                <button type="button" style="margin-right: 40px; width: 60px;" name = "follow" onClick="<?php echo "$followbtn"?>('<?php echo "$owner"?>')"><?php echo "$followbtn"?></button>
             </div>
         
         <!-- /.Project Detail -->
@@ -513,6 +545,18 @@ function showupdateform(showornot)
 <form role="form" id="tag" method="post" action="tag.php">
         <input type="hidden" id="htag" name="htag"/>
 </form>
+<form role="form" id="follow" method="post" action="followfromdetailproject.php">
+        <input type="hidden" id="hloginname" name="hloginname"/>
+        <input type="hidden" id="hfollowing" name="hfollowing"/>
+</form>
+<form role="form" id="unfollow" method="post" action="unfollowfromdetailproject.php">
+        <input type="hidden" id="unloginname" name="unloginname"/>
+        <input type="hidden" id="unfollowing" name="unfollowing"/>
+</form>
+<form role="form" id="peopledetail" method="post" action="usrpage.php">
+        <input type="hidden" id="ploginname" name="ploginname"/>
+</form>
+
 <script type="text/javascript">
 function showupdateform(showornot)
         {
