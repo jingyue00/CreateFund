@@ -17,9 +17,16 @@
 	$hometown = $_POST["hometown"];
 	$target_path = "/var/www/html/DbProject/img/";
     $target_path = $target_path . basename( $_FILES['post']['name']); 
-    //echo "<br>";
-    //echo $target_path;
-    //echo "<br>";
+    
+	$dupeloginname = "SELECT * FROM USER where (loginname = '$loginname')";
+
+	$duperow = mysqli_query($conn, $dupeloginname);
+	
+	if (mysqli_num_rows($duperow) > 0) {
+		echo"<script>alert('Signup Failed! Login Name already exist!');window.location.href='signup.php'</script>";
+		exit();
+	}
+	
     if(move_uploaded_file($_FILES["post"]["tmp_name"], $target_path))
     {
        //echo "upload complete";
